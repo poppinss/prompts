@@ -45,8 +45,8 @@ class MyCommand {
 During the tests, you can pass the emitter based prompt instance to your command as shown below:
 
 ```ts
-import { EmitterPrompt } from '@poppinss/prompts'
-const prompt = new EmitterPrompt()
+import { FakePrompt } from '@poppinss/prompts'
+const prompt = new FakePrompt()
 
 prompt.on('prompt', (prompt) => {
   if (prompt.name === 'username') {    
@@ -60,7 +60,7 @@ const myCommand = new MyCommand(prompt)
 await myCommand.run()
 ```
 
-It is as simple as that. There is no need to make any code changes, just make use of the `EmitterPrompt` class over `EnquirerPrompt`.
+It is as simple as that. There is no need to make any code changes, just make use of the `FakePrompt` class over `Prompt`.
 
 ## Usage
 Install the package from the npm registry as follows:
@@ -75,15 +75,15 @@ yarn add @poppinss/prompts
 and then use it as follows:
 
 ```ts
-import { EnquirerPrompt } from '@poppinss/prompt'
-const prompt = new EnquirerPrompt()
+import { Prompt } from '@poppinss/prompt'
+const prompt = new Prompt()
 
 const username = await prompt.ask('What is your username?')
 const password = await prompt.secure('Enter account password')
 const client = await prompt.choice('Choose installation client', ['npm', 'yarn'])
 ```
 
-During tests, replace `EnquirerPrompt` with `EmitterPrompt` and everything works as expected. However, do make sure that you listen for the `prompt` event and answer every prompt, otherwise your tests will hang.
+During tests, replace `Prompt` with `FakePrompt` and everything works as expected. However, do make sure that you listen for the `prompt` event and answer every prompt, otherwise your tests will hang.
 
 ## Implemented Prompt types
 The following prompt types from enquirer are implemented. The method names exposed by this module are different (my personal preference).

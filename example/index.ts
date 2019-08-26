@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
 */
 
-import { EnquirerPrompt } from '../index'
-const prompt = new EnquirerPrompt()
+import { Prompt } from '../index'
+const prompt = new Prompt()
 
 async function run () {
   const name = await prompt.ask('What is your name?', {

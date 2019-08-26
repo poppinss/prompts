@@ -7,6 +7,6 @@
  * file that was distributed with this source code.
 */
 
-export { EnquirerPrompt } from './src/Enquirer'
-export { EmitterPrompt } from './src/Emitter'
+export { EnquirerPrompt as Prompt } from './src/Enquirer'
+export { EmitterPrompt as FakePrompt } from './src/Emitter'
 export * from './src/Contracts'
