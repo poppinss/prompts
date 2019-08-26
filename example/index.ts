@@ -25,7 +25,19 @@ async function run () {
   })
 
   const deps = await prompt.multiple('Select base dependencies', ['@adonisjs/core', '@adonisjs/redis'])
-  console.log({ name, password, client, deps })
+
+  const toppings = await prompt.choice('Select toppings', [
+    {
+      name: 'Jalapenos',
+      hint: '(Marinated in vinegar, will taste sour)',
+    },
+    {
+      name: 'Lettuce',
+      hint: '(Freshly picked from farms)',
+    },
+  ])
+
+  console.log({ name, password, client, deps, toppings })
 }
 
 run().then(console.log).catch(console.error)
