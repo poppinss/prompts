@@ -93,49 +93,49 @@ export class EmitterPrompt extends Prompt {
             answer = this.format(answer)
           }
 
-          /**
-           * If their is no `validate` method, then resolve the prompt
-           * right away
-           */
-          if (typeof (this.validate) !== 'function') {
-            return resolve(answer)
-          }
+          let passes = true
 
           /**
-           * Attempt to mimic the crucially required state
-           * properties from enquirer.
+           * Invoke the validate function when it is defined.
            */
-          const state: any = {
-            value: answer,
-            type: this.type,
-            name: this.name,
-            message: this.message,
-            choices: this.choices,
-            initial: this.initial,
-            format: this.format,
-            submitted: true,
-            cancelled: false,
-          }
+          if (typeof (this.validate) === 'function') {
+            /**
+             * Attempt to mimic the crucially required state
+             * properties from enquirer.
+             */
+            const state: any = {
+              value: answer,
+              type: this.type,
+              name: this.name,
+              message: this.message,
+              choices: this.choices,
+              initial: this.initial,
+              format: this.format,
+              submitted: true,
+              cancelled: false,
+            }
 
-          /**
-           * Extra properties for the choices and multiselect
-           * prompts
-           */
-          if (state.choices) {
-            state.size = state.choices.size
-            state.multiple = state.type === 'multiselect'
-          }
+            /**
+             * Extra properties for the choices and multiselect
+             * prompts
+             */
+            if (state.choices) {
+              state.size = state.choices.size
+              state.multiple = state.type === 'multiselect'
+            }
 
-          /**
-           * Invoke the validation handler
-           */
-          const passes = await this.validate(answer, state)
+            /**
+             * Invoke the validation handler
+             */
+            passes = await this.validate(answer, state)
+          }
 
           /**
            * We emit `prompt:answer` and `prompt:error` events, so that we
            * can test the validation behavior as well.
            */
           if (passes === true) {
+            answer = typeof (this.result) === 'function' ? await this.result(answer) : answer
             self.emit('prompt:answer', answer)
             resolve(answer)
           } else {

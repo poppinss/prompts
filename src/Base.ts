@@ -41,13 +41,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Prompts for text input
    */
-  public async ask (title: string, options?: TextPromptOptions): Promise<string> {
+  public async ask<Result extends any = string> (
+    title: string,
+    options?: TextPromptOptions,
+  ): Promise<Result> {
     options = options || {}
     return this.$prompt({
       type: 'input',
       name: options.name,
       message: title,
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })
@@ -56,13 +60,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Prompts for text input but mangles the output (for password)
    */
-  public async secure (title: string, options?: TextPromptOptions): Promise<string> {
+  public async secure<Result extends any = string> (
+    title: string,
+    options?: TextPromptOptions,
+  ): Promise<Result> {
     options = options || {}
     return this.$prompt({
       type: 'password',
       message: title,
       name: options.name,
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })
@@ -71,13 +79,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Asks for `Y/n`
    */
-  public async confirm (title: string, options?: BooleanPromptOptions): Promise<boolean> {
+  public async confirm<Result extends any = boolean> (
+    title: string,
+    options?: BooleanPromptOptions,
+  ): Promise<Result> {
     options = options || {}
     return this.$prompt({
       type: 'confirm',
       message: title,
       name: options.name,
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })
@@ -86,11 +98,11 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Similar to [[this.confirm]] but with custom toggle options
    */
-  public async toggle (
+  public async toggle<Result extends any = boolean> (
     title: string,
     choices: [string, string],
     options?: TogglePromptOptions,
-  ): Promise<boolean> {
+  ): Promise<Result> {
     options = options || {}
     return this.$prompt({
       type: 'toggle',
@@ -99,6 +111,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
       enabled: choices[0],
       disabled: choices[1],
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })
@@ -107,11 +120,11 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Prompts for text input
    */
-  public async choice (
+  public async choice<Result extends any = string> (
     title: string,
     choices: (string | PromptChoice)[],
     options?: ChoicePromptOptions,
-  ): Promise<string> {
+  ): Promise<Result> {
     options = options || {}
 
     return this.$prompt({
@@ -125,6 +138,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
         return choice
       }),
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })
@@ -133,11 +147,11 @@ export abstract class Prompt extends Emitter implements PromptContract {
   /**
    * Prompts for text input
    */
-  public async multiple (
+  public async multiple<Result extends any = string[]> (
     title: string,
     choices: (string | PromptChoice)[],
     options?: MultiplePromptOptions,
-  ): Promise<string[]> {
+  ): Promise<Result> {
     options = options || {}
 
     return this.$prompt({
@@ -151,6 +165,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
         return choice
       }),
       initial: options.default,
+      result: options.result,
       format: options.format,
       validate: options.validate,
     })

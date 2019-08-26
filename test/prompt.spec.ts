@@ -46,6 +46,23 @@ test.group('Prompts | input', () => {
 
     assert.equal(username, '')
   })
+
+  test('invoke result function before returning the result', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (prompt) => {
+      prompt.answer('virk')
+    })
+
+    const username = await prompt.ask('What\'s your username?', {
+      name: 'username',
+      result (answer) {
+        return answer.toUpperCase()
+      },
+    })
+
+    assert.equal(username, 'VIRK')
+  })
 })
 
 test.group('Prompts | choice', () => {
@@ -79,6 +96,22 @@ test.group('Prompts | choice', () => {
     })
 
     assert.equal(client, '')
+  })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (prompt) => {
+      prompt.select(0)
+    })
+
+    const client = await prompt.choice('Select the installation client', ['npm', 'yarn'], {
+      result (answer) {
+        return answer.toUpperCase()
+      },
+    })
+
+    assert.equal(client, 'NPM')
   })
 })
 
@@ -114,6 +147,22 @@ test.group('Prompts | multiple', () => {
 
     assert.deepEqual(client, [])
   })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (prompt) => {
+      prompt.select(0)
+    })
+
+    const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'], {
+      result (choices) {
+        return choices.map((one) => one.toUpperCase())
+      },
+    })
+
+    assert.deepEqual(clients, ['NPM'])
+  })
 })
 
 test.group('Prompts | toggle', () => {
@@ -146,6 +195,20 @@ test.group('Prompts | toggle', () => {
     })
 
     assert.isFalse(deleteFile)
+  })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (prompt) => {
+      prompt.accept()
+    })
+
+    const deleteFile = await prompt.toggle('Delete the file?', ['Yep', 'Nope'], {
+      result (answer) {
+        return answer ? 'Y' : 'n'
+      },
+    })
+    assert.equal(deleteFile as unknown as string, 'Y')
   })
 })
 
@@ -180,6 +243,20 @@ test.group('Prompts | confirm', () => {
 
     assert.isFalse(deleteFile)
   })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (prompt) => {
+      prompt.accept()
+    })
+
+    const deleteFile = await prompt.confirm('Delete the file?', {
+      result (answer) {
+        return answer ? 'Yes' : 'No'
+      },
+    })
+    assert.equal(deleteFile as unknown as string, 'Yes')
+  })
 })
 
 test.group('Prompts | secure', () => {
@@ -212,5 +289,19 @@ test.group('Prompts | secure', () => {
     })
 
     assert.equal(password, '')
+  })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (prompt) => {
+      prompt.answer('foo')
+    })
+
+    const password = await prompt.secure('Enter password', {
+      result (answer) {
+        return answer.toUpperCase()
+      },
+    })
+    assert.equal(password, 'FOO')
   })
 })

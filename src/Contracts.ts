@@ -35,11 +35,18 @@ export type PromptValidationFunction<T extends PromptState<any>> = (
 export type PromptFormatFunction<T extends any> = (value: T) => T | Promise<T>
 
 /**
+ * Shape of prompt result function. It is called before returning the result
+ * and after validation
+ */
+export type PromptResultFunction<T extends any> = (value: T) => any | Promise<any>
+
+/**
  * Prompt options for text based prompts
  */
 export type TextPromptOptions = {
   default?: string,
   name?: string,
+  result?: PromptResultFunction<string>,
   format?: PromptFormatFunction<string>,
   validate?: PromptValidationFunction<PromptState<string>>,
 }
@@ -50,6 +57,7 @@ export type TextPromptOptions = {
 export type ChoicePromptOptions = {
   default?: string,
   name?: string,
+  result?: PromptResultFunction<string>,
   format?: PromptFormatFunction<string>,
   validate?: PromptValidationFunction<PromptState<string> & { choices: PromptChoice[] }>,
 }
@@ -60,6 +68,7 @@ export type ChoicePromptOptions = {
 export type MultiplePromptOptions = {
   default?: string[],
   name?: string,
+  result?: PromptResultFunction<string[]>,
   format?: PromptFormatFunction<string[]>,
   validate?: PromptValidationFunction<PromptState<string[]> & { choices: PromptChoice[] }>,
 }
@@ -70,6 +79,7 @@ export type MultiplePromptOptions = {
 export type BooleanPromptOptions = {
   default?: boolean,
   name?: string,
+  result?: PromptResultFunction<boolean>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
 }
@@ -80,7 +90,8 @@ export type BooleanPromptOptions = {
 export type TogglePromptOptions = {
   default?: boolean,
   name?: string,
-  format?: PromptFormatFunction<string>,
+  result?: PromptResultFunction<boolean>,
+  format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
 }
 
@@ -93,6 +104,7 @@ export type PromptEventOptions = {
   type: string,
   message: string,
   initial?: string | boolean | string[],
+  result?: PromptResultFunction<any>,
   format?: PromptFormatFunction<any>,
   validate?: PromptValidationFunction<any>,
   answer (answer: any): Promise<void>,
@@ -116,17 +128,38 @@ export type PromptChoice = {
  * Shape of prompts class.
  */
 export interface PromptContract {
-  ask (title: string, options?: TextPromptOptions): Promise<string>,
-  secure (title: string, options?: TextPromptOptions): Promise<string>,
-  confirm (title: string, options?: BooleanPromptOptions): Promise<boolean>,
-  toggle (title: string, choices: [string, string], options?: TogglePromptOptions): Promise<boolean>,
-  choice (title: string, choices: (string | PromptChoice)[], options?: ChoicePromptOptions): Promise<string>,
+  ask<Result extends any = string> (
+    title: string,
+    options?: TextPromptOptions,
+  ): Promise<Result>,
 
-  multiple (
+  secure<Result extends any = string> (
+    title: string,
+    options?: TextPromptOptions,
+  ): Promise<Result>,
+
+  confirm<Result extends any = boolean> (
+    title: string,
+    options?: BooleanPromptOptions,
+  ): Promise<Result>,
+
+  toggle<Result extends any = boolean> (
+    title: string,
+    choices: [string, string],
+    options?: TogglePromptOptions,
+  ): Promise<Result>,
+
+  choice<Result extends any = string> (
+    title: string,
+    choices: (string | PromptChoice)[],
+    options?: ChoicePromptOptions,
+  ): Promise<Result>,
+
+  multiple<Result extends any = string[]> (
     title: string,
     choices: (string | PromptChoice)[],
     options?: MultiplePromptOptions,
-  ): Promise<string[]>,
+  ): Promise<Result>,
 
   on (event: 'prompt', callback: (options: PromptEventOptions) => any): this,
   on (event: 'prompt:error', callback: (message: string) => any): this,
