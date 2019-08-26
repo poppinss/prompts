@@ -75,7 +75,7 @@ yarn add @poppinss/prompts
 and then use it as follows:
 
 ```ts
-import { Prompt } from '@poppinss/prompt'
+import { Prompt } from '@poppinss/prompts'
 const prompt = new Prompt()
 
 const username = await prompt.ask('What is your username?')
