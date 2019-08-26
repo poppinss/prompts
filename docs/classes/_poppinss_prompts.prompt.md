@@ -95,11 +95,15 @@ ___
 
 ###  ask
 
-▸ **ask**(`title`: string, `options?`: [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions)): *Promise‹string›*
+▸ **ask**<**Result**>(`title`: string, `options?`: [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions)): *Promise‹Result›*
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
 Prompts for text input
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -108,15 +112,19 @@ Name | Type |
 `title` | string |
 `options?` | [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions) |
 
-**Returns:** *Promise‹string›*
+**Returns:** *Promise‹Result›*
 
 ___
 
 ###  choice
 
-▸ **choice**(`title`: string, `choices`: string | object[], `options?`: [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions)): *Promise‹string›*
+▸ **choice**<**Result**>(`title`: string, `choices`: string | object[], `options?`: [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions)): *Promise‹Result›*
 
 Prompts for text input
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -126,17 +134,21 @@ Name | Type |
 `choices` | string \| object[] |
 `options?` | [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions) |
 
-**Returns:** *Promise‹string›*
+**Returns:** *Promise‹Result›*
 
 ___
 
 ###  confirm
 
-▸ **confirm**(`title`: string, `options?`: [BooleanPromptOptions](../modules/_poppinss_prompts.md#booleanpromptoptions)): *Promise‹boolean›*
+▸ **confirm**<**Result**>(`title`: string, `options?`: [BooleanPromptOptions](../modules/_poppinss_prompts.md#booleanpromptoptions)): *Promise‹Result›*
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
 Asks for `Y/n`
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -145,7 +157,7 @@ Name | Type |
 `title` | string |
 `options?` | [BooleanPromptOptions](../modules/_poppinss_prompts.md#booleanpromptoptions) |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹Result›*
 
 ___
 
@@ -220,9 +232,13 @@ ___
 
 ###  multiple
 
-▸ **multiple**(`title`: string, `choices`: string | object[], `options?`: [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions)): *Promise‹string[]›*
+▸ **multiple**<**Result**>(`title`: string, `choices`: string | object[], `options?`: [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions)): *Promise‹Result›*
 
 Prompts for text input
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -232,7 +248,7 @@ Name | Type |
 `choices` | string \| object[] |
 `options?` | [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions) |
 
-**Returns:** *Promise‹string[]›*
+**Returns:** *Promise‹Result›*
 
 ___
 
@@ -454,11 +470,15 @@ ___
 
 ###  secure
 
-▸ **secure**(`title`: string, `options?`: [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions)): *Promise‹string›*
+▸ **secure**<**Result**>(`title`: string, `options?`: [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions)): *Promise‹Result›*
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
 Prompts for text input but mangles the output (for password)
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -467,7 +487,7 @@ Name | Type |
 `title` | string |
 `options?` | [TextPromptOptions](../modules/_poppinss_prompts.md#textpromptoptions) |
 
-**Returns:** *Promise‹string›*
+**Returns:** *Promise‹Result›*
 
 ___
 
@@ -489,11 +509,15 @@ ___
 
 ###  toggle
 
-▸ **toggle**(`title`: string, `choices`: [string, string], `options?`: [TogglePromptOptions](../modules/_poppinss_prompts.md#togglepromptoptions)): *Promise‹boolean›*
+▸ **toggle**<**Result**>(`title`: string, `choices`: [string, string], `options?`: [TogglePromptOptions](../modules/_poppinss_prompts.md#togglepromptoptions)): *Promise‹Result›*
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
 Similar to [[this.confirm]] but with custom toggle options
+
+**Type parameters:**
+
+▪ **Result**: *any*
 
 **Parameters:**
 
@@ -503,7 +527,7 @@ Name | Type |
 `choices` | [string, string] |
 `options?` | [TogglePromptOptions](../modules/_poppinss_prompts.md#togglepromptoptions) |
 
-**Returns:** *Promise‹boolean›*
+**Returns:** *Promise‹Result›*
 
 ___
 

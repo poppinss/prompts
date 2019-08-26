@@ -24,6 +24,7 @@
 * [PromptChoice](_poppinss_prompts.md#promptchoice)
 * [PromptEventOptions](_poppinss_prompts.md#prompteventoptions)
 * [PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)
+* [PromptResultFunction](_poppinss_prompts.md#promptresultfunction)
 * [PromptState](_poppinss_prompts.md#promptstate)
 * [PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)
 * [TextPromptOptions](_poppinss_prompts.md#textpromptoptions)
@@ -91,6 +92,25 @@ Shape of prompt format function. It is called on every keystroke
 #### Type declaration:
 
 ▸ (`value`: T): *T | Promise‹T›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`value` | T |
+
+___
+
+###  PromptResultFunction
+
+Ƭ **PromptResultFunction**: *function*
+
+Shape of prompt result function. It is called before returning the result
+and after validation
+
+#### Type declaration:
+
+▸ (`value`: T): *any | Promise‹any›*
 
 **Parameters:**
 
