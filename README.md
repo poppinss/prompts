@@ -162,7 +162,7 @@ await prompt.choice('Select toppings', [
 Uses the [multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
-await prompt.choice('Select base dependencies', [
+await prompt.multiple('Select base dependencies', [
   '@adonisjs/core',
   '@adonisjs/bodyparser'
 ])
@@ -171,7 +171,7 @@ await prompt.choice('Select base dependencies', [
 Or pass the choice as an object
 
 ```ts
-await prompt.choice('Select base dependencies', [
+await prompt.multiple('Select base dependencies', [
   {
     name: '@adonisjs/core',
     message: 'Framework core'
