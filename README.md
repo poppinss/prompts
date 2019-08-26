@@ -3,7 +3,7 @@
 
 This module is used by AdonisJs with capabilities to use the fake API to test the prompts. I have only implemented a subset of enquirer prompt types, since these are the only ones I need. However, I am open to accept PR for more.
 
-[![appveyor-image]][appveyor-url] [![circleci-image]][circleci-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
+[![circleci-image]][circleci-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -186,9 +186,6 @@ await prompt.multiple('Select base dependencies', [
 
 ## Maintainers
 [Harminder virk](https://github.com/thetutlage)
-
-[appveyor-image]: https://img.shields.io/appveyor/ci/thetutlage/prompts/master.svg?style=for-the-badge&logo=appveyor
-[appveyor-url]: https://ci.appveyor.com/project/thetutlage/prompts "appveyor"
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/prompts/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/prompts "circleci"
