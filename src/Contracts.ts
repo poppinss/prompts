@@ -1,5 +1,9 @@
+/**
+ * @module @poppinss/prompts
+ */
+
 /*
-* @adonisjs/ace
+* @poppinss/prompts
 *
 * (c) Harminder Virk <virk@adonisjs.com>
 *
