@@ -45,6 +45,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     options = options || {}
     return this.$prompt({
       type: 'input',
+      name: options.name,
       message: title,
       initial: options.default,
       format: options.format,
@@ -60,6 +61,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     return this.$prompt({
       type: 'password',
       message: title,
+      name: options.name,
       initial: options.default,
       format: options.format,
       validate: options.validate,
@@ -74,6 +76,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     return this.$prompt({
       type: 'confirm',
       message: title,
+      name: options.name,
       initial: options.default,
       format: options.format,
       validate: options.validate,
@@ -92,6 +95,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     return this.$prompt({
       type: 'toggle',
       message: title,
+      name: options.name,
       enabled: choices[0],
       disabled: choices[1],
       initial: options.default,
@@ -113,6 +117,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     return this.$prompt({
       type: 'select',
       message: title,
+      name: options.name,
       choices: choices.map((choice) => {
         if (typeof (choice) === 'string') {
           return { name: choice, message: choice, value: choice }
@@ -138,6 +143,7 @@ export abstract class Prompt extends Emitter implements PromptContract {
     return this.$prompt({
       type: 'multiselect',
       message: title,
+      name: options.name,
       choices: choices.map((choice) => {
         if (typeof (choice) === 'string') {
           return { name: choice, message: choice, value: choice }
