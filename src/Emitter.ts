@@ -2,7 +2,7 @@
  * @module @poppinss/prompts
  */
 
-/**
+/*
  * @poppinss/prompts
  *
  * (c) Harminder Virk <virk@adonisjs.com>
@@ -85,7 +85,7 @@ export class EmitterPrompt extends Prompt {
          * This function must be called in order for prompts
          * to advance.
          */
-        async answer (answer) {
+        async answer (answer: any) {
           /**
            * Format the user input
            */

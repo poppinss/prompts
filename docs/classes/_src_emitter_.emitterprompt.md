@@ -1,21 +1,17 @@
 **[@poppinss/prompts](../README.md)**
 
-[Globals](../README.md) › [@poppinss/prompts](../modules/_poppinss_prompts.md) › [Prompt](_poppinss_prompts.prompt.md)
+[Globals](../README.md) › ["src/Emitter"](../modules/_src_emitter_.md) › [EmitterPrompt](_src_emitter_.emitterprompt.md)
 
-# Class: Prompt
+# Class: EmitterPrompt
 
-Base class extended by [[Enquirer]] and [[Emitter]] classes to have
-common interface.
+Use event emitter to emit different prompt events, which can be
+used to answer the prompts programmatically.
 
 ## Hierarchy
 
-* internal
+  * [Prompt](_src_base_.prompt.md)
 
-  * **Prompt**
-
-  * [EnquirerPrompt](_poppinss_prompts.enquirerprompt.md)
-
-  * [EmitterPrompt](_poppinss_prompts.emitterprompt.md)
+  * **EmitterPrompt**
 
 ## Implements
 
@@ -23,41 +19,38 @@ common interface.
 
 ## Index
 
-### Classes
-
-* [EventEmitter](_poppinss_prompts.prompt.eventemitter.md)
-
 ### Methods
 
-* [$prompt](_poppinss_prompts.prompt.md#protected-abstract-$prompt)
-* [addListener](_poppinss_prompts.prompt.md#addlistener)
-* [ask](_poppinss_prompts.prompt.md#ask)
-* [choice](_poppinss_prompts.prompt.md#choice)
-* [confirm](_poppinss_prompts.prompt.md#confirm)
-* [emit](_poppinss_prompts.prompt.md#emit)
-* [eventNames](_poppinss_prompts.prompt.md#eventnames)
-* [getMaxListeners](_poppinss_prompts.prompt.md#getmaxlisteners)
-* [listenerCount](_poppinss_prompts.prompt.md#listenercount)
-* [listeners](_poppinss_prompts.prompt.md#listeners)
-* [multiple](_poppinss_prompts.prompt.md#multiple)
-* [off](_poppinss_prompts.prompt.md#off)
-* [on](_poppinss_prompts.prompt.md#on)
-* [once](_poppinss_prompts.prompt.md#once)
-* [prependListener](_poppinss_prompts.prompt.md#prependlistener)
-* [prependOnceListener](_poppinss_prompts.prompt.md#prependoncelistener)
-* [rawListeners](_poppinss_prompts.prompt.md#rawlisteners)
-* [removeAllListeners](_poppinss_prompts.prompt.md#removealllisteners)
-* [removeListener](_poppinss_prompts.prompt.md#removelistener)
-* [secure](_poppinss_prompts.prompt.md#secure)
-* [setMaxListeners](_poppinss_prompts.prompt.md#setmaxlisteners)
-* [toggle](_poppinss_prompts.prompt.md#toggle)
-* [once](_poppinss_prompts.prompt.md#static-once)
+* [$prompt](_src_emitter_.emitterprompt.md#protected-$prompt)
+* [addListener](_src_emitter_.emitterprompt.md#addlistener)
+* [ask](_src_emitter_.emitterprompt.md#ask)
+* [choice](_src_emitter_.emitterprompt.md#choice)
+* [confirm](_src_emitter_.emitterprompt.md#confirm)
+* [emit](_src_emitter_.emitterprompt.md#emit)
+* [eventNames](_src_emitter_.emitterprompt.md#eventnames)
+* [getMaxListeners](_src_emitter_.emitterprompt.md#getmaxlisteners)
+* [listenerCount](_src_emitter_.emitterprompt.md#listenercount)
+* [listeners](_src_emitter_.emitterprompt.md#listeners)
+* [multiple](_src_emitter_.emitterprompt.md#multiple)
+* [off](_src_emitter_.emitterprompt.md#off)
+* [on](_src_emitter_.emitterprompt.md#on)
+* [once](_src_emitter_.emitterprompt.md#once)
+* [prependListener](_src_emitter_.emitterprompt.md#prependlistener)
+* [prependOnceListener](_src_emitter_.emitterprompt.md#prependoncelistener)
+* [rawListeners](_src_emitter_.emitterprompt.md#rawlisteners)
+* [removeAllListeners](_src_emitter_.emitterprompt.md#removealllisteners)
+* [removeListener](_src_emitter_.emitterprompt.md#removelistener)
+* [secure](_src_emitter_.emitterprompt.md#secure)
+* [setMaxListeners](_src_emitter_.emitterprompt.md#setmaxlisteners)
+* [toggle](_src_emitter_.emitterprompt.md#toggle)
 
 ## Methods
 
-### `Protected` `Abstract` $prompt
+### `Protected` $prompt
 
 ▸ **$prompt**(`options`: any): *Promise‹any›*
+
+*Overrides [Prompt](_src_base_.prompt.md).[$prompt](_src_base_.prompt.md#protected-abstract-$prompt)*
 
 **Parameters:**
 
@@ -99,6 +92,8 @@ ___
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[ask](_src_base_.prompt.md#ask)*
+
 Prompts for text input
 
 **Type parameters:**
@@ -119,6 +114,8 @@ ___
 ###  choice
 
 ▸ **choice**<**Result**>(`title`: string, `choices`: string | object[], `options?`: [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions)): *Promise‹Result›*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[choice](_src_base_.prompt.md#choice)*
 
 Prompts for text input
 
@@ -143,6 +140,8 @@ ___
 ▸ **confirm**<**Result**>(`title`: string, `options?`: [BooleanPromptOptions](../modules/_poppinss_prompts.md#booleanpromptoptions)): *Promise‹Result›*
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[confirm](_src_base_.prompt.md#confirm)*
 
 Asks for `Y/n`
 
@@ -234,6 +233,8 @@ ___
 
 ▸ **multiple**<**Result**>(`title`: string, `choices`: string | object[], `options?`: [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions)): *Promise‹Result›*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[multiple](_src_base_.prompt.md#multiple)*
+
 Prompts for text input
 
 **Type parameters:**
@@ -280,6 +281,8 @@ ___
 
 ▸ **on**(`event`: "prompt", `callback`: function): *this*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[on](_src_base_.prompt.md#on)*
+
 *Overrides void*
 
 **Parameters:**
@@ -300,6 +303,8 @@ Name | Type |
 
 ▸ **on**(`event`: "prompt:error", `callback`: function): *this*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[on](_src_base_.prompt.md#on)*
+
 *Overrides void*
 
 **Parameters:**
@@ -319,6 +324,8 @@ Name | Type |
 **Returns:** *this*
 
 ▸ **on**(`event`: "prompt:answer", `callback`: function): *this*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[on](_src_base_.prompt.md#on)*
 
 *Overrides void*
 
@@ -474,6 +481,8 @@ ___
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[secure](_src_base_.prompt.md#secure)*
+
 Prompts for text input but mangles the output (for password)
 
 **Type parameters:**
@@ -513,6 +522,8 @@ ___
 
 *Implementation of [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)*
 
+*Inherited from [Prompt](_src_base_.prompt.md).[toggle](_src_base_.prompt.md#toggle)*
+
 Similar to [[this.confirm]] but with custom toggle options
 
 **Type parameters:**
@@ -528,18 +539,3 @@ Name | Type |
 `options?` | [TogglePromptOptions](../modules/_poppinss_prompts.md#togglepromptoptions) |
 
 **Returns:** *Promise‹Result›*
-
-___
-
-### `Static` once
-
-▸ **once**(`emitter`: EventEmitter, `event`: string | symbol): *Promise‹any[]›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`emitter` | EventEmitter |
-`event` | string \| symbol |
-
-**Returns:** *Promise‹any[]›*

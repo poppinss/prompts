@@ -2,7 +2,7 @@
  * @module @poppinss/prompts
  */
 
-/**
+/*
  * @poppinss/prompts
  *
  * (c) Harminder Virk <virk@adonisjs.com>

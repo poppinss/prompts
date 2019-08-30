@@ -1,6 +1,6 @@
 **[@poppinss/prompts](../README.md)**
 
-[Globals](../README.md) › [@poppinss/prompts](../modules/_poppinss_prompts.md) › [Prompt](_poppinss_prompts.prompt.md) › [EventEmitter](_poppinss_prompts.prompt.eventemitter.md)
+[Globals](../README.md) › ["src/Base"](../modules/_src_base_.md) › [Prompt](_src_base_.prompt.md) › [EventEmitter](_src_base_.prompt.eventemitter.md)
 
 # Class: EventEmitter
 
@@ -12,26 +12,26 @@
 
 ### Properties
 
-* [defaultMaxListeners](_poppinss_prompts.prompt.eventemitter.md#static-defaultmaxlisteners)
+* [defaultMaxListeners](_src_base_.prompt.eventemitter.md#static-defaultmaxlisteners)
 
 ### Methods
 
-* [addListener](_poppinss_prompts.prompt.eventemitter.md#addlistener)
-* [emit](_poppinss_prompts.prompt.eventemitter.md#emit)
-* [eventNames](_poppinss_prompts.prompt.eventemitter.md#eventnames)
-* [getMaxListeners](_poppinss_prompts.prompt.eventemitter.md#getmaxlisteners)
-* [listenerCount](_poppinss_prompts.prompt.eventemitter.md#listenercount)
-* [listeners](_poppinss_prompts.prompt.eventemitter.md#listeners)
-* [off](_poppinss_prompts.prompt.eventemitter.md#off)
-* [on](_poppinss_prompts.prompt.eventemitter.md#on)
-* [once](_poppinss_prompts.prompt.eventemitter.md#once)
-* [prependListener](_poppinss_prompts.prompt.eventemitter.md#prependlistener)
-* [prependOnceListener](_poppinss_prompts.prompt.eventemitter.md#prependoncelistener)
-* [rawListeners](_poppinss_prompts.prompt.eventemitter.md#rawlisteners)
-* [removeAllListeners](_poppinss_prompts.prompt.eventemitter.md#removealllisteners)
-* [removeListener](_poppinss_prompts.prompt.eventemitter.md#removelistener)
-* [setMaxListeners](_poppinss_prompts.prompt.eventemitter.md#setmaxlisteners)
-* [listenerCount](_poppinss_prompts.prompt.eventemitter.md#static-listenercount)
+* [addListener](_src_base_.prompt.eventemitter.md#addlistener)
+* [emit](_src_base_.prompt.eventemitter.md#emit)
+* [eventNames](_src_base_.prompt.eventemitter.md#eventnames)
+* [getMaxListeners](_src_base_.prompt.eventemitter.md#getmaxlisteners)
+* [listenerCount](_src_base_.prompt.eventemitter.md#listenercount)
+* [listeners](_src_base_.prompt.eventemitter.md#listeners)
+* [off](_src_base_.prompt.eventemitter.md#off)
+* [on](_src_base_.prompt.eventemitter.md#on)
+* [once](_src_base_.prompt.eventemitter.md#once)
+* [prependListener](_src_base_.prompt.eventemitter.md#prependlistener)
+* [prependOnceListener](_src_base_.prompt.eventemitter.md#prependoncelistener)
+* [rawListeners](_src_base_.prompt.eventemitter.md#rawlisteners)
+* [removeAllListeners](_src_base_.prompt.eventemitter.md#removealllisteners)
+* [removeListener](_src_base_.prompt.eventemitter.md#removelistener)
+* [setMaxListeners](_src_base_.prompt.eventemitter.md#setmaxlisteners)
+* [listenerCount](_src_base_.prompt.eventemitter.md#static-listenercount)
 
 ## Properties
 

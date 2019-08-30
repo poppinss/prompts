@@ -12,9 +12,9 @@ Shape of prompts class.
 
 ## Implemented by
 
-* [EmitterPrompt](../classes/_poppinss_prompts.emitterprompt.md)
-* [EnquirerPrompt](../classes/_poppinss_prompts.enquirerprompt.md)
-* [Prompt](../classes/_poppinss_prompts.prompt.md)
+* [EmitterPrompt](../classes/_src_emitter_.emitterprompt.md)
+* [EnquirerPrompt](../classes/_src_enquirer_.enquirerprompt.md)
+* [Prompt](../classes/_src_base_.prompt.md)
 
 ## Index
 

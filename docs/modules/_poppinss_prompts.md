@@ -6,12 +6,6 @@
 
 ## Index
 
-### Classes
-
-* [EmitterPrompt](../classes/_poppinss_prompts.emitterprompt.md)
-* [EnquirerPrompt](../classes/_poppinss_prompts.enquirerprompt.md)
-* [Prompt](../classes/_poppinss_prompts.prompt.md)
-
 ### Interfaces
 
 * [PromptContract](../interfaces/_poppinss_prompts.promptcontract.md)
