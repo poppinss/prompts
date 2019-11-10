@@ -15,13 +15,11 @@ test.group('Prompts | input', () => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (prompt) => {
+      assert.equal(prompt.name, 'prompt')
       prompt.answer('virk')
     })
 
-    const username = await prompt.ask('What\'s your username?', {
-      name: 'username',
-    })
-
+    const username = await prompt.ask('What\'s your username?')
     assert.equal(username, 'virk')
   })
 

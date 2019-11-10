@@ -23,6 +23,8 @@ import {
   MultiplePromptOptions,
 } from './Contracts'
 
+import { ObjectBuilder } from './ObjectBuilder'
+
 /**
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
  * common interface.
@@ -46,15 +48,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
     options?: TextPromptOptions,
   ): Promise<Result> {
     options = options || {}
-    return this.$prompt({
-      type: 'input',
-      name: options.name,
-      message: title,
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'input')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+
+    return this.$prompt(builder.toJSON())
   }
 
   /**
@@ -65,15 +69,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
     options?: TextPromptOptions,
   ): Promise<Result> {
     options = options || {}
-    return this.$prompt({
-      type: 'password',
-      message: title,
-      name: options.name,
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'password')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+
+    return this.$prompt(builder.toJSON())
   }
 
   /**
@@ -84,15 +90,17 @@ export abstract class Prompt extends Emitter implements PromptContract {
     options?: BooleanPromptOptions,
   ): Promise<Result> {
     options = options || {}
-    return this.$prompt({
-      type: 'confirm',
-      message: title,
-      name: options.name,
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'confirm')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+
+    return this.$prompt(builder.toJSON())
   }
 
   /**
@@ -104,17 +112,19 @@ export abstract class Prompt extends Emitter implements PromptContract {
     options?: TogglePromptOptions,
   ): Promise<Result> {
     options = options || {}
-    return this.$prompt({
-      type: 'toggle',
-      message: title,
-      name: options.name,
-      enabled: choices[0],
-      disabled: choices[1],
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'toggle')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+    builder.addProp('enabled', choices[0])
+    builder.addProp('disabled', choices[1])
+
+    return this.$prompt(builder.toJSON())
   }
 
   /**
@@ -127,21 +137,22 @@ export abstract class Prompt extends Emitter implements PromptContract {
   ): Promise<Result> {
     options = options || {}
 
-    return this.$prompt({
-      type: 'select',
-      message: title,
-      name: options.name,
-      choices: choices.map((choice) => {
-        if (typeof (choice) === 'string') {
-          return { name: choice, message: choice, value: choice }
-        }
-        return choice
-      }),
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'select')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+    builder.addProp('choices', choices.map((choice) => {
+      if (typeof (choice) === 'string') {
+        return { name: choice, message: choice, value: choice }
+      }
+      return choice
+    }))
+
+    return this.$prompt(builder.toJSON())
   }
 
   /**
@@ -154,20 +165,21 @@ export abstract class Prompt extends Emitter implements PromptContract {
   ): Promise<Result> {
     options = options || {}
 
-    return this.$prompt({
-      type: 'multiselect',
-      message: title,
-      name: options.name,
-      choices: choices.map((choice) => {
-        if (typeof (choice) === 'string') {
-          return { name: choice, message: choice, value: choice }
-        }
-        return choice
-      }),
-      initial: options.default,
-      result: options.result,
-      format: options.format,
-      validate: options.validate,
-    })
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'multiselect')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+    builder.addProp('choices', choices.map((choice) => {
+      if (typeof (choice) === 'string') {
+        return { name: choice, message: choice, value: choice }
+      }
+      return choice
+    }))
+
+    return this.$prompt(builder.toJSON())
   }
 }
