@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › [@poppinss/prompts](../modules/_poppinss_prompts.md) › [PromptContract](_poppinss_prompts.promptcontract.md)
+[@poppinss/prompts](../README.md) › [@poppinss/prompts](../modules/_poppinss_prompts.md) › [PromptContract](_poppinss_prompts.promptcontract.md)
 
 # Interface: PromptContract
 
@@ -62,7 +60,7 @@ ___
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions) |
 
 **Returns:** *Promise‹Result›*
@@ -101,7 +99,7 @@ ___
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions) |
 
 **Returns:** *Promise‹Result›*

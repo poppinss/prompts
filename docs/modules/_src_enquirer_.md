@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › ["src/Enquirer"](_src_enquirer_.md)
+[@poppinss/prompts](../README.md) › ["src/Enquirer"](_src_enquirer_.md)
 
 # External module: "src/Enquirer"
 

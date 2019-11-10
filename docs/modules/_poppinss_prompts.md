@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › [@poppinss/prompts](_poppinss_prompts.md)
+[@poppinss/prompts](../README.md) › [@poppinss/prompts](_poppinss_prompts.md)
 
 # External module: @poppinss/prompts
 

@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › ["src/Enquirer"](../modules/_src_enquirer_.md) › [EnquirerPrompt](_src_enquirer_.enquirerprompt.md)
+[@poppinss/prompts](../README.md) › ["src/Enquirer"](../modules/_src_enquirer_.md) › [EnquirerPrompt](_src_enquirer_.enquirerprompt.md)
 
 # Class: EnquirerPrompt
 
@@ -9,9 +7,9 @@ method is invoked by the extended `Prompt` class.
 
 ## Hierarchy
 
-  * [Prompt](_src_base_.prompt.md)
+  ↳ [Prompt](_src_base_.prompt.md)
 
-  * **EnquirerPrompt**
+  ↳ **EnquirerPrompt**
 
 ## Implements
 
@@ -128,7 +126,7 @@ Prompts for text input
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions) |
 
 **Returns:** *Promise‹Result›*
@@ -170,7 +168,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 `...args` | any[] |
 
 **Returns:** *boolean*
@@ -207,7 +205,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`type` | string \| symbol |
+`type` | string &#124; symbol |
 
 **Returns:** *number*
 
@@ -223,7 +221,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 
 **Returns:** *Function[]*
 
@@ -246,7 +244,7 @@ Prompts for text input
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions) |
 
 **Returns:** *Promise‹Result›*
@@ -429,7 +427,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 
 **Returns:** *Function[]*
 
@@ -445,7 +443,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event?` | string \| symbol |
+`event?` | string &#124; symbol |
 
 **Returns:** *this*
 

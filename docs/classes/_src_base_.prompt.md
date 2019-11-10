@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › ["src/Base"](../modules/_src_base_.md) › [Prompt](_src_base_.prompt.md)
+[@poppinss/prompts](../README.md) › ["src/Base"](../modules/_src_base_.md) › [Prompt](_src_base_.prompt.md)
 
 # Class: Prompt
 
@@ -11,11 +9,11 @@ common interface.
 
 * internal
 
-  * **Prompt**
+  ↳ **Prompt**
 
-  * [EnquirerPrompt](_src_enquirer_.enquirerprompt.md)
+  ↳ [EnquirerPrompt](_src_enquirer_.enquirerprompt.md)
 
-  * [EmitterPrompt](_src_emitter_.emitterprompt.md)
+  ↳ [EmitterPrompt](_src_emitter_.emitterprompt.md)
 
 ## Implements
 
@@ -131,7 +129,7 @@ Prompts for text input
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [ChoicePromptOptions](../modules/_poppinss_prompts.md#choicepromptoptions) |
 
 **Returns:** *Promise‹Result›*
@@ -171,7 +169,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 `...args` | any[] |
 
 **Returns:** *boolean*
@@ -208,7 +206,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`type` | string \| symbol |
+`type` | string &#124; symbol |
 
 **Returns:** *number*
 
@@ -224,7 +222,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 
 **Returns:** *Function[]*
 
@@ -245,7 +243,7 @@ Prompts for text input
 Name | Type |
 ------ | ------ |
 `title` | string |
-`choices` | string \| object[] |
+`choices` | string &#124; object[] |
 `options?` | [MultiplePromptOptions](../modules/_poppinss_prompts.md#multiplepromptoptions) |
 
 **Returns:** *Promise‹Result›*
@@ -422,7 +420,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event` | string \| symbol |
+`event` | string &#124; symbol |
 
 **Returns:** *Function[]*
 
@@ -438,7 +436,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`event?` | string \| symbol |
+`event?` | string &#124; symbol |
 
 **Returns:** *this*
 
@@ -533,13 +531,24 @@ ___
 
 ### `Static` once
 
-▸ **once**(`emitter`: EventEmitter, `event`: string | symbol): *Promise‹any[]›*
+▸ **once**(`emitter`: NodeEventTarget, `event`: string | symbol): *Promise‹any[]›*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`emitter` | EventEmitter |
-`event` | string \| symbol |
+`emitter` | NodeEventTarget |
+`event` | string &#124; symbol |
+
+**Returns:** *Promise‹any[]›*
+
+▸ **once**(`emitter`: DOMEventTarget, `event`: string): *Promise‹any[]›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`emitter` | DOMEventTarget |
+`event` | string |
 
 **Returns:** *Promise‹any[]›*

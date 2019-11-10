@@ -1,6 +1,4 @@
-**[@poppinss/prompts](../README.md)**
-
-[Globals](../README.md) › ["src/Emitter"](_src_emitter_.md)
+[@poppinss/prompts](../README.md) › ["src/Emitter"](_src_emitter_.md)
 
 # External module: "src/Emitter"
 
