@@ -1,15 +1,21 @@
 # Prompts
 > Module on top of [enquirer](https://github.com/enquirer/enquirer) with API for testing as well.
 
-This module is used by AdonisJs with capabilities to use the fake API to test the prompts. I have only implemented a subset of enquirer prompt types, since these are the only ones I need. However, I am open to accept PR for more.
 
-[![circleci-image]][circleci-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
+[![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
+
+This module wraps [enquirer](https://github.com/enquirer/enquirer) and exposes the API to easily test prompts without pulling your hair.
+
+For testing, we make use of Event emitter instead of executing actual prompts and you can act on those events programmatically.
+
+> Please note: Only a subset of prompts are implemented. However, I am open to accept PR's for adding more.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of contents
 
 - [Why use this module?](#why-use-this-module)
+- [Installation](#installation)
 - [Usage](#usage)
 - [Implemented Prompt types](#implemented-prompt-types)
     - [ask(title: string, options?: TextPromptOptions)](#asktitle-string-options-textpromptoptions)
@@ -18,7 +24,6 @@ This module is used by AdonisJs with capabilities to use the fake API to test th
     - [toggle(title: string, choices: [string, string], options?: TogglePromptOptions)](#toggletitle-string-choices-string-string-options-togglepromptoptions)
     - [choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)](#choicetitle-string-choices-string---options-choicepromptoptions)
     - [multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)](#multipletitle-string-choices-string---options-multiplepromptoptions)
-- [Maintainers](#maintainers)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,7 +67,7 @@ await myCommand.run()
 
 It is as simple as that. There is no need to make any code changes, just make use of the `FakePrompt` class over `Prompt`.
 
-## Usage
+## Installation
 Install the package from the npm registry as follows:
 
 ```sh
@@ -72,7 +77,7 @@ npm i @poppinss/prompts
 yarn add @poppinss/prompts
 ```
 
-and then use it as follows:
+## Usage
 
 ```ts
 import { Prompt } from '@poppinss/prompts'
@@ -183,17 +188,14 @@ await prompt.multiple('Select base dependencies', [
 ])
 ```
 
-
-## Maintainers
-[Harminder virk](https://github.com/thetutlage)
-
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/prompts/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/prompts "circleci"
+
+[typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
+[typescript-url]:  "typescript"
 
 [npm-image]: https://img.shields.io/npm/v/@poppinss/prompts.svg?style=for-the-badge&logo=npm
 [npm-url]: https://npmjs.org/package/@poppinss/prompts "npm"
 
-[typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-
-[license-url]: LICENSE.md
-[license-image]: https://img.shields.io/aur/license/pac.svg?style=for-the-badge
+[license-image]: https://img.shields.io/npm/l/@poppinss/prompts?color=blueviolet&style=for-the-badge
+[license-url]: LICENSE.md "license"
