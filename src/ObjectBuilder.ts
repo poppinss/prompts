@@ -8,16 +8,16 @@
 */
 
 export class ObjectBuilder {
-  private _source: any = {}
+  private source: { [key: string]: any } = {}
 
-  public addProp (key, value) {
+  public addProp (key: string, value: any) {
     if (value === undefined) {
       return
     }
-    this._source[key] = value
+    this.source[key] = value
   }
 
-  public toJSON () {
-    return this._source
+  public toJSON (): { [key: string]: any } {
+    return this.source
   }
 }
