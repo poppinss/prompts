@@ -14,9 +14,9 @@ test.group('Prompts | input', () => {
   test('test input prompt', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      assert.equal(prompt.name, 'prompt')
-      prompt.answer('virk')
+    prompt.on('prompt', (question) => {
+      assert.equal(question.name, 'prompt')
+      question.answer('virk')
     })
 
     const username = await prompt.ask('What\'s your username?')
@@ -27,8 +27,8 @@ test.group('Prompts | input', () => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('')
+    prompt.on('prompt', (question) => {
+      question.answer('')
     })
 
     prompt.on('prompt:error', (message) => {
@@ -48,8 +48,8 @@ test.group('Prompts | input', () => {
   test('invoke result function before returning the result', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('virk')
+    prompt.on('prompt', (question) => {
+      question.answer('virk')
     })
 
     const username = await prompt.ask('What\'s your username?', {
@@ -67,8 +67,8 @@ test.group('Prompts | choice', () => {
   test('test choice prompt', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.select(0)
+    prompt.on('prompt', (question) => {
+      question.select(0)
     })
 
     const client = await prompt.choice('Select the installation client', ['npm', 'yarn'])
@@ -79,8 +79,8 @@ test.group('Prompts | choice', () => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('')
+    prompt.on('prompt', (question) => {
+      question.answer('')
     })
 
     prompt.on('prompt:error', (message) => {
@@ -99,8 +99,8 @@ test.group('Prompts | choice', () => {
   test('invoke result function before returning the value', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.select(0)
+    prompt.on('prompt', (question) => {
+      question.select(0)
     })
 
     const client = await prompt.choice('Select the installation client', ['npm', 'yarn'], {
@@ -117,8 +117,8 @@ test.group('Prompts | multiple', () => {
   test('test multiple prompt', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.select(0)
+    prompt.on('prompt', (question) => {
+      question.select(0)
     })
 
     const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'])
@@ -129,8 +129,8 @@ test.group('Prompts | multiple', () => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.answer([])
+    prompt.on('prompt', (question) => {
+      question.answer([])
     })
 
     prompt.on('prompt:error', (message) => {
@@ -149,8 +149,8 @@ test.group('Prompts | multiple', () => {
   test('invoke result function before returning the value', async (assert) => {
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.select(0)
+    prompt.on('prompt', (question) => {
+      question.select(0)
     })
 
     const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'], {
@@ -166,8 +166,8 @@ test.group('Prompts | multiple', () => {
 test.group('Prompts | toggle', () => {
   test('test toggle prompt', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.accept()
+    prompt.on('prompt', (question) => {
+      question.accept()
     })
 
     const deleteFile = await prompt.toggle('Delete the file?', ['Yep', 'Nope'])
@@ -178,8 +178,8 @@ test.group('Prompts | toggle', () => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.decline()
+    prompt.on('prompt', (question) => {
+      question.decline()
     })
 
     prompt.on('prompt:error', (message) => {
@@ -197,8 +197,8 @@ test.group('Prompts | toggle', () => {
 
   test('invoke result function before returning the value', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.accept()
+    prompt.on('prompt', (question) => {
+      question.accept()
     })
 
     const deleteFile = await prompt.toggle('Delete the file?', ['Yep', 'Nope'], {
@@ -213,8 +213,8 @@ test.group('Prompts | toggle', () => {
 test.group('Prompts | confirm', () => {
   test('test confirm prompt', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.accept()
+    prompt.on('prompt', (question) => {
+      question.accept()
     })
 
     const deleteFile = await prompt.confirm('Delete the file?')
@@ -225,8 +225,8 @@ test.group('Prompts | confirm', () => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.decline()
+    prompt.on('prompt', (question) => {
+      question.decline()
     })
 
     prompt.on('prompt:error', (message) => {
@@ -244,8 +244,8 @@ test.group('Prompts | confirm', () => {
 
   test('invoke result function before returning the value', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.accept()
+    prompt.on('prompt', (question) => {
+      question.accept()
     })
 
     const deleteFile = await prompt.confirm('Delete the file?', {
@@ -260,8 +260,8 @@ test.group('Prompts | confirm', () => {
 test.group('Prompts | secure', () => {
   test('test secure prompt', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('foo')
+    prompt.on('prompt', (question) => {
+      question.answer('foo')
     })
 
     const password = await prompt.secure('Enter password')
@@ -272,8 +272,8 @@ test.group('Prompts | secure', () => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('')
+    prompt.on('prompt', (question) => {
+      question.answer('')
     })
 
     prompt.on('prompt:error', (message) => {
@@ -291,8 +291,8 @@ test.group('Prompts | secure', () => {
 
   test('invoke result function before returning the value', async (assert) => {
     const prompt = new EmitterPrompt()
-    prompt.on('prompt', (prompt) => {
-      prompt.answer('foo')
+    prompt.on('prompt', (question) => {
+      question.answer('foo')
     })
 
     const password = await prompt.secure('Enter password', {
