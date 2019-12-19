@@ -17,13 +17,13 @@
 
 ###  addProp
 
-▸ **addProp**(`key`: any, `value`: any): *void*
+▸ **addProp**(`key`: string, `value`: any): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`key` | any |
+`key` | string |
 `value` | any |
 
 **Returns:** *void*
@@ -32,6 +32,8 @@ ___
 
 ###  toJSON
 
-▸ **toJSON**(): *any*
+▸ **toJSON**(): *object*
 
-**Returns:** *any*
+**Returns:** *object*
+
+* \[ **key**: *string*\]: any
