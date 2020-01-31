@@ -7,7 +7,7 @@ common interface.
 
 ## Hierarchy
 
-* internal
+* EventEmitter
 
   ↳ **Prompt**
 
@@ -21,13 +21,17 @@ common interface.
 
 ## Index
 
-### Classes
+### Constructors
 
-* [EventEmitter](_src_base_.prompt.eventemitter.md)
+* [constructor](_src_base_.prompt.md#constructor)
+
+### Properties
+
+* [defaultMaxListeners](_src_base_.prompt.md#static-defaultmaxlisteners)
 
 ### Methods
 
-* [$prompt](_src_base_.prompt.md#protected-abstract-$prompt)
+* [$prompt](_src_base_.prompt.md#protected-abstract-prompt)
 * [addListener](_src_base_.prompt.md#addlistener)
 * [ask](_src_base_.prompt.md#ask)
 * [choice](_src_base_.prompt.md#choice)
@@ -49,7 +53,31 @@ common interface.
 * [secure](_src_base_.prompt.md#secure)
 * [setMaxListeners](_src_base_.prompt.md#setmaxlisteners)
 * [toggle](_src_base_.prompt.md#toggle)
-* [once](_src_base_.prompt.md#static-once)
+* [listenerCount](_src_base_.prompt.md#static-listenercount)
+
+## Constructors
+
+###  constructor
+
+\+ **new Prompt**(`options?`: EventEmitterOptions): *[Prompt](_src_base_.prompt.md)*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[constructor](_src_base_.prompt.md#constructor)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`options?` | EventEmitterOptions |
+
+**Returns:** *[Prompt](_src_base_.prompt.md)*
+
+## Properties
+
+### `Static` defaultMaxListeners
+
+▪ **defaultMaxListeners**: *number*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[defaultMaxListeners](_src_base_.prompt.md#static-defaultmaxlisteners)*
 
 ## Methods
 
@@ -71,7 +99,7 @@ ___
 
 ▸ **addListener**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[addListener](_src_base_.prompt.md#addlistener)*
 
 **Parameters:**
 
@@ -163,7 +191,7 @@ ___
 
 ▸ **emit**(`event`: string | symbol, ...`args`: any[]): *boolean*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[emit](_src_base_.prompt.md#emit)*
 
 **Parameters:**
 
@@ -180,7 +208,7 @@ ___
 
 ▸ **eventNames**(): *Array‹string | symbol›*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[eventNames](_src_base_.prompt.md#eventnames)*
 
 **Returns:** *Array‹string | symbol›*
 
@@ -190,7 +218,7 @@ ___
 
 ▸ **getMaxListeners**(): *number*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[getMaxListeners](_src_base_.prompt.md#getmaxlisteners)*
 
 **Returns:** *number*
 
@@ -200,7 +228,7 @@ ___
 
 ▸ **listenerCount**(`type`: string | symbol): *number*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[listenerCount](_src_base_.prompt.md#listenercount)*
 
 **Parameters:**
 
@@ -216,7 +244,7 @@ ___
 
 ▸ **listeners**(`event`: string | symbol): *Function[]*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[listeners](_src_base_.prompt.md#listeners)*
 
 **Parameters:**
 
@@ -254,7 +282,7 @@ ___
 
 ▸ **off**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[off](_src_base_.prompt.md#off)*
 
 **Parameters:**
 
@@ -342,7 +370,7 @@ ___
 
 ▸ **once**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[once](_src_base_.prompt.md#once)*
 
 **Parameters:**
 
@@ -366,7 +394,7 @@ ___
 
 ▸ **prependListener**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[prependListener](_src_base_.prompt.md#prependlistener)*
 
 **Parameters:**
 
@@ -390,7 +418,7 @@ ___
 
 ▸ **prependOnceListener**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[prependOnceListener](_src_base_.prompt.md#prependoncelistener)*
 
 **Parameters:**
 
@@ -414,7 +442,7 @@ ___
 
 ▸ **rawListeners**(`event`: string | symbol): *Function[]*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[rawListeners](_src_base_.prompt.md#rawlisteners)*
 
 **Parameters:**
 
@@ -430,7 +458,7 @@ ___
 
 ▸ **removeAllListeners**(`event?`: string | symbol): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[removeAllListeners](_src_base_.prompt.md#removealllisteners)*
 
 **Parameters:**
 
@@ -446,7 +474,7 @@ ___
 
 ▸ **removeListener**(`event`: string | symbol, `listener`: function): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[removeListener](_src_base_.prompt.md#removelistener)*
 
 **Parameters:**
 
@@ -493,7 +521,7 @@ ___
 
 ▸ **setMaxListeners**(`n`: number): *this*
 
-*Inherited from void*
+*Inherited from [Prompt](_src_base_.prompt.md).[setMaxListeners](_src_base_.prompt.md#setmaxlisteners)*
 
 **Parameters:**
 
@@ -529,26 +557,19 @@ Name | Type |
 
 ___
 
-### `Static` once
+### `Static` listenerCount
 
-▸ **once**(`emitter`: NodeEventTarget, `event`: string | symbol): *Promise‹any[]›*
+▸ **listenerCount**(`emitter`: EventEmitter, `event`: string | symbol): *number*
+
+*Inherited from [Prompt](_src_base_.prompt.md).[listenerCount](_src_base_.prompt.md#static-listenercount)*
+
+**`deprecated`** since v4.0.0
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`emitter` | NodeEventTarget |
+`emitter` | EventEmitter |
 `event` | string &#124; symbol |
 
-**Returns:** *Promise‹any[]›*
-
-▸ **once**(`emitter`: DOMEventTarget, `event`: string): *Promise‹any[]›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`emitter` | DOMEventTarget |
-`event` | string |
-
-**Returns:** *Promise‹any[]›*
+**Returns:** *number*

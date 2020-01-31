@@ -32,6 +32,16 @@ Shape of boolean prompts
 
 #### Type declaration:
 
+* **default**? : *undefined | false | true*
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹boolean›*
+
+* **name**? : *undefined | string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹boolean›*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹[PromptState](_poppinss_prompts.md#promptstate)‹boolean››*
+
 ___
 
 ###  ChoicePromptOptions
@@ -41,6 +51,16 @@ ___
 Prompt options for the choice prompt
 
 #### Type declaration:
+
+* **default**? : *undefined | string*
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹string›*
+
+* **name**? : *undefined | string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹string›*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹[PromptState](_poppinss_prompts.md#promptstate)‹string› & object›*
 
 ___
 
@@ -52,6 +72,16 @@ Prompt options for the multiple prompt
 
 #### Type declaration:
 
+* **default**? : *string[]*
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹string[]›*
+
+* **name**? : *undefined | string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹string[]›*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹[PromptState](_poppinss_prompts.md#promptstate)‹string[]› & object›*
+
 ___
 
 ###  PromptChoice
@@ -61,6 +91,14 @@ ___
 Shape of the prompt choice
 
 #### Type declaration:
+
+* **disabled**? : *undefined | false | true*
+
+* **hint**? : *undefined | string*
+
+* **message**? : *undefined | string*
+
+* **name**: *string*
 
 ___
 
@@ -72,6 +110,30 @@ The following options are passed to the emitter `prompt`
 event handler
 
 #### Type declaration:
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹any›*
+
+* **initial**? : *string | boolean | string[]*
+
+* **message**: *string*
+
+* **name**: *string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹any›*
+
+* **type**: *string*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹any›*
+
+* **accept**(): *Promise‹void›*
+
+* **answer**(`answer`: any): *Promise‹void›*
+
+* **decline**(): *Promise‹void›*
+
+* **multiSelect**(`indexes`: number[]): *Promise‹void›*
+
+* **select**(`index`: number): *Promise‹void›*
 
 ___
 
@@ -120,6 +182,14 @@ The state of prompt shared with the validate function
 
 #### Type declaration:
 
+* **message**: *string*
+
+* **name**: *string*
+
+* **type**: *string*
+
+* **value**: *T*
+
 ___
 
 ###  PromptValidationFunction
@@ -149,6 +219,16 @@ Prompt options for text based prompts
 
 #### Type declaration:
 
+* **default**? : *undefined | string*
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹string›*
+
+* **name**? : *undefined | string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹string›*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹[PromptState](_poppinss_prompts.md#promptstate)‹string››*
+
 ___
 
 ###  TogglePromptOptions
@@ -158,3 +238,13 @@ ___
 Options for a toggle prompt
 
 #### Type declaration:
+
+* **default**? : *undefined | false | true*
+
+* **format**? : *[PromptFormatFunction](_poppinss_prompts.md#promptformatfunction)‹boolean›*
+
+* **name**? : *undefined | string*
+
+* **result**? : *[PromptResultFunction](_poppinss_prompts.md#promptresultfunction)‹boolean›*
+
+* **validate**? : *[PromptValidationFunction](_poppinss_prompts.md#promptvalidationfunction)‹[PromptState](_poppinss_prompts.md#promptstate)‹boolean››*
