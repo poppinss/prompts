@@ -11,7 +11,7 @@
  * file that was distributed with this source code.
  */
 
-import Emitter from 'events'
+import { EventEmitter } from 'events'
 import {
   PromptContract,
   TextPromptOptions,
@@ -29,7 +29,7 @@ import { ObjectBuilder } from './ObjectBuilder'
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
  * common interface.
  */
-export abstract class Prompt extends Emitter implements PromptContract {
+export abstract class Prompt extends EventEmitter implements PromptContract {
   protected abstract $prompt (options: any): Promise<any>
 
   public on (event: 'prompt', callback: (options: PromptEventOptions) => any): this
