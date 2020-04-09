@@ -25,7 +25,7 @@ const enquirer = enq as any
  * method is invoked by the extended `Prompt` class.
  */
 export class EnquirerPrompt extends Prompt {
-  protected async $prompt (options: any): Promise<any> {
+  protected async prompt (options: any): Promise<any> {
     options = Object.assign({ name: 'prompt' }, options)
     const output = await enquirer.prompt(options)
     return output[options.name]

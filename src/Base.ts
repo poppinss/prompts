@@ -30,7 +30,7 @@ import { ObjectBuilder } from './ObjectBuilder'
  * common interface.
  */
 export abstract class Prompt extends EventEmitter implements PromptContract {
-  protected abstract $prompt (options: any): Promise<any>
+  protected abstract prompt (options: any): Promise<any>
 
   public on (event: 'prompt', callback: (options: PromptEventOptions) => any): this
   public on (event: 'prompt:error', callback: (message: string) => any): this
@@ -58,7 +58,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('format', options.format)
     builder.addProp('validate', options.validate)
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 
   /**
@@ -79,7 +79,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('format', options.format)
     builder.addProp('validate', options.validate)
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 
   /**
@@ -100,7 +100,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('format', options.format)
     builder.addProp('validate', options.validate)
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 
   /**
@@ -124,7 +124,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('enabled', choices[0])
     builder.addProp('disabled', choices[1])
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 
   /**
@@ -152,7 +152,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       return choice
     }))
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 
   /**
@@ -180,6 +180,6 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       return choice
     }))
 
-    return this.$prompt(builder.toJSON())
+    return this.prompt(builder.toJSON())
   }
 }

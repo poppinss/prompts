@@ -18,7 +18,7 @@ import { Prompt } from './Base'
  * used to answer the prompts programmatically.
  */
 export class EmitterPrompt extends Prompt {
-  protected $prompt (options: any): Promise<any> {
+  protected prompt (options: any): Promise<any> {
     return new Promise((resolve, reject) => {
       const self = this
 
