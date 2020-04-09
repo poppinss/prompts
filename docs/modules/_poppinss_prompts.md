@@ -1,6 +1,6 @@
 [@poppinss/prompts](../README.md) › [@poppinss/prompts](_poppinss_prompts.md)
 
-# External module: @poppinss/prompts
+# Module: @poppinss/prompts
 
 ## Index
 

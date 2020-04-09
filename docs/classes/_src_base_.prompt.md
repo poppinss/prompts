@@ -31,7 +31,6 @@ common interface.
 
 ### Methods
 
-* [$prompt](_src_base_.prompt.md#protected-abstract-prompt)
 * [addListener](_src_base_.prompt.md#addlistener)
 * [ask](_src_base_.prompt.md#ask)
 * [choice](_src_base_.prompt.md#choice)
@@ -47,6 +46,7 @@ common interface.
 * [once](_src_base_.prompt.md#once)
 * [prependListener](_src_base_.prompt.md#prependlistener)
 * [prependOnceListener](_src_base_.prompt.md#prependoncelistener)
+* [prompt](_src_base_.prompt.md#protected-abstract-prompt)
 * [rawListeners](_src_base_.prompt.md#rawlisteners)
 * [removeAllListeners](_src_base_.prompt.md#removealllisteners)
 * [removeListener](_src_base_.prompt.md#removelistener)
@@ -80,20 +80,6 @@ Name | Type |
 *Inherited from [Prompt](_src_base_.prompt.md).[defaultMaxListeners](_src_base_.prompt.md#static-defaultmaxlisteners)*
 
 ## Methods
-
-### `Protected` `Abstract` $prompt
-
-▸ **$prompt**(`options`: any): *Promise‹any›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options` | any |
-
-**Returns:** *Promise‹any›*
-
-___
 
 ###  addListener
 
@@ -435,6 +421,20 @@ Name | Type |
 `...args` | any[] |
 
 **Returns:** *this*
+
+___
+
+### `Protected` `Abstract` prompt
+
+▸ **prompt**(`options`: any): *Promise‹any›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`options` | any |
+
+**Returns:** *Promise‹any›*
 
 ___
 

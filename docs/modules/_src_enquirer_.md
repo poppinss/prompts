@@ -1,6 +1,6 @@
 [@poppinss/prompts](../README.md) › ["src/Enquirer"](_src_enquirer_.md)
 
-# External module: "src/Enquirer"
+# Module: "src/Enquirer"
 
 ## Index
 

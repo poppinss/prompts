@@ -1,6 +1,6 @@
 [@poppinss/prompts](../README.md) › ["src/Emitter"](_src_emitter_.md)
 
-# External module: "src/Emitter"
+# Module: "src/Emitter"
 
 ## Index
 

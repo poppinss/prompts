@@ -1,6 +1,6 @@
 [@poppinss/prompts](../README.md) › ["src/Base"](_src_base_.md)
 
-# External module: "src/Base"
+# Module: "src/Base"
 
 ## Index
 

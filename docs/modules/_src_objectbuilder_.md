@@ -1,6 +1,6 @@
 [@poppinss/prompts](../README.md) › ["src/ObjectBuilder"](_src_objectbuilder_.md)
 
-# External module: "src/ObjectBuilder"
+# Module: "src/ObjectBuilder"
 
 ## Index
 

@@ -19,7 +19,6 @@ method is invoked by the extended `Prompt` class.
 
 ### Methods
 
-* [$prompt](_src_enquirer_.enquirerprompt.md#protected-prompt)
 * [addListener](_src_enquirer_.enquirerprompt.md#addlistener)
 * [ask](_src_enquirer_.enquirerprompt.md#ask)
 * [choice](_src_enquirer_.enquirerprompt.md#choice)
@@ -35,6 +34,7 @@ method is invoked by the extended `Prompt` class.
 * [once](_src_enquirer_.enquirerprompt.md#once)
 * [prependListener](_src_enquirer_.enquirerprompt.md#prependlistener)
 * [prependOnceListener](_src_enquirer_.enquirerprompt.md#prependoncelistener)
+* [prompt](_src_enquirer_.enquirerprompt.md#protected-prompt)
 * [rawListeners](_src_enquirer_.enquirerprompt.md#rawlisteners)
 * [removeAllListeners](_src_enquirer_.enquirerprompt.md#removealllisteners)
 * [removeListener](_src_enquirer_.enquirerprompt.md#removelistener)
@@ -43,22 +43,6 @@ method is invoked by the extended `Prompt` class.
 * [toggle](_src_enquirer_.enquirerprompt.md#toggle)
 
 ## Methods
-
-### `Protected` $prompt
-
-▸ **$prompt**(`options`: any): *Promise‹any›*
-
-*Overrides [Prompt](_src_base_.prompt.md).[$prompt](_src_base_.prompt.md#protected-abstract-prompt)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options` | any |
-
-**Returns:** *Promise‹any›*
-
-___
 
 ###  addListener
 
@@ -414,6 +398,22 @@ Name | Type |
 `...args` | any[] |
 
 **Returns:** *this*
+
+___
+
+### `Protected` prompt
+
+▸ **prompt**(`options`: any): *Promise‹any›*
+
+*Overrides [Prompt](_src_base_.prompt.md).[prompt](_src_base_.prompt.md#protected-abstract-prompt)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`options` | any |
+
+**Returns:** *Promise‹any›*
 
 ___
 

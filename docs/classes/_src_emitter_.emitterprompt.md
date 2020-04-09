@@ -19,7 +19,6 @@ used to answer the prompts programmatically.
 
 ### Methods
 
-* [$prompt](_src_emitter_.emitterprompt.md#protected-prompt)
 * [addListener](_src_emitter_.emitterprompt.md#addlistener)
 * [ask](_src_emitter_.emitterprompt.md#ask)
 * [choice](_src_emitter_.emitterprompt.md#choice)
@@ -35,6 +34,7 @@ used to answer the prompts programmatically.
 * [once](_src_emitter_.emitterprompt.md#once)
 * [prependListener](_src_emitter_.emitterprompt.md#prependlistener)
 * [prependOnceListener](_src_emitter_.emitterprompt.md#prependoncelistener)
+* [prompt](_src_emitter_.emitterprompt.md#protected-prompt)
 * [rawListeners](_src_emitter_.emitterprompt.md#rawlisteners)
 * [removeAllListeners](_src_emitter_.emitterprompt.md#removealllisteners)
 * [removeListener](_src_emitter_.emitterprompt.md#removelistener)
@@ -43,22 +43,6 @@ used to answer the prompts programmatically.
 * [toggle](_src_emitter_.emitterprompt.md#toggle)
 
 ## Methods
-
-### `Protected` $prompt
-
-▸ **$prompt**(`options`: any): *Promise‹any›*
-
-*Overrides [Prompt](_src_base_.prompt.md).[$prompt](_src_base_.prompt.md#protected-abstract-prompt)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options` | any |
-
-**Returns:** *Promise‹any›*
-
-___
 
 ###  addListener
 
@@ -414,6 +398,22 @@ Name | Type |
 `...args` | any[] |
 
 **Returns:** *this*
+
+___
+
+### `Protected` prompt
+
+▸ **prompt**(`options`: any): *Promise‹any›*
+
+*Overrides [Prompt](_src_base_.prompt.md).[prompt](_src_base_.prompt.md#protected-abstract-prompt)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`options` | any |
+
+**Returns:** *Promise‹any›*
 
 ___
 
