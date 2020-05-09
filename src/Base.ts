@@ -16,11 +16,12 @@ import {
   PromptChoice,
   PromptContract,
   TextPromptOptions,
-  BooleanPromptOptions,
+  PromptEventOptions,
   TogglePromptOptions,
   ChoicePromptOptions,
-  PromptEventOptions,
+  BooleanPromptOptions,
   MultiplePromptOptions,
+  AutoCompletePromptOptions,
 } from './Contracts'
 
 import { ObjectBuilder } from './ObjectBuilder'
@@ -185,6 +186,34 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       }
       return choice
     }))
+
+    return this.prompt(builder.toJSON())
+  }
+
+  /**
+   * Prompts for text input
+   */
+  public async autocomplete<
+    Choice extends string,
+    Multiple extends boolean = false,
+    Result extends any = Multiple extends true ? Choice[] : Choice,
+  > (
+    title: string,
+    choices: readonly Choice[],
+    options?: AutoCompletePromptOptions<Choice, Multiple, Result>,
+  ): Promise<Result> {
+    options = options || {}
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'autocomplete')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('initial', options.default)
+    builder.addProp('multiple', options.multiple)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+    builder.addProp('choices', choices)
 
     return this.prompt(builder.toJSON())
   }

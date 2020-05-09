@@ -65,7 +65,7 @@ export type ChoicePromptOptions<
   name?: string,
   result?: PromptResultFunction<Choice, Result>,
   format?: PromptFormatFunction<Choice>,
-  validate?: PromptValidationFunction<PromptState<string> & { choices: PromptChoice<Choice>[] }>,
+  validate?: PromptValidationFunction<PromptState<Choice> & { choices: PromptChoice<Choice>[] }>,
 }
 
 /**
@@ -78,8 +78,8 @@ export type MultiplePromptOptions<
   default?: string[],
   name?: string,
   result?: PromptResultFunction<Choice[], Result>,
-  format?: PromptFormatFunction<Choice[]>,
-  validate?: PromptValidationFunction<PromptState<string[]> & { choices: PromptChoice<Choice>[] }>,
+  format?: PromptFormatFunction<Choice>,
+  validate?: PromptValidationFunction<PromptState<Choice[]> & { choices: PromptChoice<Choice>[] }>,
 }
 
 /**
@@ -102,6 +102,25 @@ export type TogglePromptOptions<Result extends any> = {
   result?: PromptResultFunction<boolean, Result>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
+}
+
+/**
+ * Prompt options for the autocomplete prompt
+ */
+export type AutoCompletePromptOptions<
+  Choice extends string,
+  Multiple extends boolean,
+  Result extends any,
+> = {
+  default?: number,
+  limit?: number,
+  name?: string,
+  multiple?: Multiple,
+  result?: PromptResultFunction<Multiple extends true ? Choice[] : Choice, Result>,
+  format?: PromptFormatFunction<Choice>,
+  validate?: PromptValidationFunction<
+    PromptState<Multiple extends true ? Choice[] : Choice> & { choices: PromptChoice<Choice>[] }
+  >,
 }
 
 /**
@@ -166,6 +185,19 @@ export interface PromptContract {
     choices: readonly (Choice | PromptChoice<Choice>)[],
     options?: ChoicePromptOptions<Choice, Result>,
   ): Promise<Result>,
+
+  /**
+   * Prompts for choice with auto complete feature
+   */
+  autocomplete<
+    Choice extends string,
+    Multiple extends boolean = false,
+    Result extends any = Multiple extends true ? Choice[] : Choice,
+  > (
+    title: string,
+    choices: readonly Choice[],
+    options?: AutoCompletePromptOptions<Choice, Multiple, Result>,
+  ): Promise<Result>
 
   multiple<
     Choice extends string,

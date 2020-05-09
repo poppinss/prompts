@@ -23,6 +23,10 @@ export class EmitterPrompt extends Prompt {
       const self = this
 
       options = Object.assign({ name: 'prompt' }, options, {
+        multipleSelection: options.type === 'multiselect' || (
+          options.type === 'autocomplete' && options.multiple
+        ),
+
         /**
          * Accept the confirmation prompt
          */
@@ -55,17 +59,18 @@ export class EmitterPrompt extends Prompt {
             return
           }
 
-          const answer = this.choices[index].name
-          return this.answer(this.type === 'multiselect' ? [answer] : answer)
+          let answer = this.choices[index]
+          answer = typeof (answer) === 'string' ? answer : answer.name
+          return this.answer(this.multipleSelection ? [answer] : answer)
         },
 
         /**
          * Select multiple options
          */
         async multiSelect (indexes: number[]) {
-          if (this.type !== 'multiselect') {
+          if (!this.multipleSelection) {
             reject(
-              new Error('[prompt multiselect]: method can only be with multiple choices prompt'),
+              new Error('[prompt multiselect]: method can only used be with multiple choices prompt'),
             )
             return
           }
@@ -78,7 +83,10 @@ export class EmitterPrompt extends Prompt {
             return
           }
 
-          return this.answer(indexes.map((index) => this.choices[index].name))
+          return this.answer(indexes.map((index) => {
+            const answer = this.choices[index]
+            return typeof (answer) === 'string' ? answer : answer.name
+          }))
         },
 
         /**

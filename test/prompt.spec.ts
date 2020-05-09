@@ -303,3 +303,106 @@ test.group('Prompts | secure', () => {
     assert.equal(password, 'FOO')
   })
 })
+
+test.group('Prompts | autocomplete', () => {
+  test('select value', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      question.select(0)
+    })
+
+    const clients = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'])
+    assert.deepEqual(clients, 'npm')
+  })
+
+  test('allow multiple select', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      question.multiSelect([0, 1])
+    })
+
+    const clients = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      multiple: true,
+    })
+    assert.deepEqual(clients, ['npm', 'yarn'])
+  })
+
+  test('validate input', async (assert) => {
+    assert.plan(2)
+
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (question) => {
+      question.answer('')
+    })
+
+    prompt.on('prompt:error', (message) => {
+      assert.equal(message, 'Enter the value')
+    })
+
+    const client = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      multiple: false,
+      validate (answer) {
+        return !!answer
+      },
+    })
+
+    assert.deepEqual(client, '')
+  })
+
+  test('validate input for multiple selections', async (assert) => {
+    assert.plan(2)
+
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (question) => {
+      question.answer([])
+    })
+
+    prompt.on('prompt:error', (message) => {
+      assert.equal(message, 'Enter the value')
+    })
+
+    const client = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      multiple: true,
+      validate (answer) {
+        return answer.length > 0
+      },
+    })
+
+    assert.deepEqual(client, [])
+  })
+
+  test('invoke result function before returning the value', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      question.select(0)
+    })
+
+    const clients = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      result (choice) {
+        return choice.toUpperCase()
+      },
+    })
+
+    assert.deepEqual(clients, 'NPM')
+  })
+
+  test('invoke result function for multiple selection', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      question.select(0)
+    })
+
+    const clients = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      multiple: true,
+      result (choices) {
+        return choices.map((choice) => choice.toUpperCase())
+      },
+    })
+
+    assert.deepEqual(clients, ['NPM'])
+  })
+})
