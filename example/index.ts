@@ -13,19 +13,14 @@ const prompt = new Prompt()
 async function run () {
   const name = await prompt.ask('What is your name?', {
     name: 'name',
+    hint: 'No special characters',
     async result (value) {
       return Number(value)
     },
   })
 
-  const column = await prompt.autocomplete('Choose account password', [
-    'text',
-    'string',
-    'integer',
-    'increments',
-  ], {
-    multiple: true,
-    default: 1,
+  await prompt.enum('Define tags', {
+    hint: 'Accepts comma separated values',
   })
 
   const password = await prompt.secure('Choose account password', {
@@ -37,6 +32,7 @@ async function run () {
     'yarn',
   ], {
     name: 'client',
+    hint: 'Will be used for installation',
     async validate () {
       return true
     },
@@ -51,9 +47,9 @@ async function run () {
       name: 'redis',
       message: '@adonisjs/redis',
     },
-  ] as const, { name: 'deps' })
+  ] as const, { name: 'deps', hint: 'Will be used for installation' })
 
-  console.log({ name, password, client, deps, column })
+  console.log({ name, password, client, deps })
 }
 
 run().then(() => {}).catch(console.error)

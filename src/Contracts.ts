@@ -49,9 +49,23 @@ export type PromptResultFunction<
 export type TextPromptOptions<Result extends any> = {
   default?: string,
   name?: string,
+  hint?: string,
   result?: PromptResultFunction<string, Result>,
   format?: PromptFormatFunction<string>,
   validate?: PromptValidationFunction<PromptState<string>>,
+}
+
+/**
+ * Prompt options for enum prompt
+ */
+export type EnumPromptOptions<Result extends any> = {
+  default?: string,
+  name?: string,
+  result?: PromptResultFunction<string[], Result>,
+  format?: PromptFormatFunction<string>,
+  validate?: PromptValidationFunction<PromptState<string[]>>,
+  hint?: string,
+  seperator?: string,
 }
 
 /**
@@ -63,6 +77,7 @@ export type ChoicePromptOptions<
 > = {
   default?: string,
   name?: string,
+  hint?: string,
   result?: PromptResultFunction<Choice, Result>,
   format?: PromptFormatFunction<Choice>,
   validate?: PromptValidationFunction<PromptState<Choice> & { choices: PromptChoice<Choice>[] }>,
@@ -77,6 +92,7 @@ export type MultiplePromptOptions<
 > = {
   default?: string[],
   name?: string,
+  hint?: string,
   result?: PromptResultFunction<Choice[], Result>,
   format?: PromptFormatFunction<Choice>,
   validate?: PromptValidationFunction<PromptState<Choice[]> & { choices: PromptChoice<Choice>[] }>,
@@ -88,6 +104,7 @@ export type MultiplePromptOptions<
 export type BooleanPromptOptions<Result extends any> = {
   default?: boolean,
   name?: string,
+  hint?: string,
   result?: PromptResultFunction<boolean, Result>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
@@ -99,6 +116,7 @@ export type BooleanPromptOptions<Result extends any> = {
 export type TogglePromptOptions<Result extends any> = {
   default?: boolean,
   name?: string,
+  hint?: string,
   result?: PromptResultFunction<boolean, Result>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
@@ -115,6 +133,7 @@ export type AutoCompletePromptOptions<
   default?: number,
   limit?: number,
   name?: string,
+  hint?: string,
   multiple?: Multiple,
   result?: PromptResultFunction<Multiple extends true ? Choice[] : Choice, Result>,
   format?: PromptFormatFunction<Choice>,
@@ -161,6 +180,11 @@ export interface PromptContract {
     options?: TextPromptOptions<Result>,
   ): Promise<Result>,
 
+  enum<Result extends any = string[]> (
+    title: string,
+    options?: EnumPromptOptions<Result>,
+  ): Promise<Result>,
+
   secure<Result extends any = string> (
     title: string,
     options?: TextPromptOptions<Result>,
@@ -177,6 +201,9 @@ export interface PromptContract {
     options?: TogglePromptOptions<Result>,
   ): Promise<Result>,
 
+  /**
+   * Prompts to select one item
+   */
   choice<
     Choice extends string,
     Result extends any = Choice
@@ -184,6 +211,18 @@ export interface PromptContract {
     title: string,
     choices: readonly (Choice | PromptChoice<Choice>)[],
     options?: ChoicePromptOptions<Choice, Result>,
+  ): Promise<Result>,
+
+  /**
+   * Prompts to select multiple item
+   */
+  multiple<
+    Choice extends string,
+    Result extends any = Choice[]
+  > (
+    title: string,
+    choices: readonly (Choice | PromptChoice<Choice>)[],
+    options?: MultiplePromptOptions<Choice, Result>,
   ): Promise<Result>,
 
   /**
@@ -198,15 +237,6 @@ export interface PromptContract {
     choices: readonly Choice[],
     options?: AutoCompletePromptOptions<Choice, Multiple, Result>,
   ): Promise<Result>
-
-  multiple<
-    Choice extends string,
-    Result extends any = Choice[]
-  > (
-    title: string,
-    choices: readonly (Choice | PromptChoice<Choice>)[],
-    options?: MultiplePromptOptions<Choice, Result>,
-  ): Promise<Result>,
 
   on (event: 'prompt', callback: (options: PromptEventOptions) => any): this,
   on (event: 'prompt:error', callback: (message: string) => any): this,

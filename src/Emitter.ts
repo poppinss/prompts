@@ -28,6 +28,13 @@ export class EmitterPrompt extends Prompt {
         ),
 
         /**
+         * The default format function for the list prompt
+         */
+        format: options.format || options.type === 'list' ? function (input: string) {
+          return input ? String(input).split(this.sep) : []
+        } : undefined,
+
+        /**
          * Accept the confirmation prompt
          */
         async accept () {

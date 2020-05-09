@@ -406,3 +406,56 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(clients, ['NPM'])
   })
 })
+
+test.group('Prompts | enum', () => {
+  test('test enum prompt', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      assert.equal(question.name, 'prompt')
+      question.answer('virk,nikk')
+    })
+
+    const username = await prompt.enum('What\'s your username?')
+    assert.deepEqual(username, ['virk', 'nikk'])
+  })
+
+  test('run validation', async (assert) => {
+    assert.plan(2)
+
+    const prompt = new EmitterPrompt()
+    prompt.on('prompt', (question) => {
+      question.answer('')
+    })
+
+    prompt.on('prompt:error', (message) => {
+      assert.equal(message, 'Enter the value')
+    })
+
+    const username = await prompt.enum('What\'s your username?', {
+      name: 'username',
+      validate (value) {
+        return value.length > 0
+      },
+    })
+
+    assert.deepEqual(username, [])
+  })
+
+  test('invoke result function before returning the result', async (assert) => {
+    const prompt = new EmitterPrompt()
+
+    prompt.on('prompt', (question) => {
+      question.answer('virk')
+    })
+
+    const username = await prompt.enum('What\'s your username?', {
+      name: 'username',
+      result (answer) {
+        return answer.map((val) => val.toUpperCase())
+      },
+    })
+
+    assert.deepEqual(username, ['VIRK'])
+  })
+})

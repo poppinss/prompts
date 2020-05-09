@@ -6,7 +6,7 @@
 
 This module wraps [enquirer](https://github.com/enquirer/enquirer) and exposes the API to easily test prompts without pulling your hair.
 
-For testing, we make use of Event emitter instead of executing actual prompts and you can act on those events programmatically.
+For testing, we make use of Event Emitter instead of executing actual prompts and you can act on those events programmatically.
 
 > Please note: Only a subset of prompts are implemented. However, I am open to accept PR's for adding more.
 
@@ -24,13 +24,15 @@ For testing, we make use of Event emitter instead of executing actual prompts an
     - [toggle(title: string, choices: [string, string], options?: TogglePromptOptions)](#toggletitle-string-choices-string-string-options-togglepromptoptions)
     - [choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)](#choicetitle-string-choices-string---options-choicepromptoptions)
     - [multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)](#multipletitle-string-choices-string---options-multiplepromptoptions)
+    - [autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)](#autocompletetitle-string-choices-string-options-autocompletepromptoptions)
+    - [enum(title: string, options?: EnumPromptOptions)](#enumtitle-string-options-enumpromptoptions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Why use this module?
 When using [enquirer](https://github.com/enquirer/enquirer), there is no simple way to test your code that makes use of prompts, since prompts needs manual intervention. This module ships with a parallel implementation that uses the Event emitter to write tests for prompts. For example:
 
-You want test a command that asks for the username and password and this is how you may go about writing it.
+You want to test a command that asks for the **username** and **password** and this is how you may go about writing it.
 
 ```ts
 class MyCommand {
@@ -187,6 +189,44 @@ await prompt.multiple('Select base dependencies', [
   }
 ])
 ```
+
+#### autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)
+
+Uses the [autocomplete](https://github.com/enquirer/enquirer#autocomplete-prompt) prompt.
+
+```ts
+await prompt.autocomplete('Select country', [
+  'India',
+  'USA',
+  'UK',
+  'Ireland',
+  'Australia',
+])
+```
+
+For multi-select, you can pass the `multiple` property
+
+```ts
+await prompt.autocomplete('Select country', [
+  'India',
+  'USA',
+  'UK',
+  'Ireland',
+  'Australia',
+], {
+  multiple: true,
+})
+```
+
+#### enum(title: string, options?: EnumPromptOptions)
+Similar to the `ask` prompt, but allows comma (,) separated values. Uses the [list](https://github.com/enquirer/enquirer#list-prompt) prompt.
+
+```ts
+await prompt.enum('Define tags', {
+  hint: 'Accepts comma separated values'
+})
+```
+
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/prompts/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/prompts "circleci"

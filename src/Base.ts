@@ -15,6 +15,7 @@ import { EventEmitter } from 'events'
 import {
   PromptChoice,
   PromptContract,
+  EnumPromptOptions,
   TextPromptOptions,
   PromptEventOptions,
   TogglePromptOptions,
@@ -54,6 +55,30 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('type', 'input')
     builder.addProp('name', options.name)
     builder.addProp('message', title)
+    builder.addProp('hint', options.hint)
+    builder.addProp('initial', options.default)
+    builder.addProp('result', options.result)
+    builder.addProp('format', options.format)
+    builder.addProp('validate', options.validate)
+
+    return this.prompt(builder.toJSON())
+  }
+
+  /**
+   * Prompts for text input
+   */
+  public async enum<Result extends any = string[]> (
+    title: string,
+    options?: EnumPromptOptions<Result>,
+  ): Promise<Result> {
+    options = options || {}
+
+    const builder = new ObjectBuilder()
+    builder.addProp('type', 'list')
+    builder.addProp('sep', options.seperator || ',')
+    builder.addProp('name', options.name)
+    builder.addProp('message', title)
+    builder.addProp('hint', options.hint)
     builder.addProp('initial', options.default)
     builder.addProp('result', options.result)
     builder.addProp('format', options.format)
@@ -96,6 +121,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('type', 'confirm')
     builder.addProp('name', options.name)
     builder.addProp('message', title)
+    builder.addProp('hint', options.hint)
     builder.addProp('initial', options.default)
     builder.addProp('result', options.result)
     builder.addProp('format', options.format)
@@ -118,6 +144,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('type', 'toggle')
     builder.addProp('name', options.name)
     builder.addProp('message', title)
+    builder.addProp('hint', options.hint)
     builder.addProp('initial', options.default)
     builder.addProp('result', options.result)
     builder.addProp('format', options.format)
@@ -146,6 +173,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('name', options.name)
     builder.addProp('message', title)
     builder.addProp('initial', options.default)
+    builder.addProp('hint', options.hint)
     builder.addProp('result', options.result)
     builder.addProp('format', options.format)
     builder.addProp('validate', options.validate)
@@ -179,6 +207,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('initial', options.default)
     builder.addProp('result', options.result)
     builder.addProp('format', options.format)
+    builder.addProp('hint', options.hint)
     builder.addProp('validate', options.validate)
     builder.addProp('choices', choices.map((choice) => {
       if (typeof (choice) === 'string') {
@@ -211,6 +240,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('initial', options.default)
     builder.addProp('multiple', options.multiple)
     builder.addProp('result', options.result)
+    builder.addProp('hint', options.hint)
     builder.addProp('format', options.format)
     builder.addProp('validate', options.validate)
     builder.addProp('choices', choices)
