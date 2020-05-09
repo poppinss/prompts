@@ -38,15 +38,18 @@ export type PromptFormatFunction<T extends any> = (value: T) => T | Promise<T>
  * Shape of prompt result function. It is called before returning the result
  * and after validation
  */
-export type PromptResultFunction<T extends any> = (value: T) => any | Promise<any>
+export type PromptResultFunction<
+  T extends any,
+  Result extends any,
+> = (value: T) => Result | Promise<Result>
 
 /**
  * Prompt options for text based prompts
  */
-export type TextPromptOptions = {
+export type TextPromptOptions<Result extends any> = {
   default?: string,
   name?: string,
-  result?: PromptResultFunction<string>,
+  result?: PromptResultFunction<string, Result>,
   format?: PromptFormatFunction<string>,
   validate?: PromptValidationFunction<PromptState<string>>,
 }
@@ -54,32 +57,38 @@ export type TextPromptOptions = {
 /**
  * Prompt options for the choice prompt
  */
-export type ChoicePromptOptions = {
+export type ChoicePromptOptions<
+  Choice extends string,
+  Result extends any,
+> = {
   default?: string,
   name?: string,
-  result?: PromptResultFunction<string>,
-  format?: PromptFormatFunction<string>,
-  validate?: PromptValidationFunction<PromptState<string> & { choices: PromptChoice[] }>,
+  result?: PromptResultFunction<Choice, Result>,
+  format?: PromptFormatFunction<Choice>,
+  validate?: PromptValidationFunction<PromptState<string> & { choices: PromptChoice<Choice>[] }>,
 }
 
 /**
  * Prompt options for the multiple prompt
  */
-export type MultiplePromptOptions = {
+export type MultiplePromptOptions<
+  Choice extends string,
+  Result extends any,
+> = {
   default?: string[],
   name?: string,
-  result?: PromptResultFunction<string[]>,
-  format?: PromptFormatFunction<string[]>,
-  validate?: PromptValidationFunction<PromptState<string[]> & { choices: PromptChoice[] }>,
+  result?: PromptResultFunction<Choice[], Result>,
+  format?: PromptFormatFunction<Choice[]>,
+  validate?: PromptValidationFunction<PromptState<string[]> & { choices: PromptChoice<Choice>[] }>,
 }
 
 /**
  * Shape of boolean prompts
  */
-export type BooleanPromptOptions = {
+export type BooleanPromptOptions<Result extends any> = {
   default?: boolean,
   name?: string,
-  result?: PromptResultFunction<boolean>,
+  result?: PromptResultFunction<boolean, Result>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
 }
@@ -87,10 +96,10 @@ export type BooleanPromptOptions = {
 /**
  * Options for a toggle prompt
  */
-export type TogglePromptOptions = {
+export type TogglePromptOptions<Result extends any> = {
   default?: boolean,
   name?: string,
-  result?: PromptResultFunction<boolean>,
+  result?: PromptResultFunction<boolean, Result>,
   format?: PromptFormatFunction<boolean>,
   validate?: PromptValidationFunction<PromptState<boolean>>,
 }
@@ -104,7 +113,7 @@ export type PromptEventOptions = {
   type: string,
   message: string,
   initial?: string | boolean | string[],
-  result?: PromptResultFunction<any>,
+  result?: PromptResultFunction<any, any>,
   format?: PromptFormatFunction<any>,
   validate?: PromptValidationFunction<any>,
   answer (answer: any): Promise<void>,
@@ -117,8 +126,8 @@ export type PromptEventOptions = {
 /**
  * Shape of the prompt choice
  */
-export type PromptChoice = {
-  name: string,
+export type PromptChoice<Choice extends string> = {
+  name: Choice,
   message?: string,
   hint?: string,
   disabled?: boolean,
@@ -130,35 +139,41 @@ export type PromptChoice = {
 export interface PromptContract {
   ask<Result extends any = string> (
     title: string,
-    options?: TextPromptOptions,
+    options?: TextPromptOptions<Result>,
   ): Promise<Result>,
 
   secure<Result extends any = string> (
     title: string,
-    options?: TextPromptOptions,
+    options?: TextPromptOptions<Result>,
   ): Promise<Result>,
 
   confirm<Result extends any = boolean> (
     title: string,
-    options?: BooleanPromptOptions,
+    options?: BooleanPromptOptions<Result>,
   ): Promise<Result>,
 
   toggle<Result extends any = boolean> (
     title: string,
     choices: [string, string],
-    options?: TogglePromptOptions,
+    options?: TogglePromptOptions<Result>,
   ): Promise<Result>,
 
-  choice<Result extends any = string> (
+  choice<
+    Choice extends string,
+    Result extends any = Choice
+  > (
     title: string,
-    choices: (string | PromptChoice)[],
-    options?: ChoicePromptOptions,
+    choices: readonly (Choice | PromptChoice<Choice>)[],
+    options?: ChoicePromptOptions<Choice, Result>,
   ): Promise<Result>,
 
-  multiple<Result extends any = string[]> (
+  multiple<
+    Choice extends string,
+    Result extends any = Choice[]
+  > (
     title: string,
-    choices: (string | PromptChoice)[],
-    options?: MultiplePromptOptions,
+    choices: readonly (Choice | PromptChoice<Choice>)[],
+    options?: MultiplePromptOptions<Choice, Result>,
   ): Promise<Result>,
 
   on (event: 'prompt', callback: (options: PromptEventOptions) => any): this,

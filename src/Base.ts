@@ -13,13 +13,13 @@
 
 import { EventEmitter } from 'events'
 import {
+  PromptChoice,
   PromptContract,
   TextPromptOptions,
   BooleanPromptOptions,
   TogglePromptOptions,
   ChoicePromptOptions,
   PromptEventOptions,
-  PromptChoice,
   MultiplePromptOptions,
 } from './Contracts'
 
@@ -45,7 +45,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
    */
   public async ask<Result extends any = string> (
     title: string,
-    options?: TextPromptOptions,
+    options?: TextPromptOptions<Result>,
   ): Promise<Result> {
     options = options || {}
 
@@ -66,7 +66,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
    */
   public async secure<Result extends any = string> (
     title: string,
-    options?: TextPromptOptions,
+    options?: TextPromptOptions<Result>,
   ): Promise<Result> {
     options = options || {}
 
@@ -87,7 +87,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
    */
   public async confirm<Result extends any = boolean> (
     title: string,
-    options?: BooleanPromptOptions,
+    options?: BooleanPromptOptions<Result>,
   ): Promise<Result> {
     options = options || {}
 
@@ -109,7 +109,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
   public async toggle<Result extends any = boolean> (
     title: string,
     choices: [string, string],
-    options?: TogglePromptOptions,
+    options?: TogglePromptOptions<Result>,
   ): Promise<Result> {
     options = options || {}
 
@@ -130,10 +130,13 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
   /**
    * Prompts for text input
    */
-  public async choice<Result extends any = string> (
+  public async choice<
+    Choice extends string,
+    Result extends any = Choice
+  > (
     title: string,
-    choices: (string | PromptChoice)[],
-    options?: ChoicePromptOptions,
+    choices: readonly (Choice | PromptChoice<Choice>)[],
+    options?: ChoicePromptOptions<Choice, Result>,
   ): Promise<Result> {
     options = options || {}
 
@@ -158,10 +161,13 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
   /**
    * Prompts for text input
    */
-  public async multiple<Result extends any = string[]> (
+  public async multiple<
+    Choice extends string,
+    Result extends any = Choice[]
+  > (
     title: string,
-    choices: (string | PromptChoice)[],
-    options?: MultiplePromptOptions,
+    choices: readonly (Choice | PromptChoice<Choice>)[],
+    options?: MultiplePromptOptions<Choice, Result>,
   ): Promise<Result> {
     options = options || {}
 

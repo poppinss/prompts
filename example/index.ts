@@ -13,6 +13,9 @@ const prompt = new Prompt()
 async function run () {
   const name = await prompt.ask('What is your name?', {
     name: 'name',
+    async result (value) {
+      return Number(value)
+    },
   })
 
   const password = await prompt.secure('Choose account password', {
@@ -25,9 +28,15 @@ async function run () {
   ], { name: 'client' })
 
   const deps = await prompt.multiple('Select base dependencies', [
-    '@adonisjs/core',
-    '@adonisjs/redis',
-  ], { name: 'deps' })
+    {
+      name: 'core',
+      message: '@adonisjs/core',
+    },
+    {
+      name: 'redis',
+      message: '@adonisjs/redis',
+    },
+  ] as const, { name: 'deps' })
 
   console.log({ name, password, client, deps })
 }
