@@ -12,6 +12,7 @@
  */
 
 import { EventEmitter } from 'events'
+import { Colors } from '@poppinss/colors'
 import {
   PromptChoice,
   PromptContract,
@@ -200,6 +201,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
   ): Promise<Result> {
     options = options || {}
 
+    const colors = new Colors()
     const builder = new ObjectBuilder()
     builder.addProp('type', 'multiselect')
     builder.addProp('name', options.name)
@@ -209,6 +211,13 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     builder.addProp('format', options.format)
     builder.addProp('hint', options.hint)
     builder.addProp('validate', options.validate)
+    builder.addProp('indicator', (state, choice) => {
+      if (choice.enabled) {
+        return colors.blue(state.symbols.radio.on)
+      }
+
+      return colors.grey(state.symbols.radio.off)
+    })
     builder.addProp('choices', choices.map((choice) => {
       if (typeof (choice) === 'string') {
         return { name: choice, message: choice, value: choice }

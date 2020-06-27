@@ -74,6 +74,7 @@
     "anyBranch": false
   },
   "dependencies": {
+    "@poppinss/colors": "^1.1.0",
     "enquirer": "^2.3.5"
   }
 }
