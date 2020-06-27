@@ -215,7 +215,6 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       if (choice.enabled) {
         return colors.blue(state.symbols.radio.on)
       }
-
       return colors.grey(state.symbols.radio.off)
     })
     builder.addProp('choices', choices.map((choice) => {
