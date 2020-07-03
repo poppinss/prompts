@@ -17,6 +17,7 @@ async function run() {
 		async result(value) {
 			return Number(value)
 		},
+		validate: (value) => !!value,
 	})
 
 	await prompt.enum('Define tags', {
@@ -47,7 +48,11 @@ async function run() {
 				message: '@adonisjs/redis',
 			},
 		] as const,
-		{ name: 'deps', hint: 'Will be used for installation' }
+		{
+			name: 'deps',
+			hint: 'Will be used for installation',
+			validate: (choices) => choices.length > 0,
+		}
 	)
 
 	console.log({ name, password, client, deps })

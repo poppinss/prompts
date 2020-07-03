@@ -28,6 +28,9 @@ import {
 
 import { ObjectBuilder } from './ObjectBuilder'
 
+const colors = new Colors()
+export const icons = process.platform === 'win32' ? { pointer: '>' } : { pointer: '❯' }
+
 /**
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
  * common interface.
@@ -58,7 +61,11 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
-
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
 		return this.prompt(builder.toJSON())
 	}
 
@@ -81,6 +88,10 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+		})
 
 		return this.prompt(builder.toJSON())
 	}
@@ -102,6 +113,11 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
 
 		return this.prompt(builder.toJSON())
 	}
@@ -124,6 +140,11 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
 
 		return this.prompt(builder.toJSON())
 	}
@@ -149,6 +170,11 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('validate', options.validate)
 		builder.addProp('enabled', choices[0])
 		builder.addProp('disabled', choices[1])
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
 
 		return this.prompt(builder.toJSON())
 	}
@@ -172,6 +198,12 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
+
 		builder.addProp(
 			'choices',
 			choices.map((choice) => {
@@ -195,7 +227,6 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 	): Promise<Result> {
 		options = options || {}
 
-		const colors = new Colors()
 		const builder = new ObjectBuilder()
 		builder.addProp('type', 'multiselect')
 		builder.addProp('name', options.name)
@@ -205,12 +236,19 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('format', options.format)
 		builder.addProp('hint', options.hint)
 		builder.addProp('validate', options.validate)
-		builder.addProp('indicator', (state, choice) => {
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
+
+		builder.addProp('indicator', (state: any, choice: any) => {
 			if (choice.enabled) {
-				return colors.blue(state.symbols.radio.on)
+				return colors.cyan(state.symbols.radio.on)
 			}
 			return colors.grey(state.symbols.radio.off)
 		})
+
 		builder.addProp(
 			'choices',
 			choices.map((choice) => {
@@ -249,6 +287,11 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
 		builder.addProp('choices', choices)
+		builder.addProp('prefix', colors.dim(icons.pointer))
+		builder.addProp('styles', {
+			danger: (value: string) => colors.red(value),
+			submitted: (value: string) => colors.cyan(value),
+		})
 
 		return this.prompt(builder.toJSON())
 	}
