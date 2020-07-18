@@ -36,23 +36,23 @@
 	},
 	"homepage": "https://github.com/poppinss/prompts#readme",
 	"devDependencies": {
-		"@adonisjs/mrm-preset": "^2.3.4",
-		"@types/node": "^14.0.14",
+		"@adonisjs/mrm-preset": "^2.4.0",
+		"@types/node": "^14.0.23",
 		"commitizen": "^4.1.2",
 		"cz-conventional-changelog": "^3.2.0",
 		"del-cli": "^3.0.1",
 		"doctoc": "^1.4.0",
-		"eslint": "^7.3.1",
+		"eslint": "^7.4.0",
 		"eslint-config-prettier": "^6.11.0",
 		"eslint-plugin-adonis": "^1.0.14",
 		"eslint-plugin-prettier": "^3.1.4",
 		"husky": "^4.2.5",
 		"japa": "^3.1.1",
 		"mrm": "^2.3.3",
-		"np": "^6.2.5",
+		"np": "^6.3.2",
 		"prettier": "^2.0.5",
 		"ts-node": "^8.10.2",
-		"typescript": "^3.9.6"
+		"typescript": "^3.9.7"
 	},
 	"nyc": {
 		"exclude": [
@@ -78,7 +78,7 @@
 		"anyBranch": false
 	},
 	"dependencies": {
-		"@poppinss/colors": "^2.0.0",
+		"@poppinss/colors": "^2.0.1",
 		"enquirer": "^2.3.6"
 	}
 }
