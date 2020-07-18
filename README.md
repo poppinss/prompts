@@ -1,8 +1,7 @@
 # Prompts
 > Module on top of [enquirer](https://github.com/enquirer/enquirer) with API for testing as well.
 
-
-[![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
+[![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![audit-report-image]][audit-report-url]
 
 This module wraps [enquirer](https://github.com/enquirer/enquirer) and exposes the API to easily test prompts without pulling your hair.
 
@@ -30,7 +29,7 @@ For testing, we make use of Event Emitter instead of executing actual prompts an
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Why use this module?
-When using [enquirer](https://github.com/enquirer/enquirer), there is no simple way to test your code that makes use of prompts, since prompts needs manual intervention. This module ships with a parallel implementation that uses the Event emitter to write tests for prompts. For example:
+When using [enquirer](https://github.com/enquirer/enquirer), there is no simple way to test your code that makes use of prompts as prompts needs manual intervention. This module ships with a parallel implementation that uses the Event emitter to interact with prompts programmatically. For example:
 
 You want to test a command that asks for the **username** and **password** and this is how you may go about writing it.
 
@@ -55,11 +54,11 @@ During the tests, you can pass the emitter based prompt instance to your command
 import { FakePrompt } from '@poppinss/prompts'
 const prompt = new FakePrompt()
 
-prompt.on('prompt', (prompt) => {
-  if (prompt.name === 'username') {    
-    prompt.answer('virk')
+prompt.on('prompt', (question) => {
+  if (question.name === 'username') {    
+    question.answer('virk')
   } else {
-    prompt.answer('secret-password')
+    question.answer('secret-password')
   }
 })
 
@@ -106,12 +105,24 @@ Uses the `input` prompt type. Optionally you can define the following options.
 ```ts
 await prompt.ask('Choose account username', {
   validate (answer) {
-    if (!answer || answer.length < 6) {
-      return 'Username is required and must be over 6 characters'
+    if (!answer || answer.length < 4) {
+      return 'Username is required and must be over 4 characters'
     }
     return true
   }
 })
+```
+
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+	assert.equal(question.message, 'Choose account username')
+	question.answer('virk')
+})
+
+const username = await prompt.ask('Choose account username')
+assert.equal(username, 'virk')
 ```
 
 #### secure(title: string, options?: TextPromptOptions)
@@ -128,6 +139,18 @@ await prompt.secure('Enter account password', {
 })
 ```
 
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Enter account password')
+  question.answer('secret')
+})
+
+const password = await prompt.secure('Enter account password')
+assert.equal(password, 'secret')
+```
+
 #### confirm(title: string, options?: BooleanPromptOptions)
 Uses the [confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. The prompt options are same as the `ask` method.
 
@@ -135,11 +158,45 @@ Uses the [confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. 
 await prompt.confirm('Want to delete files?')
 ``` 
 
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Want to delete files?')
+
+  // Say yes
+  question.accept()
+
+  // Say no
+  question.decline()
+})
+
+const deleteFiles = await prompt.confirm('Want to delete files?')
+assert.isTrue(deleteFiles)
+```
+
 #### toggle(title: string, choices: [string, string], options?: TogglePromptOptions)
 Use the [toggle](https://github.com/enquirer/enquirer#toggle-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
 await prompt.toggle('Want to delete files?', ['Yep', 'Nope'])
+```
+
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Want to delete files?')
+
+  // Say yes
+  question.accept()
+
+  // Say no
+  question.decline()
+})
+
+const deleteFiles = await prompt.toggle('Want to delete files?', ['Yep', 'Nope'])
+assert.isTrue(deleteFiles)
 ```
 
 #### choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)
@@ -162,6 +219,20 @@ await prompt.choice('Select toppings', [
     hint: 'Fresh and leafy',  
   }
 ])
+```
+
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Select installation client')
+
+  // pass index
+  question.select(0)
+})
+
+const client = await prompt.choice('Select installation client', ['npm', 'yarn'])
+assert.equal(client, 'npm')
 ```
 
 #### multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)
@@ -187,6 +258,27 @@ await prompt.multiple('Select base dependencies', [
     name: '@adonisjs/bodyparser',
     message: 'Bodyparser'
   }
+])
+```
+
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Select base dependencies')
+
+	// pass indexes
+  question.multiSelect([0, 1])
+})
+
+const dependencies = await prompt.multiple('Select base dependencies', [
+  '@adonisjs/core',
+  '@adonisjs/bodyparser'
+])
+
+assert.deepEqual(dependencies, [
+  '@adonisjs/core',
+  '@adonisjs/bodyparser'
 ])
 ```
 
@@ -218,6 +310,27 @@ await prompt.autocomplete('Select country', [
 })
 ```
 
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Select country')
+
+  // pass indexes
+  question.select(1)
+})
+
+const country = await prompt.autocomplete('Select country', [
+  'India',
+  'USA',
+  'UK',
+  'Ireland',
+  'Australia',
+])
+
+assert.equal(country, 'USA')
+```
+
 #### enum(title: string, options?: EnumPromptOptions)
 Similar to the `ask` prompt, but allows comma (,) separated values. Uses the [list](https://github.com/enquirer/enquirer#list-prompt) prompt.
 
@@ -227,6 +340,17 @@ await prompt.enum('Define tags', {
 })
 ```
 
+Use the following code to answer prompt during tests
+
+```ts
+prompt.on('prompt', (question) => {
+  assert.equal(question.message, 'Define tags')
+  question.answer('nodejs,javascript')
+})
+
+const tags = await await prompt.enum('Define tags')
+assert.deepEqual(tags, ['nodejs', 'javascript'])
+```
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/prompts/master.svg?style=for-the-badge&logo=circleci
 [circleci-url]: https://circleci.com/gh/poppinss/prompts "circleci"
@@ -239,3 +363,6 @@ await prompt.enum('Define tags', {
 
 [license-image]: https://img.shields.io/npm/l/@poppinss/prompts?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md "license"
+
+[audit-report-image]: https://img.shields.io/badge/-Audit%20Report-blueviolet?style=for-the-badge
+[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/prompts/blob/develop/npm-audit.html "audit-report"
