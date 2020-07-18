@@ -20,14 +20,14 @@ For testing, we make use of Event Emitter instead of executing actual prompts an
 - [Installation](#installation)
 - [Usage](#usage)
 - [Implemented Prompt types](#implemented-prompt-types)
-  - [ask(title: string, options?: TextPromptOptions)](#asktitle-string-options-textpromptoptions)
-  - [secure(title: string, options?: TextPromptOptions)](#securetitle-string-options-textpromptoptions)
-  - [confirm(title: string, options?: BooleanPromptOptions)](#confirmtitle-string-options-booleanpromptoptions)
-  - [toggle(title: string, choices: [string, string], options?: TogglePromptOptions)](#toggletitle-string-choices-string-string-options-togglepromptoptions)
-  - [choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)](#choicetitle-string-choices-string---options-choicepromptoptions)
-  - [multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)](#multipletitle-string-choices-string---options-multiplepromptoptions)
-  - [autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)](#autocompletetitle-string-choices-string-options-autocompletepromptoptions)
-  - [enum(title: string, options?: EnumPromptOptions)](#enumtitle-string-options-enumpromptoptions)
+  - [`ask(title: string, options?: TextPromptOptions)`](#asktitle-string-options-textpromptoptions)
+  - [`secure(title: string, options?: TextPromptOptions)`](#securetitle-string-options-textpromptoptions)
+  - [`confirm(title: string, options?: BooleanPromptOptions)`](#confirmtitle-string-options-booleanpromptoptions)
+  - [`toggle(title: string, choices: [string, string], options?: TogglePromptOptions)`](#toggletitle-string-choices-string-string-options-togglepromptoptions)
+  - [`choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)`](#choicetitle-string-choices-string---options-choicepromptoptions)
+  - [`multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)`](#multipletitle-string-choices-string---options-multiplepromptoptions)
+  - [`autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)`](#autocompletetitle-string-choices-string-options-autocompletepromptoptions)
+  - [`enum(title: string, options?: EnumPromptOptions)`](#enumtitle-string-options-enumpromptoptions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -102,7 +102,7 @@ The following prompt types from enquirer are implemented. The method names expos
 
 ---
 
-### ask(title: string, options?: TextPromptOptions)
+### `ask(title: string, options?: TextPromptOptions)`
 
 Uses the `input` prompt type. Optionally you can define the following options.
 
@@ -136,7 +136,7 @@ assert.equal(username, 'virk')
 
 ---
 
-### secure(title: string, options?: TextPromptOptions)
+### `secure(title: string, options?: TextPromptOptions)`
 
 Uses the `password` prompt type. You can define the same options as the `ask` method.
 
@@ -165,7 +165,7 @@ assert.equal(password, 'secret')
 
 ---
 
-### confirm(title: string, options?: BooleanPromptOptions)
+### `confirm(title: string, options?: BooleanPromptOptions)`
 
 Uses the [confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. The prompt options are same as the `ask` method.
 
@@ -192,7 +192,7 @@ assert.isTrue(deleteFiles)
 
 ---
 
-### toggle(title: string, choices: [string, string], options?: TogglePromptOptions)
+### `toggle(title: string, choices: [string, string], options?: TogglePromptOptions)`
 
 Use the [toggle](https://github.com/enquirer/enquirer#toggle-prompt) prompt. The prompt options are same as the `ask` method.
 
@@ -219,7 +219,7 @@ assert.isTrue(deleteFiles)
 
 ---
 
-### choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)
+### `choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)`
 
 Uses the [select](https://github.com/enquirer/enquirer#select-prompt) prompt. The prompt options are same as the `ask` method.
 
@@ -258,7 +258,7 @@ assert.equal(client, 'npm')
 
 ---
 
-### multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)
+### `multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)`
 
 Uses the [multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. The prompt options are same as the `ask` method.
 
@@ -301,7 +301,7 @@ assert.deepEqual(dependencies, ['@adonisjs/core', '@adonisjs/bodyparser'])
 
 ---
 
-### autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)
+### `autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)`
 
 Uses the [autocomplete](https://github.com/enquirer/enquirer#autocomplete-prompt) prompt.
 
@@ -340,7 +340,7 @@ assert.equal(country, 'USA')
 
 ---
 
-### enum(title: string, options?: EnumPromptOptions)
+### `enum(title: string, options?: EnumPromptOptions)`
 
 Similar to the `ask` prompt, but allows comma (,) separated values. Uses the [list](https://github.com/enquirer/enquirer#list-prompt) prompt.
 
