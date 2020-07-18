@@ -1,6 +1,7 @@
 <div align="center"><img src="https://res.cloudinary.com/adonisjs/image/upload/q_100/v1557762307/poppinss_iftxlt.jpg" width="600px"></div>
 
 # Prompts
+
 > Module on top of [enquirer](https://github.com/enquirer/enquirer) with API for testing as well.
 
 [![circleci-image]][circleci-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![audit-report-image]][audit-report-url]
@@ -31,17 +32,18 @@ For testing, we make use of Event Emitter instead of executing actual prompts an
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Why use this module?
+
 When using [enquirer](https://github.com/enquirer/enquirer), there is no simple way to test your code that makes use of prompts as prompts needs manual intervention. This module ships with a parallel implementation that uses the Event emitter to interact with prompts programmatically. For example:
 
 You want to test a command that asks for the **username** and **password** and this is how you may go about writing it.
 
 ```ts
 class MyCommand {
-  constructor (prompt) {
+  constructor(prompt) {
     this.prompt = prompt
   }
 
-  async run () {
+  async run() {
     const username = await this.prompt.ask('Enter account username', { name: 'username' })
     const password = await this.prompt.ask('Enter account password', { name: 'password' })
 
@@ -57,7 +59,7 @@ import { FakePrompt } from '@poppinss/prompts'
 const prompt = new FakePrompt()
 
 prompt.on('prompt', (question) => {
-  if (question.name === 'username') {    
+  if (question.name === 'username') {
     question.answer('virk')
   } else {
     question.answer('secret-password')
@@ -71,6 +73,7 @@ await myCommand.run()
 It is as simple as that. There is no need to make any code changes, just make use of the `FakePrompt` class over `Prompt`.
 
 ## Installation
+
 Install the package from the npm registry as follows:
 
 ```sh
@@ -94,9 +97,11 @@ const client = await prompt.choice('Choose installation client', ['npm', 'yarn']
 During tests, replace `Prompt` with `FakePrompt` and everything works as expected. However, do make sure that you listen for the `prompt` event and answer every prompt, otherwise your tests will hang.
 
 ## Implemented Prompt types
+
 The following prompt types from enquirer are implemented. The method names exposed by this module are different (my personal preference).
 
 #### ask(title: string, options?: TextPromptOptions)
+
 Uses the `input` prompt type. Optionally you can define the following options.
 
 - **default**: The default value to be used.
@@ -106,12 +111,12 @@ Uses the `input` prompt type. Optionally you can define the following options.
 
 ```ts
 await prompt.ask('Choose account username', {
-  validate (answer) {
+  validate(answer) {
     if (!answer || answer.length < 4) {
       return 'Username is required and must be over 4 characters'
     }
     return true
-  }
+  },
 })
 ```
 
@@ -119,8 +124,8 @@ Use the following code to answer prompt during tests
 
 ```ts
 prompt.on('prompt', (question) => {
-	assert.equal(question.message, 'Choose account username')
-	question.answer('virk')
+  assert.equal(question.message, 'Choose account username')
+  question.answer('virk')
 })
 
 const username = await prompt.ask('Choose account username')
@@ -128,16 +133,17 @@ assert.equal(username, 'virk')
 ```
 
 #### secure(title: string, options?: TextPromptOptions)
+
 Uses the `password` prompt type. You can define the same options as the `ask` method.
 
 ```ts
 await prompt.secure('Enter account password', {
-  validate (answer) {
+  validate(answer) {
     if (!answer) {
       return 'Password is required to login'
     }
     return true
-  }
+  },
 })
 ```
 
@@ -154,11 +160,12 @@ assert.equal(password, 'secret')
 ```
 
 #### confirm(title: string, options?: BooleanPromptOptions)
+
 Uses the [confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
 await prompt.confirm('Want to delete files?')
-``` 
+```
 
 Use the following code to answer prompt during tests
 
@@ -178,6 +185,7 @@ assert.isTrue(deleteFiles)
 ```
 
 #### toggle(title: string, choices: [string, string], options?: TogglePromptOptions)
+
 Use the [toggle](https://github.com/enquirer/enquirer#toggle-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
@@ -202,6 +210,7 @@ assert.isTrue(deleteFiles)
 ```
 
 #### choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)
+
 Uses the [select](https://github.com/enquirer/enquirer#select-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
@@ -218,8 +227,8 @@ await prompt.choice('Select toppings', [
   },
   {
     name: 'Lettuce',
-    hint: 'Fresh and leafy',  
-  }
+    hint: 'Fresh and leafy',
+  },
 ])
 ```
 
@@ -242,10 +251,7 @@ assert.equal(client, 'npm')
 Uses the [multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. The prompt options are same as the `ask` method.
 
 ```ts
-await prompt.multiple('Select base dependencies', [
-  '@adonisjs/core',
-  '@adonisjs/bodyparser'
-])
+await prompt.multiple('Select base dependencies', ['@adonisjs/core', '@adonisjs/bodyparser'])
 ```
 
 Or pass the choice as an object
@@ -254,12 +260,12 @@ Or pass the choice as an object
 await prompt.multiple('Select base dependencies', [
   {
     name: '@adonisjs/core',
-    message: 'Framework core'
+    message: 'Framework core',
   },
   {
     name: '@adonisjs/bodyparser',
-    message: 'Bodyparser'
-  }
+    message: 'Bodyparser',
+  },
 ])
 ```
 
@@ -269,19 +275,16 @@ Use the following code to answer prompt during tests
 prompt.on('prompt', (question) => {
   assert.equal(question.message, 'Select base dependencies')
 
-	// pass indexes
+  // pass indexes
   question.multiSelect([0, 1])
 })
 
 const dependencies = await prompt.multiple('Select base dependencies', [
   '@adonisjs/core',
-  '@adonisjs/bodyparser'
+  '@adonisjs/bodyparser',
 ])
 
-assert.deepEqual(dependencies, [
-  '@adonisjs/core',
-  '@adonisjs/bodyparser'
-])
+assert.deepEqual(dependencies, ['@adonisjs/core', '@adonisjs/bodyparser'])
 ```
 
 #### autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)
@@ -289,25 +292,13 @@ assert.deepEqual(dependencies, [
 Uses the [autocomplete](https://github.com/enquirer/enquirer#autocomplete-prompt) prompt.
 
 ```ts
-await prompt.autocomplete('Select country', [
-  'India',
-  'USA',
-  'UK',
-  'Ireland',
-  'Australia',
-])
+await prompt.autocomplete('Select country', ['India', 'USA', 'UK', 'Ireland', 'Australia'])
 ```
 
 For multi-select, you can pass the `multiple` property
 
 ```ts
-await prompt.autocomplete('Select country', [
-  'India',
-  'USA',
-  'UK',
-  'Ireland',
-  'Australia',
-], {
+await prompt.autocomplete('Select country', ['India', 'USA', 'UK', 'Ireland', 'Australia'], {
   multiple: true,
 })
 ```
@@ -334,11 +325,12 @@ assert.equal(country, 'USA')
 ```
 
 #### enum(title: string, options?: EnumPromptOptions)
+
 Similar to the `ask` prompt, but allows comma (,) separated values. Uses the [list](https://github.com/enquirer/enquirer#list-prompt) prompt.
 
 ```ts
 await prompt.enum('Define tags', {
-  hint: 'Accepts comma separated values'
+  hint: 'Accepts comma separated values',
 })
 ```
 
@@ -355,16 +347,12 @@ assert.deepEqual(tags, ['nodejs', 'javascript'])
 ```
 
 [circleci-image]: https://img.shields.io/circleci/project/github/poppinss/prompts/master.svg?style=for-the-badge&logo=circleci
-[circleci-url]: https://circleci.com/gh/poppinss/prompts "circleci"
-
+[circleci-url]: https://circleci.com/gh/poppinss/prompts 'circleci'
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
-[typescript-url]:  "typescript"
-
+[typescript-url]: "typescript"
 [npm-image]: https://img.shields.io/npm/v/@poppinss/prompts.svg?style=for-the-badge&logo=npm
-[npm-url]: https://npmjs.org/package/@poppinss/prompts "npm"
-
+[npm-url]: https://npmjs.org/package/@poppinss/prompts 'npm'
 [license-image]: https://img.shields.io/npm/l/@poppinss/prompts?color=blueviolet&style=for-the-badge
-[license-url]: LICENSE.md "license"
-
+[license-url]: LICENSE.md 'license'
 [audit-report-image]: https://img.shields.io/badge/-Audit%20Report-blueviolet?style=for-the-badge
-[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/prompts/blob/develop/npm-audit.html "audit-report"
+[audit-report-url]: https://htmlpreview.github.io/?https://github.com/poppinss/prompts/blob/develop/npm-audit.html 'audit-report'
