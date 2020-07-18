@@ -1,7 +1,3 @@
-/**
- * @module @poppinss/prompts
- */
-
 /*
  * @poppinss/prompts
  *

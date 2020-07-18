@@ -1,7 +1,3 @@
-/**
- * @module @poppinss/prompts
- */
-
 /*
  * @poppinss/prompts
  *
@@ -38,7 +34,9 @@ export type PromptFormatFunction<T extends any> = (value: T) => T | Promise<T>
  * Shape of prompt result function. It is called before returning the result
  * and after validation
  */
-export type PromptResultFunction<T extends any, Result extends any> = (value: T) => Result | Promise<Result>
+export type PromptResultFunction<T extends any, Result extends any> = (
+	value: T
+) => Result | Promise<Result>
 
 /**
  * Prompt options for text based prompts
@@ -116,7 +114,11 @@ export type TogglePromptOptions<Result extends any> = {
 /**
  * Prompt options for the autocomplete prompt
  */
-export type AutoCompletePromptOptions<Choice extends string, Multiple extends boolean, Result extends any> = {
+export type AutoCompletePromptOptions<
+	Choice extends string,
+	Multiple extends boolean,
+	Result extends any
+> = {
 	default?: number
 	limit?: number
 	name?: string
@@ -162,13 +164,25 @@ export type PromptChoice<Choice extends string> = {
  * Shape of prompts class.
  */
 export interface PromptContract {
-	ask<Result extends any = string>(title: string, options?: TextPromptOptions<Result>): Promise<Result>
+	ask<Result extends any = string>(
+		title: string,
+		options?: TextPromptOptions<Result>
+	): Promise<Result>
 
-	enum<Result extends any = string[]>(title: string, options?: EnumPromptOptions<Result>): Promise<Result>
+	enum<Result extends any = string[]>(
+		title: string,
+		options?: EnumPromptOptions<Result>
+	): Promise<Result>
 
-	secure<Result extends any = string>(title: string, options?: TextPromptOptions<Result>): Promise<Result>
+	secure<Result extends any = string>(
+		title: string,
+		options?: TextPromptOptions<Result>
+	): Promise<Result>
 
-	confirm<Result extends any = boolean>(title: string, options?: BooleanPromptOptions<Result>): Promise<Result>
+	confirm<Result extends any = boolean>(
+		title: string,
+		options?: BooleanPromptOptions<Result>
+	): Promise<Result>
 
 	toggle<Result extends any = boolean>(
 		title: string,

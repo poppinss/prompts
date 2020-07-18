@@ -20,7 +20,7 @@ async function run() {
 		validate: (value) => !!value,
 	})
 
-	await prompt.enum('Define tags', {
+	const tags = await prompt.enum('Define tags', {
 		hint: 'Accepts comma separated values',
 	})
 
@@ -55,7 +55,30 @@ async function run() {
 		}
 	)
 
-	console.log({ name, password, client, deps })
+	const deleteFiles = await prompt.toggle('Want to delete all files?', ['Yes', 'No'], {
+		hint: 'Cannot be undone',
+	})
+
+	const state = await prompt.autocomplete(
+		'Select state',
+		[
+			'Haryana',
+			'Punjab',
+			'Assam',
+			'Arunachal Pradesh',
+			'Bihar',
+			'Manipur',
+			'Meghalaya',
+			'Tamil Nadu',
+			'Uttarakhand',
+			'Uttar Pradesh',
+		],
+		{
+			hint: 'For KYC',
+		}
+	)
+
+	console.log({ name, password, client, deps, tags, deleteFiles, state })
 }
 
 run()

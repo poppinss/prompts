@@ -1,7 +1,3 @@
-/**
- * @module @poppinss/prompts
- */
-
 /*
  * @poppinss/prompts
  *
@@ -23,7 +19,8 @@ export class EmitterPrompt extends Prompt {
 			const self = this
 
 			options = Object.assign({ name: 'prompt' }, options, {
-				multipleSelection: options.type === 'multiselect' || (options.type === 'autocomplete' && options.multiple),
+				multipleSelection:
+					options.type === 'multiselect' || (options.type === 'autocomplete' && options.multiple),
 
 				/**
 				 * The default format function for the list prompt
@@ -73,7 +70,11 @@ export class EmitterPrompt extends Prompt {
 				 */
 				async multiSelect(indexes: number[]) {
 					if (!this.multipleSelection) {
-						reject(new Error('[prompt multiselect]: method can only used be with multiple choices prompt'))
+						reject(
+							new Error(
+								'[prompt multiselect]: method can only used be with multiple choices prompt'
+							)
+						)
 						return
 					}
 

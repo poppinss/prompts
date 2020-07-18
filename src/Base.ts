@@ -1,7 +1,3 @@
-/**
- * @module @poppinss/prompts
- */
-
 /*
  * @poppinss/prompts
  *
@@ -13,6 +9,7 @@
 
 import { EventEmitter } from 'events'
 import { Colors } from '@poppinss/colors'
+
 import {
 	PromptChoice,
 	PromptContract,
@@ -28,6 +25,9 @@ import {
 
 import { ObjectBuilder } from './ObjectBuilder'
 
+/**
+ * Colors and icons to use.
+ */
 const colors = new Colors()
 export const icons = process.platform === 'win32' ? { pointer: '>' } : { pointer: '❯' }
 
@@ -49,7 +49,10 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 	/**
 	 * Prompts for text input
 	 */
-	public async ask<Result extends any = string>(title: string, options?: TextPromptOptions<Result>): Promise<Result> {
+	public async ask<Result extends any = string>(
+		title: string,
+		options?: TextPromptOptions<Result>
+	): Promise<Result> {
 		options = options || {}
 
 		const builder = new ObjectBuilder()
