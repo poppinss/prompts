@@ -1,3 +1,5 @@
+<div align="center"><img src="https://res.cloudinary.com/adonisjs/image/upload/q_100/v1557762307/poppinss_iftxlt.jpg" width="600px"></div>
+
 # Prompts
 > Module on top of [enquirer](https://github.com/enquirer/enquirer) with API for testing as well.
 
