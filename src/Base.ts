@@ -197,7 +197,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('name', options.name)
 		builder.addProp('message', title)
 		builder.addProp('initial', options.default)
-		builder.addProp('hint', options.hint)
+		builder.addProp('hint', options.hint || 'Press <ENTER> to select')
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
@@ -237,7 +237,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('initial', options.default)
 		builder.addProp('result', options.result)
 		builder.addProp('format', options.format)
-		builder.addProp('hint', options.hint)
+		builder.addProp('hint', options.hint || 'Press <SPACE> to select')
 		builder.addProp('validate', options.validate)
 		builder.addProp('prefix', colors.dim(icons.pointer))
 		builder.addProp('styles', {
@@ -249,7 +249,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 			if (choice.enabled) {
 				return colors.cyan(state.symbols.radio.on)
 			}
-			return colors.grey(state.symbols.radio.off)
+			return colors.dim(state.symbols.radio.off)
 		})
 
 		builder.addProp(
@@ -286,7 +286,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 		builder.addProp('initial', options.default)
 		builder.addProp('multiple', options.multiple)
 		builder.addProp('result', options.result)
-		builder.addProp('hint', options.hint)
+		builder.addProp('hint', options.hint || '(Type to filter) or (Press <ENTER> to select)')
 		builder.addProp('format', options.format)
 		builder.addProp('validate', options.validate)
 		builder.addProp('choices', choices)

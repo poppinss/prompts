@@ -30,7 +30,6 @@ async function run() {
 
 	const client = await prompt.choice('Select installation client', ['npm', 'yarn'], {
 		name: 'client',
-		hint: 'Will be used for installation',
 		async validate() {
 			return true
 		},
@@ -50,7 +49,6 @@ async function run() {
 		] as const,
 		{
 			name: 'deps',
-			hint: 'Will be used for installation',
 			validate: (choices) => choices.length > 0,
 		}
 	)
@@ -59,24 +57,18 @@ async function run() {
 		hint: 'Cannot be undone',
 	})
 
-	const state = await prompt.autocomplete(
-		'Select state',
-		[
-			'Haryana',
-			'Punjab',
-			'Assam',
-			'Arunachal Pradesh',
-			'Bihar',
-			'Manipur',
-			'Meghalaya',
-			'Tamil Nadu',
-			'Uttarakhand',
-			'Uttar Pradesh',
-		],
-		{
-			hint: 'For KYC',
-		}
-	)
+	const state = await prompt.autocomplete('Select state', [
+		'Haryana',
+		'Punjab',
+		'Assam',
+		'Arunachal Pradesh',
+		'Bihar',
+		'Manipur',
+		'Meghalaya',
+		'Tamil Nadu',
+		'Uttarakhand',
+		'Uttar Pradesh',
+	])
 
 	console.log({ name, password, client, deps, tags, deleteFiles, state })
 }
