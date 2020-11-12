@@ -29,7 +29,8 @@ import { ObjectBuilder } from './ObjectBuilder'
  * Colors and icons to use.
  */
 const colors = new Colors()
-export const icons = process.platform === 'win32' ? { pointer: '>' } : { pointer: '❯' }
+export const icons =
+	process.platform === 'win32' && !process.env.WT_SESSION ? { pointer: '>' } : { pointer: '❯' }
 
 /**
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
