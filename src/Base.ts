@@ -30,7 +30,7 @@ import { ObjectBuilder } from './ObjectBuilder'
  */
 const colors = new Colors()
 export const icons =
-	process.platform === 'win32' && !process.env.WT_SESSION ? { pointer: '>' } : { pointer: '❯' }
+  process.platform === 'win32' && !process.env.WT_SESSION ? { pointer: '>' } : { pointer: '❯' }
 
 /**
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
