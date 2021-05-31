@@ -206,7 +206,7 @@ test.group('Prompts | toggle', () => {
         return answer ? 'Y' : 'n'
       },
     })
-    assert.equal((deleteFile as unknown) as string, 'Y')
+    assert.equal(deleteFile as unknown as string, 'Y')
   })
 })
 
@@ -253,7 +253,7 @@ test.group('Prompts | confirm', () => {
         return answer ? 'Yes' : 'No'
       },
     })
-    assert.equal((deleteFile as unknown) as string, 'Yes')
+    assert.equal(deleteFile as unknown as string, 'Yes')
   })
 })
 
