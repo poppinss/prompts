@@ -11,12 +11,12 @@
 	"scripts": {
 		"mrm": "mrm --preset=@adonisjs/mrm-preset",
 		"pretest": "npm run lint",
-		"test": "node japaFile.js",
+		"test": "node .bin/test.js",
 		"clean": "del build",
 		"compile": "npm run lint && npm run clean && tsc",
 		"build": "npm run compile",
 		"commit": "git-cz",
-		"release": "np",
+		"release": "np --message=\"chore(release): %s\"",
 		"version": "npm run build",
 		"format": "prettier --write .",
 		"prepublishOnly": "npm run build",
@@ -41,6 +41,8 @@
 		"@adonisjs/mrm-preset": "^5.0.2",
 		"@adonisjs/require-ts": "^2.0.6",
 		"@types/node": "^17.0.0",
+		"commitizen": "^4.2.4",
+		"cz-conventional-changelog": "^3.3.0",
 		"del-cli": "^4.0.1",
 		"doctoc": "^2.0.1",
 		"eslint": "^8.4.1",
@@ -75,5 +77,48 @@
 	"dependencies": {
 		"@poppinss/colors": "^3.0.0",
 		"enquirer": "^2.3.6"
+	},
+	"mrmConfig": {
+		"core": false,
+		"license": "MIT",
+		"services": [
+			"github-actions"
+		],
+		"minNodeVersion": "16.13.1",
+		"probotApps": [
+			"stale",
+			"lock"
+		],
+		"runGhActionsOnWindows": true
+	},
+	"eslintConfig": {
+		"extends": [
+			"plugin:adonis/typescriptPackage",
+			"prettier"
+		],
+		"plugins": [
+			"prettier"
+		],
+		"rules": {
+			"prettier/prettier": [
+				"error",
+				{
+					"endOfLine": "auto"
+				}
+			]
+		}
+	},
+	"eslintIgnore": [
+		"build"
+	],
+	"prettier": {
+		"trailingComma": "es5",
+		"semi": false,
+		"singleQuote": true,
+		"useTabs": false,
+		"quoteProps": "consistent",
+		"bracketSpacing": true,
+		"arrowParens": "always",
+		"printWidth": 100
 	}
 }
