@@ -1,13 +1,13 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-import { Prompt } from '../index'
+import { Prompt } from '../index.js'
 const prompt = new Prompt()
 
 async function run() {

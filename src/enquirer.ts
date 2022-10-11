@@ -1,14 +1,14 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 import enq from 'enquirer'
-import { Prompt } from './Base'
+import { Prompt } from './base.js'
 
 /**
  * Since the typings for `enquirer` package is badly broken, we

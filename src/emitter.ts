@@ -1,13 +1,13 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-import { Prompt } from './Base'
+import { Prompt } from './base.js'
 
 /**
  * Use event emitter to emit different prompt events, which can be
@@ -27,7 +27,7 @@ export class EmitterPrompt extends Prompt {
          */
         format:
           options.format || options.type === 'list'
-            ? function (input: string) {
+            ? function format(this: any, input: string) {
                 return input ? String(input).split(this.sep) : []
               }
             : undefined,
@@ -50,17 +50,17 @@ export class EmitterPrompt extends Prompt {
          * Select the choice at a given index
          */
         async select(index: number) {
-          if (!Array.isArray(this.choices)) {
+          if (!Array.isArray((this as any).choices)) {
             reject(new Error('[prompt select]: method can only be used with choices'))
             return
           }
 
-          if (this.choices.length <= index) {
+          if ((this as any).choices.length <= index) {
             reject(new Error(`[prompt select]: out of bounds index ${index}`))
             return
           }
 
-          let answer = this.choices[index]
+          let answer = (this as any).choices[index]
           answer = typeof answer === 'string' ? answer : answer.name
           return this.answer(this.multipleSelection ? [answer] : answer)
         },
@@ -79,14 +79,14 @@ export class EmitterPrompt extends Prompt {
           }
 
           const maxIndex = Math.max(...indexes)
-          if (this.choices.length <= maxIndex) {
+          if ((this as any).choices.length <= maxIndex) {
             reject(new Error(`[prompt multiselect]: out of bounds index ${maxIndex}`))
             return
           }
 
           return this.answer(
             indexes.map((index) => {
-              const answer = this.choices[index]
+              const answer = (this as any).choices[index]
               return typeof answer === 'string' ? answer : answer.name
             })
           )
@@ -109,18 +109,18 @@ export class EmitterPrompt extends Prompt {
           /**
            * Invoke the validate function when it is defined.
            */
-          if (typeof this.validate === 'function') {
+          if (typeof (this as any).validate === 'function') {
             /**
              * Attempt to mimic the crucially required state
              * properties from enquirer.
              */
             const state: any = {
               value: answer,
-              type: this.type,
-              name: this.name,
-              message: this.message,
-              choices: this.choices,
-              initial: this.initial,
+              type: (this as any).type,
+              name: (this as any).name,
+              message: (this as any).message,
+              choices: (this as any).choices,
+              initial: (this as any).initial,
               format: this.format,
               submitted: true,
               cancelled: false,
@@ -138,7 +138,7 @@ export class EmitterPrompt extends Prompt {
             /**
              * Invoke the validation handler
              */
-            passes = await this.validate(answer, state)
+            passes = await (this as any).validate(answer, state)
           }
 
           /**
@@ -146,7 +146,10 @@ export class EmitterPrompt extends Prompt {
            * can test the validation behavior as well.
            */
           if (passes === true) {
-            answer = typeof this.result === 'function' ? await this.result(answer) : answer
+            answer =
+              typeof (this as any).result === 'function'
+                ? await (this as any).result(answer)
+                : answer
             self.emit('prompt:answer', answer)
             resolve(answer)
           } else {

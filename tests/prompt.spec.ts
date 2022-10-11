@@ -1,17 +1,17 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
-import { EmitterPrompt } from '../src/Emitter'
+import { test } from '@japa/runner'
+import { EmitterPrompt } from '../src/emitter.js'
 
 test.group('Prompts | input', () => {
-  test('test input prompt', async (assert) => {
+  test('test input prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -23,7 +23,7 @@ test.group('Prompts | input', () => {
     assert.equal(username, 'virk')
   })
 
-  test('test input prompt validation', async (assert) => {
+  test('test input prompt validation', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -45,7 +45,7 @@ test.group('Prompts | input', () => {
     assert.equal(username, '')
   })
 
-  test('invoke result function before returning the result', async (assert) => {
+  test('invoke result function before returning the result', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -64,7 +64,7 @@ test.group('Prompts | input', () => {
 })
 
 test.group('Prompts | choice', () => {
-  test('test choice prompt', async (assert) => {
+  test('test choice prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -75,7 +75,7 @@ test.group('Prompts | choice', () => {
     assert.equal(client, 'npm')
   })
 
-  test('test choice prompt validation', async (assert) => {
+  test('test choice prompt validation', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -96,7 +96,7 @@ test.group('Prompts | choice', () => {
     assert.equal(client, '')
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -114,7 +114,7 @@ test.group('Prompts | choice', () => {
 })
 
 test.group('Prompts | multiple', () => {
-  test('test multiple prompt', async (assert) => {
+  test('test multiple prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -125,7 +125,7 @@ test.group('Prompts | multiple', () => {
     assert.deepEqual(clients, ['npm'])
   })
 
-  test('test multiple prompt validation', async (assert) => {
+  test('test multiple prompt validation', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -146,7 +146,7 @@ test.group('Prompts | multiple', () => {
     assert.deepEqual(client, [])
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -164,7 +164,7 @@ test.group('Prompts | multiple', () => {
 })
 
 test.group('Prompts | toggle', () => {
-  test('test toggle prompt', async (assert) => {
+  test('test toggle prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.accept()
@@ -174,7 +174,7 @@ test.group('Prompts | toggle', () => {
     assert.isTrue(deleteFile)
   })
 
-  test('test toggle prompt validation', async (assert) => {
+  test('test toggle prompt validation', async ({ assert }) => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
@@ -195,7 +195,7 @@ test.group('Prompts | toggle', () => {
     assert.isFalse(deleteFile)
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.accept()
@@ -211,7 +211,7 @@ test.group('Prompts | toggle', () => {
 })
 
 test.group('Prompts | confirm', () => {
-  test('test confirm prompt', async (assert) => {
+  test('test confirm prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.accept()
@@ -221,7 +221,7 @@ test.group('Prompts | confirm', () => {
     assert.isTrue(deleteFile)
   })
 
-  test('test confirm prompt validation', async (assert) => {
+  test('test confirm prompt validation', async ({ assert }) => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
@@ -242,7 +242,7 @@ test.group('Prompts | confirm', () => {
     assert.isFalse(deleteFile)
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.accept()
@@ -258,7 +258,7 @@ test.group('Prompts | confirm', () => {
 })
 
 test.group('Prompts | secure', () => {
-  test('test secure prompt', async (assert) => {
+  test('test secure prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.answer('foo')
@@ -268,7 +268,7 @@ test.group('Prompts | secure', () => {
     assert.equal(password, 'foo')
   })
 
-  test('test secure prompt validation', async (assert) => {
+  test('test secure prompt validation', async ({ assert }) => {
     assert.plan(2)
     const prompt = new EmitterPrompt()
 
@@ -289,7 +289,7 @@ test.group('Prompts | secure', () => {
     assert.equal(password, '')
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
     prompt.on('prompt', (question) => {
       question.answer('foo')
@@ -305,7 +305,7 @@ test.group('Prompts | secure', () => {
 })
 
 test.group('Prompts | autocomplete', () => {
-  test('select value', async (assert) => {
+  test('select value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -316,7 +316,7 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(clients, 'npm')
   })
 
-  test('allow multiple select', async (assert) => {
+  test('allow multiple select', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -329,7 +329,7 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(clients, ['npm', 'yarn'])
   })
 
-  test('validate input', async (assert) => {
+  test('validate input', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -351,7 +351,7 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(client, '')
   })
 
-  test('validate input for multiple selections', async (assert) => {
+  test('validate input for multiple selections', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -373,7 +373,7 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(client, [])
   })
 
-  test('invoke result function before returning the value', async (assert) => {
+  test('invoke result function before returning the value', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -389,7 +389,7 @@ test.group('Prompts | autocomplete', () => {
     assert.deepEqual(clients, 'NPM')
   })
 
-  test('invoke result function for multiple selection', async (assert) => {
+  test('invoke result function for multiple selection', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -408,7 +408,7 @@ test.group('Prompts | autocomplete', () => {
 })
 
 test.group('Prompts | enum', () => {
-  test('test enum prompt', async (assert) => {
+  test('test enum prompt', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
@@ -420,7 +420,7 @@ test.group('Prompts | enum', () => {
     assert.deepEqual(username, ['virk', 'nikk'])
   })
 
-  test('run validation', async (assert) => {
+  test('run validation', async ({ assert }) => {
     assert.plan(2)
 
     const prompt = new EmitterPrompt()
@@ -442,7 +442,7 @@ test.group('Prompts | enum', () => {
     assert.deepEqual(username, [])
   })
 
-  test('invoke result function before returning the result', async (assert) => {
+  test('invoke result function before returning the result', async ({ assert }) => {
     const prompt = new EmitterPrompt()
 
     prompt.on('prompt', (question) => {
