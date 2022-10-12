@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { EnquirerPrompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | enum', () => {
   test('trap enum prompt', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node,js')
 
     const tags = await prompt.enum('Enter tags')
@@ -21,7 +21,7 @@ test.group('Prompts | enum', () => {
   })
 
   test('use custom separator', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node, js')
 
     const tags = await prompt.enum('Enter tags', { seperator: ', ' })
@@ -30,7 +30,7 @@ test.group('Prompts | enum', () => {
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags')
 
     const tags = await prompt.enum('Enter tags', {
@@ -41,14 +41,14 @@ test.group('Prompts | enum', () => {
   })
 
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('').replyWith('node,js')
 
     await assert.rejects(() => prompt.enum('Enter tags'), 'Expected assertion to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('').replyWith('node,js')
 
     await assert.rejects(
@@ -63,7 +63,7 @@ test.group('Prompts | enum', () => {
   })
 
   test('fail when expected passing assertion fails', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').assertPasses('foo').replyWith('node,js')
 
     await assert.rejects(
@@ -80,7 +80,7 @@ test.group('Prompts | enum', () => {
   test('fail when expected failing assertion fails with a different message', async ({
     assert,
   }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('', 'Tags are required').replyWith('secret')
     await assert.rejects(
       () =>
@@ -94,7 +94,7 @@ test.group('Prompts | enum', () => {
   })
 
   test('invoke result method to transform return value', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node,js')
 
     const tags = await prompt.enum('Enter tags', {

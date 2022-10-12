@@ -8,7 +8,7 @@
  */
 
 import enq from 'enquirer'
-import { Prompt } from './base.js'
+import { BasePrompt } from './base.js'
 import { PromptCancelledException } from './exceptions/prompt_cancelled_exception.js'
 
 /**
@@ -21,7 +21,7 @@ const enquirer = enq as any
  * Uses the `enquirer` package to prompt user for input. The `$prompt`
  * method is invoked by the extended `Prompt` class.
  */
-export class EnquirerPrompt extends Prompt {
+export class Prompt extends BasePrompt {
   protected async prompt(options: any): Promise<any> {
     let cancelled = false
     options = Object.assign(

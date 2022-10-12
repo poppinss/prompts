@@ -28,7 +28,7 @@ import { MockedPrompt } from './mocked_prompt.js'
  * Base prompt class exposes the public API for triggering prompts. The
  * implementations just need to implement a single prompt method.
  */
-export abstract class Prompt {
+export abstract class BasePrompt {
   #mockedPrompts: Map<string, MockedPrompt> = new Map()
 
   /**

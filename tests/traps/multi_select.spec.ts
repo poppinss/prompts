@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { EnquirerPrompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | multiselect', () => {
   test('trap multiselect prompt', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').chooseOptions([0])
 
     const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'])
@@ -21,7 +21,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('reply directly with option value', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').replyWith(['npm'])
 
     const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'])
@@ -30,7 +30,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client')
 
     const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'], {
@@ -41,7 +41,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('')
 
     await assert.rejects(
@@ -51,7 +51,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('')
 
     await assert.rejects(
@@ -66,7 +66,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('fail when expected passing assertion fails', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').assertPasses('npm')
 
     await assert.rejects(
@@ -83,7 +83,7 @@ test.group('Prompts | multiselect', () => {
   test('fail when expected failing assertion fails with a different message', async ({
     assert,
   }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('', 'client is required')
 
     await assert.rejects(
@@ -98,7 +98,7 @@ test.group('Prompts | multiselect', () => {
   })
 
   test('invoke result method to transform return value', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Select the installation client').chooseOption(1)
 
     const client = await prompt.multiple('Select the installation client', ['npm', 'yarn'], {

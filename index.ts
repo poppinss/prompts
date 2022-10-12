@@ -7,4 +7,4 @@
  * file that was distributed with this source code.
  */
 
-export { EnquirerPrompt as Prompt } from './src/enquirer.js'
+export { Prompt } from './src/enquirer.js'

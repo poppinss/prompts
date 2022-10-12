@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { EnquirerPrompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | confirm', () => {
   test('trap confirm prompt', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').accept()
 
     const shouldDeleteFiles = await prompt.confirm('Delete the file?')
@@ -21,7 +21,7 @@ test.group('Prompts | confirm', () => {
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?')
 
     const shouldDeleteFiles = await prompt.confirm('Delete the file?', {
@@ -32,7 +32,7 @@ test.group('Prompts | confirm', () => {
   })
 
   test('return false when value is accepted explicitly', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?')
 
     const shouldDeleteFiles = await prompt.confirm('Delete the file?')
@@ -41,14 +41,14 @@ test.group('Prompts | confirm', () => {
   })
 
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').assertFails('').replyWith('virk')
 
     await assert.rejects(() => prompt.confirm('Delete the file?'), 'Expected assertion to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').assertFails('').replyWith('virk')
 
     await assert.rejects(
@@ -63,7 +63,7 @@ test.group('Prompts | confirm', () => {
   })
 
   test('fail when expected passing assertion fails', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').assertPasses('foo').replyWith('virk')
 
     await assert.rejects(
@@ -80,7 +80,7 @@ test.group('Prompts | confirm', () => {
   test('fail when expected failing assertion fails with a different message', async ({
     assert,
   }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').assertFails('', 'You should not delete files').replyWith('virk')
 
     await assert.rejects(
@@ -95,7 +95,7 @@ test.group('Prompts | confirm', () => {
   })
 
   test('invoke result method to transform return value', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Delete the file?').accept()
 
     const shouldDeleteFiles = await prompt.confirm('Delete the file?', {

@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { EnquirerPrompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | secure', () => {
   test('trap secure prompt', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').replyWith('secret')
 
     const password = await prompt.secure('Choose password')
@@ -21,7 +21,7 @@ test.group('Prompts | secure', () => {
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password')
 
     const password = await prompt.secure('Choose password', {
@@ -32,14 +32,14 @@ test.group('Prompts | secure', () => {
   })
 
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').assertFails('').replyWith('secret')
 
     await assert.rejects(() => prompt.secure('Choose password'), 'Expected assertion to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').assertFails('').replyWith('secret')
 
     await assert.rejects(
@@ -54,7 +54,7 @@ test.group('Prompts | secure', () => {
   })
 
   test('fail when expected passing assertion fails', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').assertPasses('foo').replyWith('secret')
 
     await assert.rejects(
@@ -71,7 +71,7 @@ test.group('Prompts | secure', () => {
   test('fail when expected failing assertion fails with a different message', async ({
     assert,
   }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').assertFails('', 'Password is required').replyWith('secret')
     await assert.rejects(
       () =>
@@ -85,7 +85,7 @@ test.group('Prompts | secure', () => {
   })
 
   test('invoke result method to transform return value', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap('Choose password').replyWith('secret')
 
     const password = await prompt.secure('Choose password', {

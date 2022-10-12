@@ -8,11 +8,11 @@
  */
 
 import { test } from '@japa/runner'
-import { EnquirerPrompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | input', () => {
   test('trap input prompt', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").replyWith('virk')
 
     const username = await prompt.ask("What's your username?")
@@ -21,7 +21,7 @@ test.group('Prompts | input', () => {
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?")
 
     const username = await prompt.ask("What's your username?", {
@@ -32,14 +32,14 @@ test.group('Prompts | input', () => {
   })
 
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").assertFails('').replyWith('virk')
 
     await assert.rejects(() => prompt.ask("What's your username?"), 'Expected assertion to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").assertFails('').replyWith('virk')
 
     await assert.rejects(
@@ -54,7 +54,7 @@ test.group('Prompts | input', () => {
   })
 
   test('fail when expected passing assertion fails', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").assertPasses('foo').replyWith('virk')
 
     await assert.rejects(
@@ -71,7 +71,7 @@ test.group('Prompts | input', () => {
   test('fail when expected failing assertion fails with a different message', async ({
     assert,
   }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").assertFails('', 'Username is required').replyWith('virk')
     await assert.rejects(
       () =>
@@ -85,7 +85,7 @@ test.group('Prompts | input', () => {
   })
 
   test('invoke result method to transform return value', async ({ assert }) => {
-    const prompt = new EnquirerPrompt()
+    const prompt = new Prompt()
     prompt.trap("What's your username?").replyWith('virk')
 
     const username = await prompt.ask("What's your username?", {
