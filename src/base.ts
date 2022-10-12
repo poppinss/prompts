@@ -25,8 +25,8 @@ import { colors } from './colors.js'
 import { MockedPrompt } from './mocked_prompt.js'
 
 /**
- * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
- * common interface.
+ * Base prompt class exposes the public API for triggering prompts. The
+ * implementations just need to implement a single prompt method.
  */
 export abstract class Prompt {
   #mockedPrompts: Map<string, MockedPrompt> = new Map()
@@ -35,8 +35,15 @@ export abstract class Prompt {
    * Handle the prompt. The mocked prompts are given preference if one exists
    */
   #handlePrompt(options: any) {
-    const mockedPrompt =
-      this.#mockedPrompts.get(options.name) || this.#mockedPrompts.get(options.message)
+    let mockedPrompt: MockedPrompt | undefined
+
+    if (this.#mockedPrompts.has(options.name)) {
+      mockedPrompt = this.#mockedPrompts.get(options.name)!
+      this.#mockedPrompts.delete(options.name)
+    } else if (this.#mockedPrompts.has(options.message)) {
+      mockedPrompt = this.#mockedPrompts.get(options.message)!
+      this.#mockedPrompts.delete(options.message)
+    }
 
     if (mockedPrompt) {
       return mockedPrompt.handle(options)
@@ -46,6 +53,14 @@ export abstract class Prompt {
   }
 
   protected abstract prompt(options: any): Promise<any>
+
+  /**
+   * A list of pending mocked prompts. These prompts were never
+   * triggered, however the trap was registered for them
+   */
+  get traps(): string[] {
+    return Array.from(this.#mockedPrompts.keys())
+  }
 
   /**
    * Prompts for text input
@@ -310,19 +325,5 @@ export abstract class Prompt {
     this.#mockedPrompts.set(message, mockedPrompt)
 
     return mockedPrompt
-  }
-
-  /**
-   * Restore trap
-   */
-  restore(message: string) {
-    this.#mockedPrompts.delete(message)
-  }
-
-  /**
-   * Restore all traps
-   */
-  restoreAll() {
-    this.#mockedPrompts.clear()
   }
 }
