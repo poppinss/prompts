@@ -251,7 +251,7 @@ export class MockedPrompt {
     this.#setAnswer(answers)
   }
 
-  constructor(public question: string) {}
+  constructor() {}
 
   /**
    * Reply to prompt with a given answer

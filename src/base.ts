@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import useColors from '@poppinss/colors'
 import { EventEmitter } from 'node:events'
 import { ObjectBuilder } from '@poppinss/utils'
 
@@ -23,26 +22,24 @@ import {
   MultiplePromptOptions,
   AutoCompletePromptOptions,
 } from './types.js'
-import { MockedPrompt } from './mocked_prompt.js'
 
-/**
- * Colors and icons to use.
- */
-const colors = useColors.ansi()
-export const icons =
-  process.platform === 'win32' && !process.env.WT_SESSION ? { pointer: '>' } : { pointer: '❯' }
+import { icons } from './icons.js'
+import { colors } from './colors.js'
+import { MockedPrompt } from './mocked_prompt.js'
 
 /**
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
  * common interface.
  */
 export abstract class Prompt extends EventEmitter implements PromptContract {
-  #mockedPrompts: MockedPrompt[] = []
+  #mockedPrompts: Map<string, MockedPrompt> = new Map()
 
+  /**
+   * Handle the prompt. The mocked prompts are given preference if one exists
+   */
   #handlePrompt(options: any) {
-    const mockedPrompt = this.#mockedPrompts.find(({ question }) => {
-      return options.name === question || options.message === question
-    })
+    const mockedPrompt =
+      this.#mockedPrompts.get(options.name) || this.#mockedPrompts.get(options.message)
 
     if (mockedPrompt) {
       return mockedPrompt.handle(options)
@@ -316,10 +313,27 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
     return this.#handlePrompt(builder.toObject())
   }
 
-  trap(questionOrName: string) {
-    const mockedPrompt = new MockedPrompt(questionOrName)
-    this.#mockedPrompts.push(mockedPrompt)
+  /**
+   * Trap a prompt by its message or unique name
+   */
+  trap(message: string) {
+    const mockedPrompt = new MockedPrompt()
+    this.#mockedPrompts.set(message, mockedPrompt)
 
     return mockedPrompt
+  }
+
+  /**
+   * Restore trap
+   */
+  restore(message: string) {
+    this.#mockedPrompts.delete(message)
+  }
+
+  /**
+   * Restore all traps
+   */
+  restoreAll() {
+    this.#mockedPrompts.clear()
   }
 }
