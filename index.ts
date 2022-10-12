@@ -8,4 +8,3 @@
  */
 
 export { EnquirerPrompt as Prompt } from './src/enquirer.js'
-export { EmitterPrompt as FakePrompt } from './src/emitter.js'

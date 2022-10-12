@@ -9,6 +9,7 @@
 
 import enq from 'enquirer'
 import { Prompt } from './base.js'
+import { PromptCancelledException } from './exceptions/prompt_cancelled_exception.js'
 
 /**
  * Since the typings for `enquirer` package is badly broken, we
@@ -22,8 +23,25 @@ const enquirer = enq as any
  */
 export class EnquirerPrompt extends Prompt {
   protected async prompt(options: any): Promise<any> {
-    options = Object.assign({ name: 'prompt' }, options)
-    const output = await enquirer.prompt(options)
-    return output[options.name]
+    let cancelled = false
+    options = Object.assign(
+      {
+        onCancel() {
+          cancelled = true
+        },
+      },
+      options
+    )
+
+    try {
+      const output = await enquirer.prompt(options)
+      return output[options.name]
+    } catch (error) {
+      if (cancelled) {
+        throw new PromptCancelledException()
+      }
+
+      throw error
+    }
   }
 }

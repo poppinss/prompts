@@ -73,6 +73,9 @@ async function run() {
   console.log({ name, password, client, deps, tags, deleteFiles, state })
 }
 
-run()
-  .then(() => {})
-  .catch(console.error)
+run().catch((error) => {
+  console.error(error)
+  if (!error.code || error.code !== 'E_PROMPT_CANCELLED') {
+    process.exitCode = 1
+  }
+})

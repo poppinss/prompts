@@ -23,6 +23,7 @@ import {
   MultiplePromptOptions,
   AutoCompletePromptOptions,
 } from './types.js'
+import { MockedPrompt } from './mocked_prompt.js'
 
 /**
  * Colors and icons to use.
@@ -36,6 +37,20 @@ export const icons =
  * common interface.
  */
 export abstract class Prompt extends EventEmitter implements PromptContract {
+  #mockedPrompts: MockedPrompt[] = []
+
+  #handlePrompt(options: any) {
+    const mockedPrompt = this.#mockedPrompts.find(({ question }) => {
+      return options.name === question || options.message === question
+    })
+
+    if (mockedPrompt) {
+      return mockedPrompt.handle(options)
+    }
+
+    return this.prompt(options)
+  }
+
   protected abstract prompt(options: any): Promise<any>
 
   on(event: 'prompt', callback: (options: PromptEventOptions) => any): this
@@ -70,7 +85,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       submitted: (value: string) => colors.cyan(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -84,6 +99,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'list')
+    builder.add('name', options.name || 'prompt')
     builder.add('sep', options.seperator || ',')
     builder.add('name', options.name)
     builder.add('message', title)
@@ -97,7 +113,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       danger: (value: string) => colors.red(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -111,7 +127,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'password')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('initial', options.default)
     builder.add('result', options.result)
@@ -123,7 +139,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       submitted: (value: string) => colors.cyan(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -137,7 +153,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'confirm')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('hint', options.hint)
     builder.add('initial', options.default)
@@ -150,7 +166,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       submitted: (value: string) => colors.cyan(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -165,7 +181,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'toggle')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('hint', options.hint)
     builder.add('initial', options.default)
@@ -180,7 +196,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       submitted: (value: string) => colors.cyan(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -195,7 +211,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'select')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('initial', options.default)
     builder.add('hint', options.hint || 'Press <ENTER> to select')
@@ -218,7 +234,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       })
     )
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -233,7 +249,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'multiselect')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('initial', options.default)
     builder.add('result', options.result)
@@ -263,7 +279,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       })
     )
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -282,7 +298,7 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
 
     const builder = new ObjectBuilder()
     builder.add('type', 'autocomplete')
-    builder.add('name', options.name)
+    builder.add('name', options.name || 'prompt')
     builder.add('message', title)
     builder.add('initial', options.default)
     builder.add('multiple', options.multiple)
@@ -297,6 +313,13 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
       submitted: (value: string) => colors.cyan(value),
     })
 
-    return this.prompt(builder.toObject())
+    return this.#handlePrompt(builder.toObject())
+  }
+
+  trap(questionOrName: string) {
+    const mockedPrompt = new MockedPrompt(questionOrName)
+    this.#mockedPrompts.push(mockedPrompt)
+
+    return mockedPrompt
   }
 }
