@@ -7,15 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import { EventEmitter } from 'node:events'
 import { ObjectBuilder } from '@poppinss/utils'
 
 import {
   PromptChoice,
-  PromptContract,
   EnumPromptOptions,
   TextPromptOptions,
-  PromptEventOptions,
   TogglePromptOptions,
   ChoicePromptOptions,
   BooleanPromptOptions,
@@ -31,7 +28,7 @@ import { MockedPrompt } from './mocked_prompt.js'
  * Base class extended by [[Enquirer]] and [[Emitter]] classes to have
  * common interface.
  */
-export abstract class Prompt extends EventEmitter implements PromptContract {
+export abstract class Prompt {
   #mockedPrompts: Map<string, MockedPrompt> = new Map()
 
   /**
@@ -49,14 +46,6 @@ export abstract class Prompt extends EventEmitter implements PromptContract {
   }
 
   protected abstract prompt(options: any): Promise<any>
-
-  on(event: 'prompt', callback: (options: PromptEventOptions) => any): this
-  on(event: 'prompt:error', callback: (message: string) => any): this
-  on(event: 'prompt:answer', callback: (message: any) => any): this
-  on(event: string, callback: (...args: any[]) => any): this {
-    super.on(event, callback)
-    return this
-  }
 
   /**
    * Prompts for text input

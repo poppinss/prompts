@@ -8,9 +8,10 @@
  */
 
 import useColors from '@poppinss/colors'
+import { Colors } from '@poppinss/colors/types'
 
 /**
  * Colors and icons to use.
  */
-const colors: ReturnType<typeof useColors['ansi']> = useColors.ansi()
+const colors: Colors = useColors.ansi()
 export { colors }
