@@ -29,6 +29,15 @@ test.group('Prompts | multiselect', () => {
     assert.deepEqual(clients, ['npm'])
   })
 
+  test('reply directly with option value as a string', async ({ assert, expectTypeOf }) => {
+    const prompt = new Prompt()
+    prompt.trap('Select the installation client').replyWith('npm')
+
+    const clients = await prompt.multiple('Select the installation client', ['npm', 'yarn'])
+    expectTypeOf(clients).toEqualTypeOf<('npm' | 'yarn')[]>()
+    assert.deepEqual(clients, ['npm'])
+  })
+
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {
     const prompt = new Prompt()
     prompt.trap('Select the installation client')

@@ -116,10 +116,16 @@ export class MockedPrompt {
     return options.type === 'confirm'
   }
   #isSelect(options: any) {
-    return (options.type === 'select' || options.type === 'autocomplete') && options.choices
+    return (
+      (options.type === 'select' && options.choices) ||
+      (options.type === 'autocomplete' && !options.multiple && options.choices)
+    )
   }
   #isMultiSelect(options: any) {
-    return options.type === 'multiselect' && options.choices
+    return (
+      (options.type === 'multiselect' && options.choices) ||
+      (options.type === 'autocomplete' && options.multiple && options.choices)
+    )
   }
   #isText(options: any) {
     return options.type === 'input' || options.type === 'password' || options.type === 'list'
@@ -232,6 +238,9 @@ export class MockedPrompt {
    */
   #convertMultipleChoicesToAnswer(options: any) {
     if (this.#answer !== undefined) {
+      if (!Array.isArray(this.#answer)) {
+        this.#answer = [this.#answer]
+      }
       return
     }
 

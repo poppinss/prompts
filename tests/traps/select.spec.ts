@@ -40,6 +40,15 @@ test.group('Prompts | select', () => {
     assert.equal(client, 'npm')
   })
 
+  test('select first input when no input is provided', async ({ assert, expectTypeOf }) => {
+    const prompt = new Prompt()
+    prompt.trap('Select the installation client')
+
+    const client = await prompt.choice('Select the installation client', ['npm', 'yarn'])
+    expectTypeOf(client).toEqualTypeOf<'npm' | 'yarn'>()
+    assert.equal(client, 'npm')
+  })
+
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
     const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('')

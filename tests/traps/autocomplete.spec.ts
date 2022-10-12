@@ -40,6 +40,18 @@ test.group('Prompts | autocomplete', () => {
     assert.equal(client, 'yarn')
   })
 
+  test('select multiple options', async ({ assert, expectTypeOf }) => {
+    const prompt = new Prompt()
+    prompt.trap('Select the installation client').chooseOptions([0, 1])
+
+    const client = await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+      multiple: true,
+    })
+
+    expectTypeOf(client).toEqualTypeOf<('npm' | 'yarn')[]>()
+    assert.deepEqual(client, ['npm', 'yarn'])
+  })
+
   test('fail when assertions are defined without the validations in place', async ({ assert }) => {
     const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('')
