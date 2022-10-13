@@ -304,11 +304,17 @@ export abstract class BasePrompt {
     builder.add('initial', options.default)
     builder.add('multiple', options.multiple)
     builder.add('result', options.result)
-    builder.add('hint', options.hint || '(Type to filter) or (Press <ENTER> to select)')
+    builder.add(
+      'hint',
+      options.hint || options.multiple ? 'Press <SPACE> to select' : 'Press <ENTER> to select'
+    )
     builder.add('format', options.format)
+    builder.add('limit', options.limit)
     builder.add('validate', options.validate)
+    builder.add('footer', options.footer)
     builder.add('choices', choices)
     builder.add('prefix', colors.dim(icons.pointer))
+    builder.add('highlight', (value: string) => colors.yellow(value))
     builder.add('styles', {
       danger: (value: string) => colors.red(value),
       submitted: (value: string) => colors.cyan(value),

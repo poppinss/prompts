@@ -28,7 +28,9 @@ export type PromptValidationFunction<T extends PromptState<any>> = (
 /**
  * Shape of prompt format function. It is called on every keystroke
  */
-export type PromptFormatFunction<T extends any> = (value: T) => T | Promise<T>
+export type PromptFormatFunction<T extends any, Result extends any> = (
+  value: T
+) => Result | Promise<Result>
 
 /**
  * Shape of prompt result function. It is called before returning the result
@@ -46,7 +48,7 @@ export type TextPromptOptions<Result extends any> = {
   name?: string
   hint?: string
   result?: PromptResultFunction<string, Result>
-  format?: PromptFormatFunction<string>
+  format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string>>
 }
 
@@ -57,7 +59,7 @@ export type EnumPromptOptions<Result extends any> = {
   default?: string
   name?: string
   result?: PromptResultFunction<string[], Result>
-  format?: PromptFormatFunction<string>
+  format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string[]>>
   hint?: string
   seperator?: string
@@ -71,7 +73,7 @@ export type ChoicePromptOptions<Choice extends string, Result extends any> = {
   name?: string
   hint?: string
   result?: PromptResultFunction<Choice, Result>
-  format?: PromptFormatFunction<Choice>
+  format?: PromptFormatFunction<Choice, string>
   validate?: PromptValidationFunction<PromptState<Choice> & { choices: PromptChoice<Choice>[] }>
 }
 
@@ -83,7 +85,7 @@ export type MultiplePromptOptions<Choice extends string, Result extends any> = {
   name?: string
   hint?: string
   result?: PromptResultFunction<Choice[], Result>
-  format?: PromptFormatFunction<Choice>
+  format?: PromptFormatFunction<Choice[] | string, string | string[]>
   validate?: PromptValidationFunction<PromptState<Choice[]> & { choices: PromptChoice<Choice>[] }>
 }
 
@@ -95,7 +97,7 @@ export type BooleanPromptOptions<Result extends any> = {
   name?: string
   hint?: string
   result?: PromptResultFunction<boolean, Result>
-  format?: PromptFormatFunction<boolean>
+  format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
 }
 
@@ -107,7 +109,7 @@ export type TogglePromptOptions<Result extends any> = {
   name?: string
   hint?: string
   result?: PromptResultFunction<boolean, Result>
-  format?: PromptFormatFunction<boolean>
+  format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
 }
 
@@ -125,10 +127,14 @@ export type AutoCompletePromptOptions<
   hint?: string
   multiple?: Multiple
   result?: PromptResultFunction<Multiple extends true ? Choice[] : Choice, Result>
-  format?: PromptFormatFunction<Choice>
+  format?: PromptFormatFunction<
+    Multiple extends true ? Choice[] | string : Choice | string,
+    string[] | string
+  >
   validate?: PromptValidationFunction<
     PromptState<Multiple extends true ? Choice[] : Choice> & { choices: PromptChoice<Choice>[] }
   >
+  footer?: () => string
 }
 
 /**
