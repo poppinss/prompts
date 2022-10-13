@@ -1,6 +1,6 @@
 {
 	"name": "@poppinss/prompts",
-	"version": "3.0.0-0",
+	"version": "3.0.0-1",
 	"description": "Wrapper over enquirer with better support for testing",
 	"main": "build/index.js",
 	"type": "module",
@@ -11,7 +11,7 @@
 	],
 	"exports": {
 		".": "./build/index.js",
-    "./types": "./build/src/types.js"
+		"./types": "./build/src/types.js"
 	},
 	"scripts": {
 		"pretest": "npm run lint",
