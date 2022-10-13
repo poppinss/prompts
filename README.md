@@ -248,8 +248,8 @@ Following is the list of options accepted by the prompts.
         <td>Function</td>
         <td>
         <p>
-        Transform the prompt return value. The value passed to the <code>result<code> method depends upon the prompt. For example, the <code>multiselecT</code> prompt value will be an array of selected choices.
-        <p>
+        Transform the prompt return value. The value passed to the <code>result</code> method depends upon the prompt. For example, the <code>multiselect</code> prompt value will be an array of selected choices.
+        </p>
         <pre class="language-typescript"><code>{
   result(value) {
     return value.toUpperCase()
@@ -262,9 +262,7 @@ Following is the list of options accepted by the prompts.
         <td>All prompts</td>
         <td>Function</td>
         <td>
-        <p>
-        Format the input value as the user types. The formatting is only applied to the CLI output, not the return value.
-        <p>
+        <p>Format the input value as the user types. The formatting is only applied to the CLI output, not the return value.</p>
         <pre class="language-typescript"><code>{
   format(value) {
     return value.toUpperCase()
@@ -276,9 +274,7 @@ Following is the list of options accepted by the prompts.
         <td><code>validate</code></td>
         <td>All prompts</td>
         <td>Function</td>
-        <td><p>
-        Validate the user input. Returning <code>true</code> from the method will be pass the validation. Returning <code>false</code> or an error message string will be considered as a failure.
-        <p>
+        <td><p>Validate the user input. Returning <code>true</code> from the method will be pass the validation. Returning <code>false</code> or an error message string will be considered as a failure.</p>
         <pre class="language-typescript"><code>{
   format(value) {
     return value.length > 6
