@@ -22,7 +22,7 @@ async function run() {
     validate: (value) => !!value,
   })
 
-  const tags = await prompt.enum('Define tags', {
+  const tags = await prompt.list('Define tags', {
     hint: 'Accepts comma separated values',
   })
 

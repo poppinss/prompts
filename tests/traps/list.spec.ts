@@ -10,12 +10,12 @@
 import { test } from '@japa/runner'
 import { Prompt } from '../../src/enquirer.js'
 
-test.group('Prompts | enum', () => {
-  test('trap enum prompt', async ({ assert, expectTypeOf }) => {
+test.group('Prompts | list', () => {
+  test('trap list prompt', async ({ assert, expectTypeOf }) => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node,js')
 
-    const tags = await prompt.enum('Enter tags')
+    const tags = await prompt.list('Enter tags')
     expectTypeOf(tags).toEqualTypeOf<string[]>()
     assert.deepEqual(tags, ['node', 'js'])
   })
@@ -24,7 +24,7 @@ test.group('Prompts | enum', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node, js')
 
-    const tags = await prompt.enum('Enter tags', { seperator: ', ' })
+    const tags = await prompt.list('Enter tags', { seperator: ', ' })
     expectTypeOf(tags).toEqualTypeOf<string[]>()
     assert.deepEqual(tags, ['node', 'js'])
   })
@@ -33,7 +33,7 @@ test.group('Prompts | enum', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags')
 
-    const tags = await prompt.enum('Enter tags', {
+    const tags = await prompt.list('Enter tags', {
       default: 'node,js',
     })
     expectTypeOf(tags).toEqualTypeOf<string[]>()
@@ -44,7 +44,7 @@ test.group('Prompts | enum', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('').replyWith('node,js')
 
-    await assert.rejects(() => prompt.enum('Enter tags'), 'Expected assertion to fail')
+    await assert.rejects(() => prompt.list('Enter tags'), 'Expected assertion to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
@@ -53,7 +53,7 @@ test.group('Prompts | enum', () => {
 
     await assert.rejects(
       () =>
-        prompt.enum('Enter tags', {
+        prompt.list('Enter tags', {
           validate() {
             return true
           },
@@ -68,7 +68,7 @@ test.group('Prompts | enum', () => {
 
     await assert.rejects(
       () =>
-        prompt.enum('Enter tags', {
+        prompt.list('Enter tags', {
           validate() {
             return false
           },
@@ -84,7 +84,7 @@ test.group('Prompts | enum', () => {
     prompt.trap('Enter tags').assertFails('', 'Tags are required').replyWith('secret')
     await assert.rejects(
       () =>
-        prompt.enum('Enter tags', {
+        prompt.list('Enter tags', {
           validate() {
             return 'Enter tags'
           },
@@ -97,7 +97,7 @@ test.group('Prompts | enum', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').replyWith('node,js')
 
-    const tags = await prompt.enum('Enter tags', {
+    const tags = await prompt.list('Enter tags', {
       result(values) {
         return values.map((value) => value.toUpperCase())
       },

@@ -53,9 +53,9 @@ export type TextPromptOptions<Result extends any> = {
 }
 
 /**
- * Prompt options for enum prompt
+ * Prompt options for list prompt
  */
-export type EnumPromptOptions<Result extends any> = {
+export type ListPromptOptions<Result extends any> = {
   default?: string
   name?: string
   result?: PromptResultFunction<string[], Result>

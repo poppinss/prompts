@@ -11,13 +11,13 @@ import { ObjectBuilder } from '@poppinss/utils'
 
 import {
   PromptChoice,
-  EnumPromptOptions,
   TextPromptOptions,
   TogglePromptOptions,
   ChoicePromptOptions,
   BooleanPromptOptions,
   MultiplePromptOptions,
   AutoCompletePromptOptions,
+  ListPromptOptions,
 } from './types.js'
 
 import { icons } from './icons.js'
@@ -90,11 +90,11 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Prompts for text input
+   * Prompt to accept a list of comma separated values
    */
-  async enum<Result extends any = string[]>(
+  async list<Result extends any = string[]>(
     title: string,
-    options?: EnumPromptOptions<Result>
+    options?: ListPromptOptions<Result>
   ): Promise<Result> {
     options = options || {}
 
@@ -118,7 +118,7 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Prompts for text input but mangles the output (for password)
+   * Prompts for text input but masks the output (for password)
    */
   async secure<Result extends any = string>(
     title: string,
@@ -171,7 +171,7 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Similar to [[this.confirm]] but with custom toggle options
+   * Similar to [[this.confirm]] but with custom names for the `Y/n` options
    */
   async toggle<Result extends any = boolean>(
     title: string,
@@ -201,7 +201,7 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Prompts for text input
+   * Prompt to select a value from the list of options
    */
   async choice<Choice extends string, Result extends any = Choice>(
     title: string,
@@ -239,7 +239,7 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Prompts for text input
+   * Prompt to select multiple values from the list of options
    */
   async multiple<Choice extends string, Result extends any = Choice[]>(
     title: string,
@@ -284,7 +284,8 @@ export abstract class BasePrompt {
   }
 
   /**
-   * Prompts for text input
+   * Prompt to select one or multiple values from the list of searchable
+   * options.
    */
   async autocomplete<
     Choice extends string,
