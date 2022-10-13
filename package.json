@@ -10,7 +10,8 @@
 		"build/index.js"
 	],
 	"exports": {
-		".": "./build/index.js"
+		".": "./build/index.js",
+    "./types": "./build/src/types.js"
 	},
 	"scripts": {
 		"pretest": "npm run lint",
