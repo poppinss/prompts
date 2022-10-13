@@ -1,7 +1,7 @@
 {
 	"name": "@poppinss/prompts",
 	"version": "2.0.2",
-	"description": "Module on top of enquirer with API to fake prompts during testing",
+	"description": "Wrapper over enquirer with better support for testing",
 	"main": "build/index.js",
 	"type": "module",
 	"files": [
