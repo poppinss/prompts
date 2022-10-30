@@ -11,18 +11,18 @@ import { ObjectBuilder } from '@poppinss/utils'
 
 import {
   PromptChoice,
+  ListPromptOptions,
   TextPromptOptions,
   TogglePromptOptions,
   ChoicePromptOptions,
   BooleanPromptOptions,
   MultiplePromptOptions,
   AutoCompletePromptOptions,
-  ListPromptOptions,
 } from './types.js'
 
-import { icons } from './icons.js'
 import { colors } from './colors.js'
 import { MockedPrompt } from './mocked_prompt.js'
+import { promptHiglight, promptPrefix, promptStyles } from './prompt_options.js'
 
 /**
  * Base prompt class exposes the public API for triggering prompts. The
@@ -80,11 +80,8 @@ export abstract class BasePrompt {
     builder.add('result', options.result)
     builder.add('format', options.format)
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }
@@ -109,10 +106,8 @@ export abstract class BasePrompt {
     builder.add('result', options.result)
     builder.add('format', options.format)
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }
@@ -134,11 +129,8 @@ export abstract class BasePrompt {
     builder.add('result', options.result)
     builder.add('format', options.format)
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }
@@ -161,11 +153,8 @@ export abstract class BasePrompt {
     builder.add('result', options.result)
     builder.add('format', options.format)
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }
@@ -191,11 +180,8 @@ export abstract class BasePrompt {
     builder.add('validate', options.validate)
     builder.add('enabled', choices[0])
     builder.add('disabled', choices[1])
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }
@@ -219,11 +205,8 @@ export abstract class BasePrompt {
     builder.add('result', options.result)
     builder.add('format', options.format)
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     builder.add(
       'choices',
@@ -257,11 +240,8 @@ export abstract class BasePrompt {
     builder.add('format', options.format)
     builder.add('hint', options.hint || 'Press <SPACE> to select')
     builder.add('validate', options.validate)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('styles', promptStyles)
 
     builder.add('indicator', (state: any, choice: any) => {
       if (choice.enabled) {
@@ -314,12 +294,9 @@ export abstract class BasePrompt {
     builder.add('validate', options.validate)
     builder.add('footer', options.footer)
     builder.add('choices', choices)
-    builder.add('prefix', colors.dim(icons.pointer))
-    builder.add('highlight', (value: string) => colors.yellow(value))
-    builder.add('styles', {
-      danger: (value: string) => colors.red(value),
-      submitted: (value: string) => colors.cyan(value),
-    })
+    builder.add('prefix', promptPrefix)
+    builder.add('highlight', promptHiglight)
+    builder.add('styles', promptStyles)
 
     return this.#handlePrompt(builder.toObject())
   }

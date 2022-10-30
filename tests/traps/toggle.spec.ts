@@ -11,13 +11,22 @@ import { test } from '@japa/runner'
 import { Prompt } from '../../src/enquirer.js'
 
 test.group('Prompts | toggle', () => {
-  test('trap toggle prompt', async ({ assert, expectTypeOf }) => {
+  test('accept toggle prompt', async ({ assert, expectTypeOf }) => {
     const prompt = new Prompt()
     prompt.trap('Delete the file?').accept()
 
     const shouldDeleteFiles = await prompt.toggle('Delete the file?', ['Yep', 'Nope'])
     expectTypeOf(shouldDeleteFiles).toEqualTypeOf<boolean>()
     assert.isTrue(shouldDeleteFiles)
+  })
+
+  test('reject toggle prompt', async ({ assert, expectTypeOf }) => {
+    const prompt = new Prompt()
+    prompt.trap('Delete the file?').reject()
+
+    const shouldDeleteFiles = await prompt.toggle('Delete the file?', ['Yep', 'Nope'])
+    expectTypeOf(shouldDeleteFiles).toEqualTypeOf<boolean>()
+    assert.isFalse(shouldDeleteFiles)
   })
 
   test('use default value when no input is provided', async ({ assert, expectTypeOf }) => {

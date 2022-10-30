@@ -121,7 +121,8 @@
 			"html"
 		],
 		"exclude": [
-			"tests/**"
+			"tests/**",
+      "src/enquirer.ts"
 		]
 	}
 }

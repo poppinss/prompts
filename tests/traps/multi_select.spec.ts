@@ -20,6 +20,24 @@ test.group('Prompts | multiselect', () => {
     assert.deepEqual(clients, ['npm'])
   })
 
+  test('trap multiselect prompt with object of choices', async ({ assert, expectTypeOf }) => {
+    const prompt = new Prompt()
+    prompt.trap('Select the installation client').chooseOptions([0])
+
+    const clients = await prompt.multiple('Select the installation client', [
+      {
+        name: 'npm',
+        message: 'Npm package manager',
+      },
+      {
+        name: 'yarn',
+        message: 'Yarn package manager',
+      },
+    ])
+    expectTypeOf(clients).toEqualTypeOf<('npm' | 'yarn')[]>()
+    assert.deepEqual(clients, ['npm'])
+  })
+
   test('reply directly with option value', async ({ assert, expectTypeOf }) => {
     const prompt = new Prompt()
     prompt.trap('Select the installation client').replyWith(['npm'])

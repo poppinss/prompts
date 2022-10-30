@@ -302,7 +302,9 @@ export class MockedPrompt {
   assertFails(value: string, message?: string | RegExp): this {
     const error = new Error(
       message
-        ? `Expected assertion to fail with message "${message}"`
+        ? typeof message === 'string'
+          ? `Expected assertion to fail with message "${message}"`
+          : `Expected assertion messages to match "${message}"`
         : 'Expected assertion to fail'
     )
     this.#assertions.push({

@@ -84,6 +84,53 @@ test.group('Prompts | input', () => {
     )
   })
 
+  test('pass when expected assertion passed', async ({ assert }) => {
+    const prompt = new Prompt()
+    prompt.trap("What's your username?").assertFails('', 'Username is required').replyWith('virk')
+
+    const username = await prompt.ask("What's your username?", {
+      validate() {
+        return 'Username is required'
+      },
+    })
+
+    assert.equal(username, 'virk')
+  })
+
+  test('assert validation message against a regex', async ({ assert }) => {
+    const prompt = new Prompt()
+    prompt
+      .trap("What's your username?")
+      .assertFails('', /\w+ is required/)
+      .replyWith('virk')
+
+    const username = await prompt.ask("What's your username?", {
+      validate() {
+        return 'Username is required'
+      },
+    })
+
+    assert.equal(username, 'virk')
+  })
+
+  test('fail when validation message does not pass regex check', async ({ assert }) => {
+    const prompt = new Prompt()
+    prompt
+      .trap("What's your username?")
+      .assertFails('', /\w+ is required/)
+      .replyWith('virk')
+
+    await assert.rejects(
+      () =>
+        prompt.ask("What's your username?", {
+          validate() {
+            return 'Enter username'
+          },
+        }),
+      'Expected assertion messages to match "/\\w+ is required/"'
+    )
+  })
+
   test('invoke result method to transform return value', async ({ assert }) => {
     const prompt = new Prompt()
     prompt.trap("What's your username?").replyWith('virk')
