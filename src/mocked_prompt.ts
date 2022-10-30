@@ -199,10 +199,6 @@ export class MockedPrompt {
    * as the user types
    */
   #formatInput(input: string, options: any) {
-    if (typeof options.format === 'function') {
-      return options.format(input)
-    }
-
     if (options.type === 'list') {
       return input.split(options.sep)
     }
