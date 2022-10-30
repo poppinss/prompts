@@ -71,7 +71,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'input')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -95,7 +95,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'list')
     builder.add('name', options.name || 'prompt')
     builder.add('sep', options.seperator || ',')
@@ -121,7 +121,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'password')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -144,7 +144,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'confirm')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -169,7 +169,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'toggle')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -196,7 +196,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'select')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -231,7 +231,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'multiselect')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)
@@ -278,7 +278,7 @@ export abstract class BasePrompt {
   ): Promise<Result> {
     options = options || {}
 
-    const builder = new ObjectBuilder()
+    const builder = new ObjectBuilder({})
     builder.add('type', 'autocomplete')
     builder.add('name', options.name || 'prompt')
     builder.add('message', title)

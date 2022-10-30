@@ -59,7 +59,7 @@
 	},
 	"dependencies": {
 		"@poppinss/colors": "^4.0.0-1",
-		"@poppinss/utils": "^6.0.0-1",
+		"@poppinss/utils": "^6.0.0-3",
 		"enquirer": "^2.3.6"
 	},
 	"repository": {
@@ -122,7 +122,7 @@
 		],
 		"exclude": [
 			"tests/**",
-      "src/enquirer.ts"
+			"src/enquirer.ts"
 		]
 	}
 }
