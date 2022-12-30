@@ -8,3 +8,4 @@
  */
 
 export { Prompt } from './src/enquirer.js'
+export { PromptCancelledException } from './src/exceptions/prompt_cancelled_exception.js'
