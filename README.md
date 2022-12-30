@@ -395,7 +395,7 @@ prompt
   .chooseOptions([1, 2])
 ```
 
-[gh-workflow-image]: https://img.shields.io/github/workflow/status/poppinss/prompts/test?style=for-the-badge
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/prompts/test.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/poppinss/prompts/actions/workflows/test.yml "Github action"
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
