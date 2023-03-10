@@ -29,7 +29,17 @@ import { promptHiglight, promptPrefix, promptStyles } from './prompt_options.js'
  * implementations just need to implement a single prompt method.
  */
 export abstract class BasePrompt {
-  #mockedPrompts: Map<string, MockedPrompt> = new Map()
+  traps: {
+    prompts: Map<string, { prompt: MockedPrompt; triggerError: Error }>
+    verify: () => void
+  } = {
+    prompts: new Map(),
+    verify() {
+      this.prompts.forEach((entry) => {
+        throw entry.triggerError
+      })
+    },
+  }
 
   /**
    * Handle the prompt. The mocked prompts are given preference if one exists
@@ -37,12 +47,12 @@ export abstract class BasePrompt {
   #handlePrompt(options: any) {
     let mockedPrompt: MockedPrompt | undefined
 
-    if (this.#mockedPrompts.has(options.name)) {
-      mockedPrompt = this.#mockedPrompts.get(options.name)!
-      this.#mockedPrompts.delete(options.name)
-    } else if (this.#mockedPrompts.has(options.message)) {
-      mockedPrompt = this.#mockedPrompts.get(options.message)!
-      this.#mockedPrompts.delete(options.message)
+    if (this.traps.prompts.has(options.name)) {
+      mockedPrompt = this.traps.prompts.get(options.name)!.prompt
+      this.traps.prompts.delete(options.name)
+    } else if (this.traps.prompts.has(options.message)) {
+      mockedPrompt = this.traps.prompts.get(options.message)!.prompt
+      this.traps.prompts.delete(options.message)
     }
 
     if (mockedPrompt) {
@@ -53,14 +63,6 @@ export abstract class BasePrompt {
   }
 
   protected abstract prompt(options: any): Promise<any>
-
-  /**
-   * A list of pending mocked prompts. These prompts were never
-   * triggered, however the trap was registered for them
-   */
-  get traps(): string[] {
-    return Array.from(this.#mockedPrompts.keys())
-  }
 
   /**
    * Prompts for text input
@@ -305,9 +307,14 @@ export abstract class BasePrompt {
    * Trap a prompt by its message or unique name
    */
   trap(message: string) {
+    /**
+     * Trigger error is raised when the prompt is not triggered but
+     * trapped
+     */
+    const triggerError = new Error(`Expected prompt "${message}" to get triggered`)
     const mockedPrompt = new MockedPrompt()
-    this.#mockedPrompts.set(message, mockedPrompt)
 
+    this.traps.prompts.set(message, { prompt: mockedPrompt, triggerError })
     return mockedPrompt
   }
 }
