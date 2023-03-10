@@ -44,7 +44,10 @@ test.group('Prompts | confirm', () => {
     const prompt = new Prompt()
     prompt.trap('Delete the file?').assertFails('').replyWith('virk')
 
-    await assert.rejects(() => prompt.confirm('Delete the file?'), 'Expected assertion to fail')
+    await assert.rejects(
+      () => prompt.confirm('Delete the file?'),
+      'Expected prompt validation to fail'
+    )
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
@@ -58,7 +61,7 @@ test.group('Prompts | confirm', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -90,7 +93,7 @@ test.group('Prompts | confirm', () => {
             return 'Do not delete files'
           },
         }),
-      'Expected assertion to fail with message "You should not delete files"'
+      `Expected prompt validation message to equal 'You should not delete files'`
     )
   })
 

@@ -73,7 +73,7 @@ test.group('Prompts | select', () => {
 
     await assert.rejects(
       () => prompt.choice('Select the installation client', ['npm', 'yarn']),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -88,7 +88,7 @@ test.group('Prompts | select', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -120,7 +120,7 @@ test.group('Prompts | select', () => {
             return 'Enter client'
           },
         }),
-      'Expected assertion to fail with message "client is required"'
+      `Expected prompt validation message to equal 'client is required'`
     )
   })
 

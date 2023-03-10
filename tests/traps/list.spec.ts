@@ -44,7 +44,7 @@ test.group('Prompts | list', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('').replyWith('node,js')
 
-    await assert.rejects(() => prompt.list('Enter tags'), 'Expected assertion to fail')
+    await assert.rejects(() => prompt.list('Enter tags'), 'Expected prompt validation to fail')
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
@@ -58,7 +58,7 @@ test.group('Prompts | list', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -89,7 +89,7 @@ test.group('Prompts | list', () => {
             return 'Enter tags'
           },
         }),
-      'Expected assertion to fail with message "Tags are required"'
+      `Expected prompt validation message to equal 'Tags are required'`
     )
   })
 

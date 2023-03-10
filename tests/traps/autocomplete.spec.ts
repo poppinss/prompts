@@ -58,7 +58,7 @@ test.group('Prompts | autocomplete', () => {
 
     await assert.rejects(
       () => prompt.autocomplete('Select the installation client', ['npm', 'yarn']),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -73,7 +73,7 @@ test.group('Prompts | autocomplete', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -105,7 +105,7 @@ test.group('Prompts | autocomplete', () => {
             return 'Enter client'
           },
         }),
-      'Expected assertion to fail with message "client is required"'
+      `Expected prompt validation message to equal 'client is required'`
     )
   })
 

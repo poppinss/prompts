@@ -55,7 +55,7 @@ test.group('Prompts | toggle', () => {
 
     await assert.rejects(
       () => prompt.toggle('Delete the file?', ['Yep', 'Nope']),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -70,7 +70,7 @@ test.group('Prompts | toggle', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -102,7 +102,7 @@ test.group('Prompts | toggle', () => {
             return 'Do not delete files'
           },
         }),
-      'Expected assertion to fail with message "You should not delete files"'
+      `Expected prompt validation message to equal 'You should not delete files'`
     )
   })
 

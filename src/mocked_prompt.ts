@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+import { inspect } from 'node:util'
+import { AssertionError } from 'node:assert'
 import { PromptState } from './types.js'
 
 export class MockedPrompt {
@@ -32,7 +34,7 @@ export class MockedPrompt {
     value: string
     expectsError: boolean // Does assertion expects error?
     expectedErrorMessage?: string | RegExp
-    error: Error
+    error: AssertionError
   }[] = []
 
   /**
@@ -167,20 +169,23 @@ export class MockedPrompt {
         if (result !== true) {
           throw assertion.error
         }
-
+      } else {
         /**
          * Expected the value to fail the assertion, but the
          * validation method returned true
          */
-      } else {
         if (result === true) {
           throw assertion.error
         }
 
+        /**
+         * Validation failed but the error message is different
+         */
         if (
           typeof assertion.expectedErrorMessage === 'string' &&
           result !== assertion.expectedErrorMessage
         ) {
+          assertion.error.actual = result
           throw assertion.error
         }
 
@@ -300,18 +305,46 @@ export class MockedPrompt {
    * Expect the given value to fail the prompt validation
    */
   assertFails(value: string, message?: string | RegExp): this {
-    const error = new Error(
-      message
-        ? typeof message === 'string'
-          ? `Expected assertion to fail with message "${message}"`
-          : `Expected assertion messages to match "${message}"`
-        : 'Expected assertion to fail'
-    )
+    if (!message) {
+      this.#assertions.push({
+        value,
+        expectsError: true,
+        expectedErrorMessage: message,
+        error: new AssertionError({
+          message: 'Expected prompt validation to fail',
+          stackStartFn: this.assertFails,
+        }),
+      })
+      return this
+    }
+
+    if (typeof message === 'string') {
+      const error = new AssertionError({
+        message: `Expected prompt validation message to equal ${inspect(message)}`,
+        expected: message,
+        operator: 'strictEqual',
+        stackStartFn: this.assertFails,
+      })
+      Object.defineProperty(error, 'showDiff', { value: true })
+
+      this.#assertions.push({
+        value,
+        expectsError: true,
+        expectedErrorMessage: message,
+        error,
+      })
+
+      return this
+    }
+
     this.#assertions.push({
       value,
       expectsError: true,
       expectedErrorMessage: message,
-      error: error,
+      error: new AssertionError({
+        message: `Expected prompt validation message to match ${inspect(message)}`,
+        expected: message,
+      }),
     })
 
     return this
@@ -321,7 +354,9 @@ export class MockedPrompt {
    * Expect the given value to pass the prompt validation
    */
   assertPasses(value: string): this {
-    const error = new Error('Expected assertion to pass, instead it failed')
+    const error = new AssertionError({
+      message: 'Expected assertion to pass, instead it failed',
+    })
     this.#assertions.push({
       value,
       expectsError: false,

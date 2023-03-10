@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import { AssertionError } from 'node:assert'
 import { ObjectBuilder } from '@poppinss/utils'
 
 import {
@@ -30,7 +31,7 @@ import { promptHiglight, promptPrefix, promptStyles } from './prompt_options.js'
  */
 export abstract class BasePrompt {
   traps: {
-    prompts: Map<string, { prompt: MockedPrompt; triggerError: Error }>
+    prompts: Map<string, { prompt: MockedPrompt; triggerError: AssertionError }>
     verify: () => void
   } = {
     prompts: new Map(),
@@ -311,7 +312,9 @@ export abstract class BasePrompt {
      * Trigger error is raised when the prompt is not triggered but
      * trapped
      */
-    const triggerError = new Error(`Expected prompt "${message}" to get triggered`)
+    const triggerError = new AssertionError({
+      message: `Expected prompt "${message}" to get triggered`,
+    })
     const mockedPrompt = new MockedPrompt()
 
     this.traps.prompts.set(message, { prompt: mockedPrompt, triggerError })

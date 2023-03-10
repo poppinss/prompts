@@ -35,7 +35,10 @@ test.group('Prompts | input', () => {
     const prompt = new Prompt()
     prompt.trap("What's your username?").assertFails('').replyWith('virk')
 
-    await assert.rejects(() => prompt.ask("What's your username?"), 'Expected assertion to fail')
+    await assert.rejects(
+      () => prompt.ask("What's your username?"),
+      'Expected prompt validation to fail'
+    )
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
@@ -49,7 +52,7 @@ test.group('Prompts | input', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -80,7 +83,7 @@ test.group('Prompts | input', () => {
             return 'Enter username'
           },
         }),
-      'Expected assertion to fail with message "Username is required"'
+      `Expected prompt validation message to equal 'Username is required'`
     )
   })
 
@@ -127,7 +130,7 @@ test.group('Prompts | input', () => {
             return 'Enter username'
           },
         }),
-      'Expected assertion messages to match "/\\w+ is required/"'
+      'Expected prompt validation message to match /\\w+ is required/'
     )
   })
 

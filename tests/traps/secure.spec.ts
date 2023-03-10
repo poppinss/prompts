@@ -35,7 +35,10 @@ test.group('Prompts | secure', () => {
     const prompt = new Prompt()
     prompt.trap('Choose password').assertFails('').replyWith('secret')
 
-    await assert.rejects(() => prompt.secure('Choose password'), 'Expected assertion to fail')
+    await assert.rejects(
+      () => prompt.secure('Choose password'),
+      'Expected prompt validation to fail'
+    )
   })
 
   test('fail when expected failing assertion passes', async ({ assert }) => {
@@ -49,7 +52,7 @@ test.group('Prompts | secure', () => {
             return true
           },
         }),
-      'Expected assertion to fail'
+      'Expected prompt validation to fail'
     )
   })
 
@@ -80,7 +83,7 @@ test.group('Prompts | secure', () => {
             return 'Enter password'
           },
         }),
-      'Expected assertion to fail with message "Password is required"'
+      `Expected prompt validation message to equal 'Password is required'`
     )
   })
 
