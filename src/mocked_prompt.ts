@@ -20,12 +20,12 @@ export class MockedPrompt {
   /**
    * The selected index for the select prompt
    */
-  #choiceSelection: number
+  #choiceSelection?: number
 
   /**
    * Selected indexes for the multi-select prompt
    */
-  #multiChoiceSelection: number[]
+  #multiChoiceSelection?: number[]
 
   /**
    * Expected assertions
@@ -230,7 +230,7 @@ export class MockedPrompt {
       return
     }
 
-    const answer = options.choices[this.#choiceSelection]
+    const answer = options.choices[this.#choiceSelection!]
     this.#setAnswer(typeof answer === 'string' ? answer : answer?.name)
   }
 
