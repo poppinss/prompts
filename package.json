@@ -15,8 +15,9 @@
 	},
 	"scripts": {
 		"pretest": "npm run lint",
-		"test": "c8 npm run vscode:test",
+		"test": "c8 npm run quick:test",
 		"clean": "del-cli build",
+    "typecheck": "tsc --noEmit",
 		"compile": "npm run lint && npm run clean && tsc",
 		"build": "npm run compile",
 		"release": "np",
@@ -25,7 +26,7 @@
 		"prepublishOnly": "npm run build",
 		"lint": "eslint . --ext=.ts",
 		"sync-labels": "github-label-sync --labels .github/labels.json poppinss/prompts",
-		"vscode:test": "node --loader=ts-node/esm bin/test.ts"
+		"quick:test": "node --loader=ts-node/esm bin/test.ts"
 	},
 	"keywords": [
 		"enquirer",
