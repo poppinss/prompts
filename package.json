@@ -1,6 +1,6 @@
 {
 	"name": "@poppinss/prompts",
-	"version": "3.1.0-3",
+	"version": "3.1.0-4",
 	"description": "Wrapper over enquirer with better support for testing",
 	"main": "build/index.js",
 	"type": "module",
@@ -13,9 +13,9 @@
 		".": "./build/index.js",
 		"./types": "./build/src/types.js"
 	},
-  "engines": {
-    "node": ">=18.16.0"
-  },
+	"engines": {
+		"node": ">=18.16.0"
+	},
 	"scripts": {
 		"pretest": "npm run lint",
 		"test": "c8 npm run quick:test",
