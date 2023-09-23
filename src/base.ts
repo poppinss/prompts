@@ -273,7 +273,7 @@ export abstract class BasePrompt {
   async autocomplete<
     Choice extends string,
     Multiple extends boolean = false,
-    Result extends any = Multiple extends true ? Choice[] : Choice
+    Result extends any = Multiple extends true ? Choice[] : Choice,
   >(
     title: string,
     choices: readonly Choice[],

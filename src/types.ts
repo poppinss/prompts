@@ -119,7 +119,7 @@ export type TogglePromptOptions<Result extends any> = {
 export type AutoCompletePromptOptions<
   Choice extends string,
   Multiple extends boolean,
-  Result extends any
+  Result extends any,
 > = {
   default?: number
   limit?: number
