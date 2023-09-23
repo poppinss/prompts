@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Prompt } from '../index.js'
+import { Prompt, errors } from '../index.js'
 import { colors } from '../src/colors.js'
 
 const prompt = new Prompt()
@@ -102,7 +102,7 @@ async function run() {
 
 run().catch((error) => {
   console.error(error)
-  if (!error.code || error.code !== 'E_PROMPT_CANCELLED') {
+  if (error instanceof errors.E_PROMPT_CANCELLED === false) {
     process.exitCode = 1
   }
 })

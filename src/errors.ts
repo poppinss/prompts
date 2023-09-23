@@ -7,5 +7,6 @@
  * file that was distributed with this source code.
  */
 
-export { Prompt } from './src/enquirer.js'
-export * as errors from './src/errors.js'
+import { createError } from '@poppinss/utils'
+
+export const E_PROMPT_CANCELLED = createError('Prompt cancelled', 'E_PROMPT_CANCELLED', 500)

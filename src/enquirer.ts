@@ -9,7 +9,7 @@
 
 import enq from 'enquirer'
 import { BasePrompt } from './base.js'
-import { PromptCancelledException } from './exceptions/prompt_cancelled_exception.js'
+import { E_PROMPT_CANCELLED } from './errors.js'
 
 /**
  * Since the typings for `enquirer` package is badly broken, we
@@ -38,7 +38,7 @@ export class Prompt extends BasePrompt {
       return output[options.name]
     } catch (error) {
       if (cancelled) {
-        throw new PromptCancelledException()
+        throw new E_PROMPT_CANCELLED()
       }
 
       throw error

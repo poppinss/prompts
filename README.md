@@ -395,6 +395,23 @@ prompt
   .chooseOptions([1, 2])
 ```
 
+## Handling prompts cancellation error
+Enquirer throws an error when a prompt is cancelled using `Ctrl + C`. You can capture the exception by wrapping the prompt display code inside a `try/catch` block and check for `E_PROMPT_CANCELLED` error.
+
+```ts
+import { Prompt, errors } from '@poppinss/prompts'
+
+const prompt = new Prompt()
+
+try {
+  const modelName = await prompt.ask('Specify the model name')
+} catch (error) {
+  if (error instanceof errors.E_PROMPT_CANCELLED) {
+    console.log('Prompt cancelled')
+  }
+}
+```
+
 [gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/prompts/test.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/poppinss/prompts/actions/workflows/test.yml "Github action"
 
