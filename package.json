@@ -1,6 +1,6 @@
 {
 	"name": "@poppinss/prompts",
-	"version": "3.1.0-4",
+	"version": "3.1.0-5",
 	"description": "Wrapper over enquirer with better support for testing",
 	"main": "build/index.js",
 	"type": "module",
@@ -100,7 +100,7 @@
 		"extends": "@adonisjs/eslint-config/package"
 	},
 	"prettier": "@adonisjs/prettier-config",
-  "tsup": {
+	"tsup": {
 		"entry": [
 			"./index.ts",
 			"./src/types.ts"
