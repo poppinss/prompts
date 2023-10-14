@@ -1,369 +1,419 @@
-<div align="center"><img src="https://res.cloudinary.com/adonisjs/image/upload/q_100/v1557762307/poppinss_iftxlt.jpg" width="600px"></div>
+# @poppinss/prompts
+> Wrapper over [enquirer](https://npm.im/enquirer) with better support for testing
 
-# Prompts
+[![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
 
-> Module on top of [enquirer](https://github.com/enquirer/enquirer) with API for testing as well.
+## Why this package exists?
+There are many CLI prompts libraries in the Node ecosystem. However, they all fall short when it comes to writing tests that involve prompts.
 
-[![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
+Let's say you are writing tests for a command that triggers CLI prompts. Unfortunately, the CLI process will stall since it is waiting for manual input. 
 
-This module wraps [enquirer](https://github.com/enquirer/enquirer) and exposes the API to easily test prompts without pulling your hair.
+This package makes testing prompts easier by allowing you to trap them during testing.
 
-For testing, we make use of Event Emitter instead of executing actual prompts and you can act on those events programmatically.
+It is worth noting we only export the following prompts from the [enquirer package](https://npm.im/enquirer), and also, the API is somewhat different.
 
-> Please note: Only a subset of prompts are implemented. However, I am open to accept PR's for adding more.
+- input
+- list
+- password
+- confirm
+- toggle
+- select
+- multiselect
+- autocomplete
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-## Table of contents
-
-- [Why use this module?](#why-use-this-module)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Implemented Prompt types](#implemented-prompt-types)
-  - [`ask(title: string, options?: TextPromptOptions)`](#asktitle-string-options-textpromptoptions)
-  - [`secure(title: string, options?: TextPromptOptions)`](#securetitle-string-options-textpromptoptions)
-  - [`confirm(title: string, options?: BooleanPromptOptions)`](#confirmtitle-string-options-booleanpromptoptions)
-  - [`toggle(title: string, choices: [string, string], options?: TogglePromptOptions)`](#toggletitle-string-choices-string-string-options-togglepromptoptions)
-  - [`choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)`](#choicetitle-string-choices-string---options-choicepromptoptions)
-  - [`multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)`](#multipletitle-string-choices-string---options-multiplepromptoptions)
-  - [`autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)`](#autocompletetitle-string-choices-string-options-autocompletepromptoptions)
-  - [`enum(title: string, options?: EnumPromptOptions)`](#enumtitle-string-options-enumpromptoptions)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-## Why use this module?
-
-When using [enquirer](https://github.com/enquirer/enquirer), there is no simple way to test your code that makes use of prompts as prompts needs manual intervention. This module ships with a parallel implementation that uses the Event emitter to interact with prompts programmatically. For example:
-
-You want to test a command that asks for the **username** and **password** and this is how you may go about writing it.
-
-```ts
-class MyCommand {
-  constructor(prompt) {
-    this.prompt = prompt
-  }
-
-  async run() {
-    const username = await this.prompt.ask('Enter account username', { name: 'username' })
-    const password = await this.prompt.ask('Enter account password', { name: 'password' })
-
-    console.log({ username, password })
-  }
-}
-```
-
-During the tests, you can pass the emitter based prompt instance to your command as shown below:
-
-```ts
-import { FakePrompt } from '@poppinss/prompts'
-const prompt = new FakePrompt()
-
-prompt.on('prompt', (question) => {
-  if (question.name === 'username') {
-    question.answer('virk')
-  } else {
-    question.answer('secret-password')
-  }
-})
-
-const myCommand = new MyCommand(prompt)
-await myCommand.run()
-```
-
-It is as simple as that. There is no need to make any code changes, just make use of the `FakePrompt` class over `Prompt`.
-
-## Installation
-
-Install the package from the npm registry as follows:
+## Usage
+Install the package from the npm registry as follows.
 
 ```sh
 npm i @poppinss/prompts
 
-# yarn
+# Yarn lovers
 yarn add @poppinss/prompts
 ```
 
-## Usage
+Next, create an instance of the prompt class. If you want, you can re-use the single instance throughout the entire process lifecycle.
+
+```ts
+import { Prompt } from '@poppinss/prompts'
+
+const prompt = new Prompt()
+
+const modelName = await prompt.ask('Specify the model name')
+
+const drivers = await prompt.multiple(
+  'Select database drivers',
+  [
+    {
+      name: 'sqlite',
+      message: 'SQLite3',
+    },
+    {
+      name: 'mysql',
+      message: 'MYSQL',
+    },
+  ],
+  {
+    validate(choices) {
+      return choices.length > 0
+    }
+  }
+)
+```
+
+## Available prompts
+Following is the list of available prompts
+
+### ask
+Prompt the user to type text. The `ask` method uses the [enquirer input](https://github.com/enquirer/enquirer#input-prompt) prompt.
+
+The method accepts the prompt message as the first param and the [options object](#prompt-options) as the second param.
+
+```ts
+await prompt.ask('Specify the model name')
+```
+
+```ts
+// Validate input
+await prompt.ask('Specify the model name', {
+  validate(value) {
+    return value.length > 0
+  }
+})
+```
+
+```ts
+// Default value
+await prompt.ask('Specify the model name', {
+  default: 'User'
+})
+```
+
+### secure
+Prompt the user to type text. The output on the terminal gets masked with a star `*`. The `secure` method uses the [enquirer password](https://github.com/enquirer/enquirer#password-prompt) prompt.
+
+The method accepts the prompt message as the first param and the options object as the second param.
+
+```ts
+await prompt.secure('Enter account password')
+```
+
+```ts
+await prompt.secure('Enter account password', {
+  validate(value) {
+    return value.length < 6
+      ? 'Password must be 6 characters long'
+      : true
+  }
+})
+```
+
+### list
+
+The `list` method uses the [enquirer list](https://github.com/enquirer/enquirer#list-prompt) prompt. It allows you to accept a comma-separated list of values.
+
+```ts
+const tags = await prompt.list('Enter tags to assign')
+```
+
+```ts
+// Default list of tags
+const tags = await prompt.list('Enter tags to assign', {
+  default: ['node.js', 'javascript']
+})
+```
+
+### confirm
+
+The `confirm` method uses [enquirer confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. It presents the user with a `Y/N` option and returns a boolean value.
+
+```ts
+const shouldDeleteFiles = await prompt.confirm('Want to delete all files?')
+
+if (shouldDeleteFiles) {
+  // take action
+}
+```
+
+### toggle
+
+The `toggle` prompt is similar to the `confirm` prompt but allows you to specify custom display values for `true` and `false`.
+
+```ts
+const shouldDeleteFiles = await prompt.confirm('Want to delete all files?', ['Yup', 'Nope'])
+
+if (shouldDeleteFiles) {
+  // take action
+}
+```
+
+### choice
+
+The `choice` method uses the [enquirer select](https://github.com/enquirer/enquirer#select-prompt) prompt. It allows you to display a list of choices for selection.
+
+```ts
+await prompt.choice('Select package manager', [
+  'npm',
+  'yarn',
+  'pnpm'
+])
+```
+
+The selection options can also be an object with the `name` and the `message` properties. 
+
+- The value of the `name` property is returned as the prompt result.
+- The `message` property is displayed in the terminal.
+
+```ts
+await prompt.choice('Select database driver', [
+  {
+    name: 'sqlite',
+    message: 'SQLite'
+  },
+  {
+    name: 'mysql',
+    message: 'MySQL'
+  },
+  {
+    name: 'pg',
+    message: 'PostgreSQL'
+  }
+])
+```
+
+### multiple
+
+The `multiple` method uses the [enquirer multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. It allows you to display a list of choices for multiple selections.
+
+```ts
+await prompt.multiple('Select database driver', [
+  {
+    name: 'sqlite',
+    message: 'SQLite'
+  },
+  {
+    name: 'mysql',
+    message: 'MySQL'
+  },
+  {
+    name: 'pg',
+    message: 'PostgreSQL'
+  }
+])
+```
+
+### autocomplete
+
+The `autocomplete` prompt is a combination of the `select` and the `multiselect` prompt, but with the ability to fuzzy search the choices.
+
+```ts
+const cities = []
+
+await prompt.autocomplete('Select your city', cities)
+```
+
+## Prompt Options
+
+Following is the list of options accepted by the prompts.
+
+<table>
+    <tr>
+        <td>Option</td>
+        <td>Accepted by</td>
+        <td>Type</td>
+        <td>Description</td>
+    </tr>
+    <tr>
+        <td><code>default</code></td>
+        <td>All prompts</td>
+        <td>String</td>
+        <td>
+        The default value to use when no value is entered. In case of <code>select</code>, <code>multiselect</code>, and <code>autocomplete</code> prompts, the value can be the choices array index.
+        </td>
+    </tr>
+    <tr>
+        <td><code>name</code></td>
+        <td>All prompts</td>
+        <td>String</td>
+        <td>The unique name for the prompt</td>
+    </tr>
+    <tr>
+        <td><code>hint</code></td>
+        <td>All prompts</td>
+        <td>String</td>
+        <td>The hint text to display next to the prompt</td>
+    </tr>
+    <tr>
+        <td><code>result</code></td>
+        <td>All prompts</td>
+        <td>Function</td>
+        <td>
+        <p>
+        Transform the prompt return value. The value passed to the <code>result</code> method depends upon the prompt. For example, the <code>multiselect</code> prompt value will be an array of selected choices.
+        </p>
+        <pre><code>{
+  result(value) {
+    return value.toUpperCase()
+  }
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td><code>format</code></td>
+        <td>All prompts</td>
+        <td>Function</td>
+        <td>
+        <p>Format the input value as the user types. The formatting is only applied to the CLI output, not the return value.</p>
+        <pre><code>{
+  format(value) {
+    return value.toUpperCase()
+  }
+}</code></pre>
+        </td>
+    </tr>
+    <tr>
+        <td><code>validate</code></td>
+        <td>All prompts</td>
+        <td>Function</td>
+        <td><p>Validate the user input. Returning <code>true</code> from the method will be pass the validation. Returning <code>false</code> or an error message string will be considered as a failure.</p>
+        <pre><code>{
+  format(value) {
+    return value.length > 6
+      ? true
+      : 'Model name should be atleast 6 characters long.'
+  }
+}</code></pre></td>
+    </tr>
+    <tr>
+        <td><code>limit</code></td>
+        <td><code>autocomplete</code></td>
+        <td>Number</td>
+        <td>Limit the number of options to display. You will have you to scroll to view the rest of the options.</td>
+    </tr>
+</table>
+
+## Testing traps
+The biggest reason for using this package is for the testing traps API. Testing traps allow you to handle prompts programmatically.
+
+In the following example, we trap the prompt by its display message and answer it using the `replyWith` method.
 
 ```ts
 import { Prompt } from '@poppinss/prompts'
 const prompt = new Prompt()
 
-const username = await prompt.ask('What is your username?')
-const password = await prompt.secure('Enter account password')
-const client = await prompt.choice('Choose installation client', ['npm', 'yarn'])
-```
+test('test some example command', () => {
+  prompt.trap('Specify the model name').replyWith('User')
 
-During tests, replace `Prompt` with `FakePrompt` and everything works as expected. However, do make sure that you listen for the `prompt` event and answer every prompt, otherwise your tests will hang.
-
-## Implemented Prompt types
-
-The following prompt types from enquirer are implemented. The method names exposed by this module are different (my personal preference).
-
----
-
-### `ask(title: string, options?: TextPromptOptions)`
-
-Uses the `input` prompt type. Optionally you can define the following options.
-
-- **default**: The default value to be used.
-- **name**: Name of the prompt. Helpful when you want to answer prompts during testing.
-- **format**: Format the value before resolving the promise.
-- **validate**: Validate the value to ensure it is correct.
-
-```ts
-await prompt.ask('Choose account username', {
-  validate(answer) {
-    if (!answer || answer.length < 4) {
-      return 'Username is required and must be over 4 characters'
-    }
-    return true
-  },
+  // run command that triggers the prompt
 })
 ```
 
-Use the following code to answer prompt during tests
+The `prompt.trap` method matches the exact prompt message. You can also assign a unique name to your prompts and use that for trapping the prompt. For example:
 
 ```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Choose account username')
-  question.answer('virk')
+await prompt.ask('Specify the model name', {
+  name: 'modelName'
 })
 
-const username = await prompt.ask('Choose account username')
-assert.equal(username, 'virk')
+// Trap with prompt name
+prompt.trap('modelName')
 ```
 
----
-
-### `secure(title: string, options?: TextPromptOptions)`
-
-Uses the `password` prompt type. You can define the same options as the `ask` method.
+### Assertions
+You can define assertions on the prompt to test the `validate` method behavior. For example: Assert that the validate method disallows empty strings.
 
 ```ts
-await prompt.secure('Enter account password', {
-  validate(answer) {
-    if (!answer) {
-      return 'Password is required to login'
-    }
-    return true
-  },
-})
+prompt
+  .trap('modelName')
+  .assertFails('')
+
+// Assert the validation method to print a specific error message
+prompt
+  .trap('modelName')
+  .assertFails('', 'Enter model name')
 ```
 
-Use the following code to answer prompt during tests
+The `assertFails` method accepts the input to be tested against the `validate` method. The second argument is an optional message you expect the `validate` method to print.
+
+Similarly, you can use the `assertPasses` method to test whether the `validate` method allows for acceptable values.
 
 ```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Enter account password')
-  question.answer('secret')
-})
-
-const password = await prompt.secure('Enter account password')
-assert.equal(password, 'secret')
+prompt
+  .trap('modelName')
+  .assertPasses('User')
+  .assertPasses('app_user')
+  .assertPasses('models/User')
+  .replyWith('User')
 ```
 
----
+### Traps API
 
-### `confirm(title: string, options?: BooleanPromptOptions)`
+Following is the list of available methods on a trapped prompt.
 
-Uses the [confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. The prompt options are same as the `ask` method.
+#### replyWith
+
+Set the return value for the prompt.
 
 ```ts
-await prompt.confirm('Want to delete files?')
+prompt.trap('modelName').replyWith('User')
 ```
 
-Use the following code to answer prompt during tests
+#### accept
+
+Accept the `toggle` and the `confirm` prompts with a `true` value.
 
 ```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Want to delete files?')
-
-  // Say yes
-  question.accept()
-
-  // Say no
-  question.decline()
-})
-
-const deleteFiles = await prompt.confirm('Want to delete files?')
-assert.isTrue(deleteFiles)
+prompt.trap('Want to delete all files?').accept()
 ```
 
----
+#### reject
 
-### `toggle(title: string, choices: [string, string], options?: TogglePromptOptions)`
-
-Use the [toggle](https://github.com/enquirer/enquirer#toggle-prompt) prompt. The prompt options are same as the `ask` method.
+Reject the `toggle` and the `confirm` prompts with a `false` value.
 
 ```ts
-await prompt.toggle('Want to delete files?', ['Yep', 'Nope'])
+prompt.trap('Want to delete all files?').reject()
 ```
 
-Use the following code to answer prompt during tests
+#### chooseOption
+
+Choose an option by its index for a `select` prompt.
 
 ```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Want to delete files?')
-
-  // Say yes
-  question.accept()
-
-  // Say no
-  question.decline()
-})
-
-const deleteFiles = await prompt.toggle('Want to delete files?', ['Yep', 'Nope'])
-assert.isTrue(deleteFiles)
+prompt
+  .trap('Select package manager')
+  .chooseOption(0)
 ```
 
----
+If you do not choose any option explicitly, then the first option will be selected by default.
 
-### `choice(title: string, choices: (string | {})[], options?: ChoicePromptOptions)`
+#### chooseOptions
 
-Uses the [select](https://github.com/enquirer/enquirer#select-prompt) prompt. The prompt options are same as the `ask` method.
+Choose multiple options by their indexes for a `multiselect` prompt.
 
 ```ts
-await prompt.choice('Select installation client', ['npm', 'yarn'])
+prompt
+  .trap('Select database manager')
+  .chooseOptions([1, 2])
 ```
 
-Or pass the choice as an object
+## Handling prompts cancellation error
+Enquirer throws an error when a prompt is cancelled using `Ctrl + C`. You can capture the exception by wrapping the prompt display code inside a `try/catch` block and check for `E_PROMPT_CANCELLED` error.
 
 ```ts
-await prompt.choice('Select toppings', [
-  {
-    name: 'Jalapenos',
-    hint: 'Marinated in vinegar, will taste sour',
-  },
-  {
-    name: 'Lettuce',
-    hint: 'Fresh and leafy',
-  },
-])
+import { Prompt, errors } from '@poppinss/prompts'
+
+const prompt = new Prompt()
+
+try {
+  const modelName = await prompt.ask('Specify the model name')
+} catch (error) {
+  if (error instanceof errors.E_PROMPT_CANCELLED) {
+    console.log('Prompt cancelled')
+  }
+}
 ```
 
-Use the following code to answer prompt during tests
-
-```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Select installation client')
-
-  // pass index
-  question.select(0)
-})
-
-const client = await prompt.choice('Select installation client', ['npm', 'yarn'])
-assert.equal(client, 'npm')
-```
-
----
-
-### `multiple(title: string, choices: (string | {})[], options?: MultiplePromptOptions)`
-
-Uses the [multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. The prompt options are same as the `ask` method.
-
-```ts
-await prompt.multiple('Select base dependencies', ['@adonisjs/core', '@adonisjs/bodyparser'])
-```
-
-Or pass the choice as an object
-
-```ts
-await prompt.multiple('Select base dependencies', [
-  {
-    name: '@adonisjs/core',
-    message: 'Framework core',
-  },
-  {
-    name: '@adonisjs/bodyparser',
-    message: 'Bodyparser',
-  },
-])
-```
-
-Use the following code to answer prompt during tests
-
-```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Select base dependencies')
-
-  // pass indexes
-  question.multiSelect([0, 1])
-})
-
-const dependencies = await prompt.multiple('Select base dependencies', [
-  '@adonisjs/core',
-  '@adonisjs/bodyparser',
-])
-
-assert.deepEqual(dependencies, ['@adonisjs/core', '@adonisjs/bodyparser'])
-```
-
----
-
-### `autocomplete(title: string, choices: string[], options?: AutoCompletePromptOptions)`
-
-Uses the [autocomplete](https://github.com/enquirer/enquirer#autocomplete-prompt) prompt.
-
-```ts
-await prompt.autocomplete('Select country', ['India', 'USA', 'UK', 'Ireland', 'Australia'])
-```
-
-For multi-select, you can pass the `multiple` property
-
-```ts
-await prompt.autocomplete('Select country', ['India', 'USA', 'UK', 'Ireland', 'Australia'], {
-  multiple: true,
-})
-```
-
-Use the following code to answer prompt during tests
-
-```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Select country')
-
-  // pass indexes
-  question.select(1)
-})
-
-const country = await prompt.autocomplete('Select country', [
-  'India',
-  'USA',
-  'UK',
-  'Ireland',
-  'Australia',
-])
-
-assert.equal(country, 'USA')
-```
-
----
-
-### `enum(title: string, options?: EnumPromptOptions)`
-
-Similar to the `ask` prompt, but allows comma (,) separated values. Uses the [list](https://github.com/enquirer/enquirer#list-prompt) prompt.
-
-```ts
-await prompt.enum('Define tags', {
-  hint: 'Accepts comma separated values',
-})
-```
-
-Use the following code to answer prompt during tests
-
-```ts
-prompt.on('prompt', (question) => {
-  assert.equal(question.message, 'Define tags')
-  question.answer('nodejs,javascript')
-})
-
-const tags = await await prompt.enum('Define tags')
-assert.deepEqual(tags, ['nodejs', 'javascript'])
-```
-
-[gh-workflow-image]: https://img.shields.io/github/workflow/status/poppinss/prompts/test?style=for-the-badge
-[gh-workflow-url]: https://github.com/poppinss/prompts/actions/workflows/test.yml "Github action"
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/poppinss/prompts/checks.yml?style=for-the-badge
+[gh-workflow-url]: https://github.com/poppinss/prompts/actions/workflows/checks.yml "Github action"
 
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [typescript-url]: "typescript"
@@ -373,6 +423,3 @@ assert.deepEqual(tags, ['nodejs', 'javascript'])
 
 [license-image]: https://img.shields.io/npm/l/@poppinss/prompts?color=blueviolet&style=for-the-badge
 [license-url]: LICENSE.md 'license'
-
-[synk-image]: https://img.shields.io/snyk/vulnerabilities/github/poppinss/prompts?label=Synk%20Vulnerabilities&style=for-the-badge
-[synk-url]: https://snyk.io/test/github/poppinss/prompts?targetFile=package.json 'synk'

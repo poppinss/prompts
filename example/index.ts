@@ -1,13 +1,15 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-import { Prompt } from '../index'
+import { Prompt, errors } from '../index.js'
+import { colors } from '../src/colors.js'
+
 const prompt = new Prompt()
 
 async function run() {
@@ -20,7 +22,7 @@ async function run() {
     validate: (value) => !!value,
   })
 
-  const tags = await prompt.enum('Define tags', {
+  const tags = await prompt.list('Define tags', {
     hint: 'Accepts comma separated values',
   })
 
@@ -30,6 +32,9 @@ async function run() {
 
   const client = await prompt.choice('Select installation client', ['npm', 'yarn'], {
     name: 'client',
+    format(value) {
+      return value.toUpperCase()
+    },
     async validate() {
       return true
     },
@@ -49,6 +54,12 @@ async function run() {
     ] as const,
     {
       name: 'deps',
+      format(values) {
+        if (Array.isArray(values)) {
+          return values.map((value) => value.toUpperCase())
+        }
+        return values
+      },
       validate: (choices) => choices.length > 0,
     }
   )
@@ -57,22 +68,41 @@ async function run() {
     hint: 'Cannot be undone',
   })
 
-  const state = await prompt.autocomplete('Select state', [
-    'Haryana',
-    'Punjab',
-    'Assam',
-    'Arunachal Pradesh',
-    'Bihar',
-    'Manipur',
-    'Meghalaya',
-    'Tamil Nadu',
-    'Uttarakhand',
-    'Uttar Pradesh',
-  ])
+  const state = await prompt.autocomplete(
+    'Select state',
+    [
+      'Haryana',
+      'Punjab',
+      'Assam',
+      'Arunachal Pradesh',
+      'Bihar',
+      'Manipur',
+      'Meghalaya',
+      'Tamil Nadu',
+      'Uttarakhand',
+      'Uttar Pradesh',
+    ],
+    {
+      multiple: true,
+      footer() {
+        return colors.dim('Scroll up and down to reveal more choices')
+      },
+      limit: 3,
+      format(values) {
+        if (Array.isArray(values)) {
+          return values.map((value) => value.toUpperCase())
+        }
+        return values
+      },
+    }
+  )
 
   console.log({ name, password, client, deps, tags, deleteFiles, state })
 }
 
-run()
-  .then(() => {})
-  .catch(console.error)
+run().catch((error) => {
+  console.error(error)
+  if (error instanceof errors.E_PROMPT_CANCELLED === false) {
+    process.exitCode = 1
+  }
+})

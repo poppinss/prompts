@@ -1,14 +1,15 @@
 /*
  * @poppinss/prompts
  *
- * (c) Harminder Virk <virk@adonisjs.com>
+ * (c) Poppinss
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 import enq from 'enquirer'
-import { Prompt } from './Base'
+import { BasePrompt } from './base.js'
+import { E_PROMPT_CANCELLED } from './errors.js'
 
 /**
  * Since the typings for `enquirer` package is badly broken, we
@@ -20,10 +21,27 @@ const enquirer = enq as any
  * Uses the `enquirer` package to prompt user for input. The `$prompt`
  * method is invoked by the extended `Prompt` class.
  */
-export class EnquirerPrompt extends Prompt {
+export class Prompt extends BasePrompt {
   protected async prompt(options: any): Promise<any> {
-    options = Object.assign({ name: 'prompt' }, options)
-    const output = await enquirer.prompt(options)
-    return output[options.name]
+    let cancelled = false
+    options = Object.assign(
+      {
+        onCancel() {
+          cancelled = true
+        },
+      },
+      options
+    )
+
+    try {
+      const output = await enquirer.prompt(options)
+      return output[options.name]
+    } catch (error) {
+      if (cancelled) {
+        throw new E_PROMPT_CANCELLED()
+      }
+
+      throw error
+    }
   }
 }
