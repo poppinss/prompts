@@ -8,7 +8,7 @@
  */
 
 import { AssertionError } from 'node:assert'
-import { ObjectBuilder } from '@poppinss/utils'
+import { ObjectBuilder } from '@poppinss/object-builder'
 
 import {
   PromptChoice,

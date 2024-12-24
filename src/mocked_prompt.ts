@@ -1,5 +1,5 @@
 /*
- * @poppinss/utils
+ * @poppinss/prompts
  *
  * (c) Poppinss
  *
