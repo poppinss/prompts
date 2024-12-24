@@ -83,13 +83,13 @@ test.group('Prompts | list', () => {
     const prompt = new Prompt()
     prompt.trap('Enter tags').assertFails('', 'Tags are required').replyWith('secret')
     await assert.rejects(
-      () =>
+      async () =>
         prompt.list('Enter tags', {
           validate() {
             return 'Enter tags'
           },
         }),
-      `Expected prompt validation message to equal 'Tags are required'`
+      /Expected prompt validation message to equal 'Tags are required'/
     )
   })
 

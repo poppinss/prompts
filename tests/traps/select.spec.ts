@@ -114,13 +114,13 @@ test.group('Prompts | select', () => {
     prompt.trap('Select the installation client').assertFails('', 'client is required')
 
     await assert.rejects(
-      () =>
+      async () =>
         prompt.choice('Select the installation client', ['npm', 'yarn'], {
           validate() {
             return 'Enter client'
           },
         }),
-      `Expected prompt validation message to equal 'client is required'`
+      /Expected prompt validation message to equal 'client is required'/
     )
   })
 

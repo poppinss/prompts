@@ -87,13 +87,13 @@ test.group('Prompts | confirm', () => {
     prompt.trap('Delete the file?').assertFails('', 'You should not delete files').replyWith('virk')
 
     await assert.rejects(
-      () =>
+      async () =>
         prompt.confirm('Delete the file?', {
           validate() {
             return 'Do not delete files'
           },
         }),
-      `Expected prompt validation message to equal 'You should not delete files'`
+      /Expected prompt validation message to equal 'You should not delete files'/
     )
   })
 

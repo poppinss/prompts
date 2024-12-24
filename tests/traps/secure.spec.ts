@@ -77,13 +77,13 @@ test.group('Prompts | secure', () => {
     const prompt = new Prompt()
     prompt.trap('Choose password').assertFails('', 'Password is required').replyWith('secret')
     await assert.rejects(
-      () =>
+      async () =>
         prompt.secure('Choose password', {
           validate() {
             return 'Enter password'
           },
         }),
-      `Expected prompt validation message to equal 'Password is required'`
+      /Expected prompt validation message to equal 'Password is required'/
     )
   })
 

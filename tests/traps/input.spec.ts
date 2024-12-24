@@ -77,13 +77,13 @@ test.group('Prompts | input', () => {
     const prompt = new Prompt()
     prompt.trap("What's your username?").assertFails('', 'Username is required').replyWith('virk')
     await assert.rejects(
-      () =>
+      async () =>
         prompt.ask("What's your username?", {
           validate() {
             return 'Enter username'
           },
         }),
-      `Expected prompt validation message to equal 'Username is required'`
+      /Expected prompt validation message to equal 'Username is required'/
     )
   })
 

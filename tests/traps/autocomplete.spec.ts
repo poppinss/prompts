@@ -98,15 +98,13 @@ test.group('Prompts | autocomplete', () => {
     const prompt = new Prompt()
     prompt.trap('Select the installation client').assertFails('', 'client is required')
 
-    await assert.rejects(
-      () =>
-        prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
-          validate() {
-            return 'Enter client'
-          },
-        }),
-      `Expected prompt validation message to equal 'client is required'`
-    )
+    await assert.rejects(async () => {
+      await prompt.autocomplete('Select the installation client', ['npm', 'yarn'], {
+        validate() {
+          return 'Enter client'
+        },
+      })
+    }, /Expected prompt validation message to equal 'client is required'/)
   })
 
   test('invoke result method to transform return value', async ({ assert }) => {
