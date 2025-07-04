@@ -11,14 +11,14 @@ import { AssertionError } from 'node:assert'
 import { ObjectBuilder } from '@poppinss/object-builder'
 
 import {
-  PromptChoice,
-  ListPromptOptions,
-  TextPromptOptions,
-  TogglePromptOptions,
-  ChoicePromptOptions,
-  BooleanPromptOptions,
-  MultiplePromptOptions,
-  AutoCompletePromptOptions,
+  type PromptChoice,
+  type ListPromptOptions,
+  type TextPromptOptions,
+  type TogglePromptOptions,
+  type ChoicePromptOptions,
+  type BooleanPromptOptions,
+  type MultiplePromptOptions,
+  type AutoCompletePromptOptions,
 } from './types.js'
 
 import { colors } from './colors.js'

@@ -9,7 +9,7 @@
 
 import { inspect } from 'node:util'
 import { AssertionError } from 'node:assert'
-import { PromptState } from './types.js'
+import { type PromptState } from './types.js'
 
 export class MockedPrompt {
   /**
