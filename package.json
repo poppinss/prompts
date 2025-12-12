@@ -1,6 +1,6 @@
 {
 	"name": "@poppinss/prompts",
-	"version": "3.1.5",
+	"version": "3.1.6",
 	"description": "Wrapper over enquirer with better support for testing",
 	"type": "module",
 	"files": [
@@ -76,14 +76,14 @@
 			"./src/types.ts"
 		],
 		"outDir": "./build",
-    "clean": true,
-    "format": "esm",
-    "minify": "dce-only",
-    "fixedExtension": false,
-    "dts": false,
-    "treeshake": false,
-    "sourcemaps": false,
-    "target": "esnext"
+		"clean": true,
+		"format": "esm",
+		"minify": "dce-only",
+		"fixedExtension": false,
+		"dts": false,
+		"treeshake": false,
+		"sourcemaps": false,
+		"target": "esnext"
 	},
 	"release-it": {
 		"git": {
