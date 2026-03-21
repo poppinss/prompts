@@ -26,7 +26,8 @@ export type PromptValidationFunction<T extends PromptState<any>> = (
 ) => boolean | string | Promise<boolean | string>
 
 /**
- * Shape of prompt format function. It is called on every keystroke
+ * @deprecated The real-time visual transformation during input is no longer
+ * supported. This option is accepted but has no effect.
  */
 export type PromptFormatFunction<T extends any, Result extends any> = (
   value: T
@@ -49,6 +50,7 @@ export type TextPromptOptions<Result extends any> = {
   hint?: string
   signal?: AbortSignal
   result?: PromptResultFunction<string, Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string>>
 }
@@ -68,6 +70,7 @@ export type ListPromptOptions<Result extends any> = {
   name?: string
   signal?: AbortSignal
   result?: PromptResultFunction<string[], Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string[]>>
   hint?: string
@@ -84,6 +87,7 @@ export type ChoicePromptOptions<Choice extends string, Result extends any> = {
   signal?: AbortSignal
   maxItems?: number
   result?: PromptResultFunction<Choice, Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<Choice, string>
   validate?: PromptValidationFunction<PromptState<Choice> & { choices: PromptChoice<Choice>[] }>
 }
@@ -98,6 +102,7 @@ export type MultiplePromptOptions<Choice extends string, Result extends any> = {
   signal?: AbortSignal
   maxItems?: number
   result?: PromptResultFunction<Choice[], Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<Choice[] | string, string | string[]>
   validate?: PromptValidationFunction<PromptState<Choice[]> & { choices: PromptChoice<Choice>[] }>
 }
@@ -111,6 +116,7 @@ export type BooleanPromptOptions<Result extends any> = {
   hint?: string
   signal?: AbortSignal
   result?: PromptResultFunction<boolean, Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
 }
@@ -124,6 +130,7 @@ export type TogglePromptOptions<Result extends any> = {
   hint?: string
   signal?: AbortSignal
   result?: PromptResultFunction<boolean, Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
 }
@@ -143,6 +150,7 @@ export type AutoCompletePromptOptions<
   signal?: AbortSignal
   multiple?: Multiple
   result?: PromptResultFunction<Multiple extends true ? Choice[] : Choice, Result>
+  /** @deprecated No longer has any effect */
   format?: PromptFormatFunction<
     Multiple extends true ? Choice[] | string : Choice | string,
     string[] | string
@@ -150,6 +158,7 @@ export type AutoCompletePromptOptions<
   validate?: PromptValidationFunction<
     PromptState<Multiple extends true ? Choice[] : Choice> & { choices: PromptChoice<Choice>[] }
   >
+  /** @deprecated No longer has any effect */
   footer?: () => string
 }
 

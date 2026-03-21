@@ -188,7 +188,10 @@ export class Prompt extends BasePrompt {
   #createGroupMultiSelectPrompt(
     options: Extract<InternalPromptOptions, { type: 'group-multiselect' }>
   ) {
-    const clackGroups: Record<string, { value: string; label: string; hint?: string; disabled?: boolean }[]> = {}
+    const clackGroups: Record<
+      string,
+      { value: string; label: string; hint?: string; disabled?: boolean }[]
+    > = {}
     for (const [group, items] of Object.entries(options.groups)) {
       clackGroups[group] = this.#mapChoices(items)
     }
