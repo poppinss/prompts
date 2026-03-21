@@ -47,9 +47,17 @@ export type TextPromptOptions<Result extends any> = {
   default?: string
   name?: string
   hint?: string
+  signal?: AbortSignal
   result?: PromptResultFunction<string, Result>
   format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string>>
+}
+
+/**
+ * Prompt options for secure (password) prompts
+ */
+export type SecurePromptOptions<Result extends any> = TextPromptOptions<Result> & {
+  mask?: string
 }
 
 /**
@@ -58,6 +66,7 @@ export type TextPromptOptions<Result extends any> = {
 export type ListPromptOptions<Result extends any> = {
   default?: string
   name?: string
+  signal?: AbortSignal
   result?: PromptResultFunction<string[], Result>
   format?: PromptFormatFunction<string, string>
   validate?: PromptValidationFunction<PromptState<string[]>>
@@ -72,6 +81,8 @@ export type ChoicePromptOptions<Choice extends string, Result extends any> = {
   default?: string
   name?: string
   hint?: string
+  signal?: AbortSignal
+  maxItems?: number
   result?: PromptResultFunction<Choice, Result>
   format?: PromptFormatFunction<Choice, string>
   validate?: PromptValidationFunction<PromptState<Choice> & { choices: PromptChoice<Choice>[] }>
@@ -84,6 +95,8 @@ export type MultiplePromptOptions<Choice extends string, Result extends any> = {
   default?: string[]
   name?: string
   hint?: string
+  signal?: AbortSignal
+  maxItems?: number
   result?: PromptResultFunction<Choice[], Result>
   format?: PromptFormatFunction<Choice[] | string, string | string[]>
   validate?: PromptValidationFunction<PromptState<Choice[]> & { choices: PromptChoice<Choice>[] }>
@@ -96,6 +109,7 @@ export type BooleanPromptOptions<Result extends any> = {
   default?: boolean
   name?: string
   hint?: string
+  signal?: AbortSignal
   result?: PromptResultFunction<boolean, Result>
   format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
@@ -108,6 +122,7 @@ export type TogglePromptOptions<Result extends any> = {
   default?: boolean
   name?: string
   hint?: string
+  signal?: AbortSignal
   result?: PromptResultFunction<boolean, Result>
   format?: PromptFormatFunction<boolean, boolean>
   validate?: PromptValidationFunction<PromptState<boolean>>
@@ -125,6 +140,7 @@ export type AutoCompletePromptOptions<
   limit?: number
   name?: string
   hint?: string
+  signal?: AbortSignal
   multiple?: Multiple
   result?: PromptResultFunction<Multiple extends true ? Choice[] : Choice, Result>
   format?: PromptFormatFunction<
@@ -135,6 +151,41 @@ export type AutoCompletePromptOptions<
     PromptState<Multiple extends true ? Choice[] : Choice> & { choices: PromptChoice<Choice>[] }
   >
   footer?: () => string
+}
+
+/**
+ * Options for the selectKey prompt
+ */
+export type SelectKeyPromptOptions<Choice extends string, Result extends any> = {
+  name?: string
+  signal?: AbortSignal
+  result?: PromptResultFunction<Choice, Result>
+}
+
+/**
+ * Options for the groupMultiselect prompt
+ */
+export type GroupMultiSelectPromptOptions<Choice extends string, Result extends any> = {
+  default?: Choice[]
+  name?: string
+  hint?: string
+  signal?: AbortSignal
+  result?: PromptResultFunction<Choice[], Result>
+  validate?: PromptValidationFunction<PromptState<Choice[]>>
+  selectableGroups?: boolean
+}
+
+/**
+ * Options for the path prompt
+ */
+export type PathPromptOptions<Result extends any> = {
+  default?: string
+  name?: string
+  signal?: AbortSignal
+  root?: string
+  onlyDirectories?: boolean
+  result?: PromptResultFunction<string, Result>
+  validate?: PromptValidationFunction<PromptState<string>>
 }
 
 /**

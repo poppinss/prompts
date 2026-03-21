@@ -10,12 +10,18 @@
 import { inspect } from 'node:util'
 import { AssertionError } from 'node:assert'
 import { type PromptState } from './types.js'
+import { E_PROMPT_CANCELLED } from './errors.js'
 
 export class MockedPrompt {
   /**
    * The final answer to reply with
    */
   #answer: any
+
+  /**
+   * Whether the prompt should simulate a cancellation
+   */
+  #cancelled = false
 
   /**
    * The selected index for the select prompt
@@ -120,17 +126,24 @@ export class MockedPrompt {
   #isSelect(options: any) {
     return (
       (options.type === 'select' && options.choices) ||
+      (options.type === 'select-key' && options.choices) ||
       (options.type === 'autocomplete' && !options.multiple && options.choices)
     )
   }
   #isMultiSelect(options: any) {
     return (
       (options.type === 'multiselect' && options.choices) ||
+      (options.type === 'group-multiselect' && options.groups) ||
       (options.type === 'autocomplete' && options.multiple && options.choices)
     )
   }
   #isText(options: any) {
-    return options.type === 'input' || options.type === 'password' || options.type === 'list'
+    return (
+      options.type === 'input' ||
+      options.type === 'password' ||
+      options.type === 'list' ||
+      options.type === 'path'
+    )
   }
 
   /**
@@ -215,9 +228,7 @@ export class MockedPrompt {
    * Transform the final result
    */
   async #transformResult(result: any, options: any) {
-    if (typeof options.result === 'function') {
-      return options.result(result)
-    }
+    if (typeof options.result === 'function') return options.result(result)
 
     return result
   }
@@ -253,8 +264,13 @@ export class MockedPrompt {
         this.#choiceSelection !== undefined ? [this.#choiceSelection] : []
     }
 
+    /**
+     * For group-multiselect, flatten all group choices into a single array
+     */
+    const allChoices = options.groups ? Object.values(options.groups).flat() : options.choices
+
     const answers = this.#multiChoiceSelection.map((index) => {
-      const answer = options.choices[index]
+      const answer = (allChoices as any[])[index]
       return typeof answer === 'string' ? answer : answer?.name
     })
 
@@ -262,6 +278,14 @@ export class MockedPrompt {
   }
 
   constructor() {}
+
+  /**
+   * Simulate a prompt cancellation (Ctrl+C / Escape)
+   */
+  cancel(): this {
+    this.#cancelled = true
+    return this
+  }
 
   /**
    * Reply to prompt with a given answer
@@ -370,6 +394,8 @@ export class MockedPrompt {
    * Handle the prompt
    */
   async handle(options: any): Promise<any> {
+    if (this.#cancelled) throw new E_PROMPT_CANCELLED()
+
     if (this.#isSelect(options)) {
       this.#setSelectDefaults(options)
       this.#convertChoiceToAnswer(options)

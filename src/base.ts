@@ -8,22 +8,24 @@
  */
 
 import { AssertionError } from 'node:assert'
-import { ObjectBuilder } from '@poppinss/object-builder'
 
 import {
   type PromptChoice,
   type ListPromptOptions,
   type TextPromptOptions,
+  type SecurePromptOptions,
+  type PathPromptOptions,
   type TogglePromptOptions,
   type ChoicePromptOptions,
   type BooleanPromptOptions,
   type MultiplePromptOptions,
+  type SelectKeyPromptOptions,
   type AutoCompletePromptOptions,
+  type GroupMultiSelectPromptOptions,
 } from './types.js'
 
-import { colors } from './colors.js'
 import { MockedPrompt } from './mocked_prompt.js'
-import { promptHiglight, promptPrefix, promptStyles } from './prompt_options.js'
+import type { InternalPromptOptions, InternalChoice } from './internal_types.js'
 
 /**
  * Base prompt class exposes the public API for triggering prompts. The
@@ -45,7 +47,7 @@ export abstract class BasePrompt {
   /**
    * Handle the prompt. The mocked prompts are given preference if one exists
    */
-  #handlePrompt(options: any) {
+  #handlePrompt(options: InternalPromptOptions) {
     let mockedPrompt: MockedPrompt | undefined
 
     if (this.traps.prompts.has(options.name)) {
@@ -56,14 +58,24 @@ export abstract class BasePrompt {
       this.traps.prompts.delete(options.message)
     }
 
-    if (mockedPrompt) {
-      return mockedPrompt.handle(options)
-    }
+    if (mockedPrompt) return mockedPrompt.handle(options)
 
     return this.prompt(options)
   }
 
-  protected abstract prompt(options: any): Promise<any>
+  /**
+   * Map public choices to internal format
+   */
+  #mapChoices<Choice extends string>(
+    choices: readonly (Choice | PromptChoice<Choice>)[]
+  ): InternalChoice[] {
+    return choices.map((choice) => {
+      if (typeof choice === 'string') return { name: choice, message: choice, value: choice }
+      return choice
+    })
+  }
+
+  protected abstract prompt(options: InternalPromptOptions): Promise<any>
 
   /**
    * Prompts for text input
@@ -72,21 +84,17 @@ export abstract class BasePrompt {
     title: string,
     options?: TextPromptOptions<Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'input')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('hint', options.hint)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'input',
+      name: options?.name || 'prompt',
+      message: title,
+      hint: options?.hint,
+      initial: options?.default,
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+    })
   }
 
   /**
@@ -96,23 +104,18 @@ export abstract class BasePrompt {
     title: string,
     options?: ListPromptOptions<Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'list')
-    builder.add('name', options.name || 'prompt')
-    builder.add('sep', options.seperator || ',')
-    builder.add('name', options.name)
-    builder.add('message', title)
-    builder.add('hint', options.hint)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'list',
+      name: options?.name || 'prompt',
+      message: title,
+      sep: options?.seperator || ',',
+      hint: options?.hint,
+      initial: options?.default,
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+    })
   }
 
   /**
@@ -120,22 +123,19 @@ export abstract class BasePrompt {
    */
   async secure<Result extends any = string>(
     title: string,
-    options?: TextPromptOptions<Result>
+    options?: SecurePromptOptions<Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'password')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'password',
+      name: options?.name || 'prompt',
+      message: title,
+      initial: options?.default,
+      mask: options?.mask,
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+    })
   }
 
   /**
@@ -145,21 +145,17 @@ export abstract class BasePrompt {
     title: string,
     options?: BooleanPromptOptions<Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'confirm')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('hint', options.hint)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'confirm',
+      name: options?.name || 'prompt',
+      message: title,
+      hint: options?.hint,
+      initial: options?.default,
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+    })
   }
 
   /**
@@ -170,23 +166,19 @@ export abstract class BasePrompt {
     choices: [string, string],
     options?: TogglePromptOptions<Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'toggle')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('hint', options.hint)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('enabled', choices[0])
-    builder.add('disabled', choices[1])
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'toggle',
+      name: options?.name || 'prompt',
+      message: title,
+      hint: options?.hint,
+      initial: options?.default,
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+      enabled: choices[0],
+      disabled: choices[1],
+    })
   }
 
   /**
@@ -197,31 +189,19 @@ export abstract class BasePrompt {
     choices: readonly (Choice | PromptChoice<Choice>)[],
     options?: ChoicePromptOptions<Choice, Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'select')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('initial', options.default)
-    builder.add('hint', options.hint || 'Press <ENTER> to select')
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    builder.add(
-      'choices',
-      choices.map((choice) => {
-        if (typeof choice === 'string') {
-          return { name: choice, message: choice, value: choice }
-        }
-        return choice
-      })
-    )
-
-    return this.#handlePrompt(builder.toObject())
+    return this.#handlePrompt({
+      type: 'select',
+      name: options?.name || 'prompt',
+      message: title,
+      initial: options?.default,
+      hint: options?.hint || 'Press <ENTER> to select',
+      result: options?.result,
+      format: options?.format,
+      validate: options?.validate,
+      signal: options?.signal,
+      maxItems: options?.maxItems,
+      choices: this.#mapChoices(choices),
+    })
   }
 
   /**
@@ -232,38 +212,19 @@ export abstract class BasePrompt {
     choices: readonly (Choice | PromptChoice<Choice>)[],
     options?: MultiplePromptOptions<Choice, Result>
   ): Promise<Result> {
-    options = options || {}
-
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'multiselect')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('initial', options.default)
-    builder.add('result', options.result)
-    builder.add('format', options.format)
-    builder.add('hint', options.hint || 'Press <SPACE> to select')
-    builder.add('validate', options.validate)
-    builder.add('prefix', promptPrefix)
-    builder.add('styles', promptStyles)
-
-    builder.add('indicator', (state: any, choice: any) => {
-      if (choice.enabled) {
-        return colors.cyan(state.symbols.radio.on)
-      }
-      return colors.dim(state.symbols.radio.off)
+    return this.#handlePrompt({
+      type: 'multiselect',
+      name: options?.name || 'prompt',
+      message: title,
+      initial: options?.default,
+      result: options?.result,
+      format: options?.format,
+      hint: options?.hint || 'Press <SPACE> to select',
+      validate: options?.validate,
+      signal: options?.signal,
+      maxItems: options?.maxItems,
+      choices: this.#mapChoices(choices),
     })
-
-    builder.add(
-      'choices',
-      choices.map((choice) => {
-        if (typeof choice === 'string') {
-          return { name: choice, message: choice, value: choice }
-        }
-        return choice
-      })
-    )
-
-    return this.#handlePrompt(builder.toObject())
   }
 
   /**
@@ -279,39 +240,109 @@ export abstract class BasePrompt {
     choices: readonly Choice[],
     options?: AutoCompletePromptOptions<Choice, Multiple, Result>
   ): Promise<Result> {
-    options = options || {}
+    return this.#handlePrompt({
+      type: 'autocomplete',
+      name: options?.name || 'prompt',
+      message: title,
+      initial: options?.default,
+      multiple: options?.multiple,
+      result: options?.result,
+      hint:
+        options?.hint ||
+        (options?.multiple ? 'Press <SPACE> to select' : 'Press <ENTER> to select'),
+      format: options?.format,
+      limit: options?.limit,
+      validate: options?.validate,
+      signal: options?.signal,
+      footer: options?.footer,
+      choices: [...choices],
+    })
+  }
 
-    const builder = new ObjectBuilder({})
-    builder.add('type', 'autocomplete')
-    builder.add('name', options.name || 'prompt')
-    builder.add('message', title)
-    builder.add('initial', options.default)
-    builder.add('multiple', options.multiple)
-    builder.add('result', options.result)
-    builder.add(
-      'hint',
-      options.hint || options.multiple ? 'Press <SPACE> to select' : 'Press <ENTER> to select'
-    )
-    builder.add('format', options.format)
-    builder.add('limit', options.limit)
-    builder.add('validate', options.validate)
-    builder.add('footer', options.footer)
-    builder.add('choices', choices)
-    builder.add('prefix', promptPrefix)
-    builder.add('highlight', promptHiglight)
-    builder.add('styles', promptStyles)
+  /**
+   * Prompt to select a value by pressing a key bound to an option
+   */
+  async selectKey<Choice extends string, Result extends any = Choice>(
+    title: string,
+    choices: readonly PromptChoice<Choice>[],
+    options?: SelectKeyPromptOptions<Choice, Result>
+  ): Promise<Result> {
+    return this.#handlePrompt({
+      type: 'select-key',
+      name: options?.name || 'prompt',
+      message: title,
+      result: options?.result,
+      signal: options?.signal,
+      choices: this.#mapChoices(choices),
+    })
+  }
 
-    return this.#handlePrompt(builder.toObject())
+  /**
+   * Prompt to select multiple values organized by groups
+   */
+  async groupMultiselect<Choice extends string, Result extends any = Choice[]>(
+    title: string,
+    groups: Record<string, readonly (Choice | PromptChoice<Choice>)[]>,
+    options?: GroupMultiSelectPromptOptions<Choice, Result>
+  ): Promise<Result> {
+    const mappedGroups: Record<string, InternalChoice[]> = {}
+    for (const [group, items] of Object.entries(groups)) {
+      mappedGroups[group] = this.#mapChoices(items)
+    }
+
+    return this.#handlePrompt({
+      type: 'group-multiselect',
+      name: options?.name || 'prompt',
+      message: title,
+      hint: options?.hint || 'Press <SPACE> to select',
+      initial: options?.default,
+      result: options?.result,
+      validate: options?.validate,
+      signal: options?.signal,
+      selectableGroups: options?.selectableGroups,
+      groups: mappedGroups,
+    })
+  }
+
+  /**
+   * Prompt for a file or directory path with filesystem autocomplete
+   */
+  async path<Result extends any = string>(
+    title: string,
+    options?: PathPromptOptions<Result>
+  ): Promise<Result> {
+    return this.#handlePrompt({
+      type: 'path',
+      name: options?.name || 'prompt',
+      message: title,
+      initial: options?.default,
+      root: options?.root,
+      onlyDirectories: options?.onlyDirectories,
+      result: options?.result,
+      validate: options?.validate,
+      signal: options?.signal,
+    })
+  }
+
+  /**
+   * Chain prompts sequentially, passing accumulated results between them
+   */
+  async group<T extends Record<string, any>>(prompts: {
+    [K in keyof T]: (opts: { results: Partial<T> }) => Promise<T[K]>
+  }): Promise<T> {
+    const results = {} as T
+    for (const [key, promptFn] of Object.entries(prompts)) {
+      const value = await (promptFn as any)({ results })
+      ;(results as any)[key] = value
+    }
+
+    return results
   }
 
   /**
    * Trap a prompt by its message or unique name
    */
   trap(message: string) {
-    /**
-     * Trigger error is raised when the prompt is not triggered but
-     * trapped
-     */
     const triggerError = new AssertionError({
       message: `Expected prompt "${message}" to get triggered`,
     })

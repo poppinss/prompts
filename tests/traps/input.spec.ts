@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { Prompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/clack.js'
 
 test.group('Prompts | input', () => {
   test('trap input prompt', async ({ assert, expectTypeOf }) => {
@@ -145,5 +145,34 @@ test.group('Prompts | input', () => {
     })
 
     assert.equal(username, 'VIRK')
+  })
+
+  test('format does not affect the returned value', async ({ assert }) => {
+    const prompt = new Prompt()
+    prompt.trap('Enter name').replyWith('hello_world')
+
+    const name = await prompt.ask('Enter name', {
+      format(value) {
+        return value.toUpperCase()
+      },
+    })
+
+    assert.equal(name, 'hello_world')
+  })
+
+  test('result still works independently of format', async ({ assert }) => {
+    const prompt = new Prompt()
+    prompt.trap('Enter name').replyWith('hello')
+
+    const name = await prompt.ask('Enter name', {
+      format(value) {
+        return value.toUpperCase()
+      },
+      result(value) {
+        return `prefix_${value}`
+      },
+    })
+
+    assert.equal(name, 'prefix_hello')
   })
 })
