@@ -25,32 +25,39 @@ export class Prompt extends BasePrompt {
   }
 
   /**
-   * Run validation on a prompt result. Supports both sync and async
-   * validators. Returns the error message string if validation fails,
-   * or `undefined` if it passes.
+   * Wrap the user's validate function for clack's native validate option.
+   * Maps our return types (true/false/string) to clack's (undefined/string).
+   * Returns undefined if the validator is async since clack cannot handle that.
    */
-  async #validate(value: unknown, options: InternalPromptOptions): Promise<string | undefined> {
-    if (!options.validate) return undefined
+  #wrapValidateForClack(
+    options: InternalPromptOptions
+  ): ((value: string | undefined) => string | undefined) | undefined {
+    if (!options.validate || options.validate.constructor.name === 'AsyncFunction') {
+      return undefined
+    }
 
-    const result = await options.validate(value, {
-      type: options.type,
-      name: options.name,
-      message: options.message,
-      value,
-    })
+    return (value: string | undefined) => {
+      const result = options.validate!(value, {
+        type: options.type,
+        name: options.name,
+        message: options.message,
+        value,
+      })
 
-    if (result === true) return undefined
-    if (typeof result === 'string') return result
+      if (result === true) {
+        return undefined
+      }
 
-    return 'Validation failed'
+      return typeof result === 'string' ? result : 'Validation failed'
+    }
   }
 
   /**
-   * Prompt the user in a loop until validation passes or the
-   * user cancels. This allows us to support async validators
-   * that clack does not natively support.
+   * Prompt the user in a loop until async validation passes or the
+   * user cancels. Only used for async validators that clack does
+   * not natively support.
    */
-  async #promptWithValidation(
+  async #promptWithAsyncValidation(
     options: InternalPromptOptions,
     promptFn: () => Promise<unknown>
   ): Promise<unknown> {
@@ -58,10 +65,20 @@ export class Prompt extends BasePrompt {
       const result = await promptFn()
       this.#assertNotCancelled(result)
 
-      const error = await this.#validate(result, options)
-      if (!error) return result
+      const validationResult = await options.validate?.(result, {
+        type: options.type,
+        name: options.name,
+        message: options.message,
+        value: result,
+      })
 
-      clack.log.warning(error)
+      if (validationResult === true) {
+        return result
+      }
+
+      clack.log.warning(
+        typeof validationResult === 'string' ? validationResult : 'Validation failed'
+      )
     }
   }
 
@@ -107,20 +124,24 @@ export class Prompt extends BasePrompt {
   }
 
   #createTextPrompt(options: Extract<InternalPromptOptions, { type: 'input' | 'list' }>) {
+    const validate = this.#wrapValidateForClack(options)
     return () =>
       clack.text({
         message: options.message,
         placeholder: options.hint,
         defaultValue: options.initial,
+        validate,
         signal: options.signal,
       })
   }
 
   #createPasswordPrompt(options: Extract<InternalPromptOptions, { type: 'password' }>) {
+    const validate = this.#wrapValidateForClack(options)
     return () =>
       clack.password({
         message: options.message,
         mask: options.mask,
+        validate,
         signal: options.signal,
       })
   }
@@ -208,18 +229,23 @@ export class Prompt extends BasePrompt {
   }
 
   #createPathPrompt(options: Extract<InternalPromptOptions, { type: 'path' }>) {
+    const validate = this.#wrapValidateForClack(options)
     return () =>
       clack.path({
         message: options.message,
         initialValue: options.initial,
         root: options.root,
         directory: options.onlyDirectories,
+        validate,
         signal: options.signal,
       })
   }
 
   #createAutocompletePrompt(options: Extract<InternalPromptOptions, { type: 'autocomplete' }>) {
     const clackOptions = this.#mapChoices(options.choices)
+    const validate = this.#wrapValidateForClack(options) as
+      | ((value: string | string[] | undefined) => string | Error | undefined)
+      | undefined
 
     if (options.multiple) {
       const initialValues = this.#resolveInitialValues(
@@ -233,6 +259,7 @@ export class Prompt extends BasePrompt {
           options: clackOptions,
           maxItems: options.limit,
           initialValues,
+          validate,
           signal: options.signal,
         })
     }
@@ -248,6 +275,7 @@ export class Prompt extends BasePrompt {
         options: clackOptions,
         maxItems: options.limit,
         initialValue,
+        validate,
         signal: options.signal,
       })
   }
@@ -291,7 +319,15 @@ export class Prompt extends BasePrompt {
         throw new Error(`Unsupported prompt type: ${(options as any).type}`)
     }
 
-    let result = await this.#promptWithValidation(options, promptFn)
+    const hasAsyncValidate = options.validate?.constructor.name === 'AsyncFunction'
+
+    let result: unknown
+    if (hasAsyncValidate) {
+      result = await this.#promptWithAsyncValidation(options, promptFn)
+    } else {
+      result = await promptFn()
+      this.#assertNotCancelled(result)
+    }
 
     if (options.type === 'list') {
       result = (result as string).split(options.sep || ',')

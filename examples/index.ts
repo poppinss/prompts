@@ -18,12 +18,14 @@ async function run() {
       prompt.ask(`What is your project name?`, {
         hint: 'my-awesome-app',
         default: 'my-app',
-        validate: (value) => (value.length < 2 ? 'Name must be at least 2 characters' : true),
+        validate: (value) =>
+          !value || value.length < 2 ? 'Name must be at least 2 characters' : true,
       }),
     password: ({ results }) =>
       prompt.secure(`Database password for ${results.name}`, {
         mask: '*',
-        validate: (value) => (value.length < 4 ? 'Password must be at least 4 characters' : true),
+        validate: (value) =>
+          !value || value.length < 4 ? 'Password must be at least 4 characters' : true,
       }),
   })
 
@@ -148,8 +150,8 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error(error)
   if (error instanceof errors.E_PROMPT_CANCELLED === false) {
     process.exitCode = 1
+    console.error(error)
   }
 })
