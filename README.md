@@ -1,34 +1,22 @@
 # @poppinss/prompts
-> Wrapper over [enquirer](https://npm.im/enquirer) with better support for testing
+> Beautiful CLI prompts powered by [@clack/prompts](https://www.npmjs.com/package/@clack/prompts) with built-in testing support
 
 [![gh-workflow-image]][gh-workflow-url] [![typescript-image]][typescript-url] [![npm-image]][npm-url] [![license-image]][license-url]
 
 ## Why this package exists?
-There are many CLI prompts libraries in the Node ecosystem. However, they all fall short when it comes to writing tests that involve prompts.
 
-Let's say you are writing tests for a command that triggers CLI prompts. Unfortunately, the CLI process will stall since it is waiting for manual input. 
+There are many CLI prompt libraries in the Node ecosystem. However, they all fall short when it comes to writing tests that involve prompts.
 
-This package makes testing prompts easier by allowing you to trap them during testing.
+Let's say you are writing tests for a command that triggers CLI prompts. Unfortunately, the CLI process will stall since it is waiting for manual input.
 
-It is worth noting we only export the following prompts from the [enquirer package](https://npm.im/enquirer), and also, the API is somewhat different.
-
-- input
-- list
-- password
-- confirm
-- toggle
-- select
-- multiselect
-- autocomplete
+This package makes testing prompts easier by allowing you to **trap** them during testing.
 
 ## Usage
+
 Install the package from the npm registry as follows.
 
 ```sh
 npm i @poppinss/prompts
-
-# Yarn lovers
-yarn add @poppinss/prompts
 ```
 
 Next, create an instance of the prompt class. If you want, you can re-use the single instance throughout the entire process lifecycle.
@@ -54,8 +42,8 @@ const drivers = await prompt.multiple(
   ],
   {
     validate(choices) {
-      return choices.length > 0
-    }
+      return choices.length > 0 || 'Select at least one driver'
+    },
   }
 )
 ```
@@ -64,67 +52,71 @@ const drivers = await prompt.multiple(
 Following is the list of available prompts
 
 ### ask
-Prompt the user to type text. The `ask` method uses the [enquirer input](https://github.com/enquirer/enquirer#input-prompt) prompt.
 
-The method accepts the prompt message as the first param and the [options object](#prompt-options) as the second param.
+Prompt the user to type text.
 
 ```ts
 await prompt.ask('Specify the model name')
 ```
 
 ```ts
-// Validate input
+// With validation
 await prompt.ask('Specify the model name', {
   validate(value) {
-    return value.length > 0
-  }
+    return value.length > 0 || 'Model name is required'
+  },
 })
 ```
 
 ```ts
-// Default value
+// With default value
 await prompt.ask('Specify the model name', {
-  default: 'User'
+  default: 'User',
+})
+```
+
+```ts
+// With hint (shown as placeholder)
+await prompt.ask('Specify the model name', {
+  hint: 'e.g. User',
 })
 ```
 
 ### secure
-Prompt the user to type text. The output on the terminal gets masked with a star `*`. The `secure` method uses the [enquirer password](https://github.com/enquirer/enquirer#password-prompt) prompt.
 
-The method accepts the prompt message as the first param and the options object as the second param.
+Prompt the user to type text with masked output.
 
 ```ts
 await prompt.secure('Enter account password')
 ```
 
 ```ts
+// With custom mask character
+await prompt.secure('Enter account password', {
+  mask: '*',
+})
+```
+
+```ts
+// With validation
 await prompt.secure('Enter account password', {
   validate(value) {
-    return value.length < 6
-      ? 'Password must be 6 characters long'
-      : true
-  }
+    return value.length >= 6 || 'Password must be at least 6 characters'
+  },
 })
 ```
 
 ### list
 
-The `list` method uses the [enquirer list](https://github.com/enquirer/enquirer#list-prompt) prompt. It allows you to accept a comma-separated list of values.
+Accept a comma-separated list of values.
 
 ```ts
 const tags = await prompt.list('Enter tags to assign')
 ```
 
-```ts
-// Default list of tags
-const tags = await prompt.list('Enter tags to assign', {
-  default: ['node.js', 'javascript']
-})
-```
-
 ### confirm
 
-The `confirm` method uses [enquirer confirm](https://github.com/enquirer/enquirer#confirm-prompt) prompt. It presents the user with a `Y/N` option and returns a boolean value.
+Present the user with a `Y/N` option and return a boolean.
 
 ```ts
 const shouldDeleteFiles = await prompt.confirm('Want to delete all files?')
@@ -148,7 +140,7 @@ if (shouldDeleteFiles) {
 
 ### choice
 
-The `choice` method uses the [enquirer select](https://github.com/enquirer/enquirer#select-prompt) prompt. It allows you to display a list of choices for selection.
+Display a list of choices for single selection.
 
 ```ts
 await prompt.choice('Select package manager', [
@@ -175,17 +167,37 @@ await prompt.choice('Select database driver', [
   },
   {
     name: 'pg',
-    message: 'PostgreSQL'
-  }
+    message: 'PostgreSQL',
+    hint: 'recommended' 
+  },
+  { 
+    name: 'mssql',
+    message: 'MSSQL', 
+    disabled: true 
+  },
 ])
+```
+
+```ts
+// Limit visible options (scrollable)
+await prompt.choice('Select framework', ['React', 'Vue', 'Svelte', 'Solid', 'Angular'], {
+  maxItems: 3,
+})
+```
+
+```ts
+// Default selection by value
+await prompt.choice('Select package manager', ['npm', 'yarn', 'pnpm'], {
+  default: 'pnpm',
+})
 ```
 
 ### multiple
 
-The `multiple` method uses the [enquirer multiselect](https://github.com/enquirer/enquirer#multiselect-prompt) prompt. It allows you to display a list of choices for multiple selections.
+Display a list of choices for multiple selection.
 
 ```ts
-await prompt.multiple('Select database driver', [
+await prompt.multiple('Select database drivers', [
   {
     name: 'sqlite',
     message: 'SQLite'
@@ -197,104 +209,145 @@ await prompt.multiple('Select database driver', [
   {
     name: 'pg',
     message: 'PostgreSQL'
-  }
+  },
 ])
+```
+
+```ts
+// With maxItems and default values
+await prompt.multiple('Select features', ['Auth', 'Mail', 'Cache', 'Queue'], {
+  maxItems: 3,
+  default: ['Auth'],
+})
 ```
 
 ### autocomplete
 
-The `autocomplete` prompt is a combination of the `select` and the `multiselect` prompt, but with the ability to fuzzy search the choices.
+A searchable select prompt with fuzzy filtering.
 
 ```ts
-const cities = []
-
-await prompt.autocomplete('Select your city', cities)
+// Single selection
+const city = await prompt.autocomplete('Select your city', cities)
 ```
 
-## Prompt Options
+```ts
+// Multiple selection
+const cities = await prompt.autocomplete('Select cities', cities, {
+  multiple: true,
+  limit: 5,
+})
+```
 
-Following is the list of options accepted by the prompts.
+### selectKey
 
-<table>
-    <tr>
-        <td>Option</td>
-        <td>Accepted by</td>
-        <td>Type</td>
-        <td>Description</td>
-    </tr>
-    <tr>
-        <td><code>default</code></td>
-        <td>All prompts</td>
-        <td>String</td>
-        <td>
-        The default value to use when no value is entered. In case of <code>select</code>, <code>multiselect</code>, and <code>autocomplete</code> prompts, the value can be the choices array index.
-        </td>
-    </tr>
-    <tr>
-        <td><code>name</code></td>
-        <td>All prompts</td>
-        <td>String</td>
-        <td>The unique name for the prompt</td>
-    </tr>
-    <tr>
-        <td><code>hint</code></td>
-        <td>All prompts</td>
-        <td>String</td>
-        <td>The hint text to display next to the prompt</td>
-    </tr>
-    <tr>
-        <td><code>result</code></td>
-        <td>All prompts</td>
-        <td>Function</td>
-        <td>
-        <p>
-        Transform the prompt return value. The value passed to the <code>result</code> method depends upon the prompt. For example, the <code>multiselect</code> prompt value will be an array of selected choices.
-        </p>
-        <pre><code>{
-  result(value) {
-    return value.toUpperCase()
-  }
-}</code></pre>
-        </td>
-    </tr>
-    <tr>
-        <td><code>format</code></td>
-        <td>All prompts</td>
-        <td>Function</td>
-        <td>
-        <p>Format the input value as the user types. The formatting is only applied to the CLI output, not the return value.</p>
-        <pre><code>{
-  format(value) {
-    return value.toUpperCase()
-  }
-}</code></pre>
-        </td>
-    </tr>
-    <tr>
-        <td><code>validate</code></td>
-        <td>All prompts</td>
-        <td>Function</td>
-        <td><p>Validate the user input. Returning <code>true</code> from the method will be pass the validation. Returning <code>false</code> or an error message string will be considered as a failure.</p>
-        <pre><code>{
-  format(value) {
-    return value.length > 6
-      ? true
-      : 'Model name should be atleast 6 characters long.'
-  }
-}</code></pre></td>
-    </tr>
-    <tr>
-        <td><code>limit</code></td>
-        <td><code>autocomplete</code></td>
-        <td>Number</td>
-        <td>Limit the number of options to display. You will have you to scroll to view the rest of the options.</td>
-    </tr>
-</table>
+Select a value by pressing a key bound to an option.
+
+```ts
+const env = await prompt.selectKey('Select environment', [
+  { name: 'p', message: 'Production', hint: 'deploy to prod' },
+  { name: 's', message: 'Staging' },
+  { name: 'd', message: 'Development' },
+])
+// User presses 'p' → env === 'p'
+```
+
+### groupMultiselect
+
+Multiple selection organized by named groups.
+
+```ts
+const packages = await prompt.groupMultiselect('Select packages', {
+  Database: [
+    { name: 'lucid', message: '@adonisjs/lucid' },
+    { name: 'redis', message: '@adonisjs/redis' },
+  ],
+  Auth: [
+    { name: 'auth', message: '@adonisjs/auth' },
+    { name: 'bouncer', message: '@adonisjs/bouncer' },
+  ],
+})
+```
+
+```ts
+// With selectable group headers
+await prompt.groupMultiselect('Select packages', groups, {
+  selectableGroups: true,
+})
+```
+
+### path
+
+File or directory path input with filesystem autocomplete.
+
+```ts
+const file = await prompt.path('Select config file')
+```
+
+```ts
+// Directories only
+const dir = await prompt.path('Select output directory', {
+  onlyDirectories: true,
+})
+```
+
+### group
+
+Chain prompts sequentially, passing accumulated results to each subsequent prompt.
+
+```ts
+const config = await prompt.group({
+  name: () => prompt.ask('Project name'),
+  useTs: () => prompt.confirm('Use TypeScript?'),
+  framework: ({ results }) =>
+    prompt.choice(`Setup ${results.name} with`, ['React', 'Vue', 'Svelte']),
+})
+
+// config.name, config.useTs, config.framework
+```
+
+## Prompt options
+
+### Common options
+
+| Option     | Type          | Description                                                                                                                          |
+| ---------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `default`  | varies        | Default value when no input is provided                                                                                              |
+| `name`     | `string`      | Unique name for the prompt (used for trapping)                                                                                       |
+| `hint`     | `string`      | Hint text shown as placeholder in the input field                                                                                    |
+| `validate` | `Function`    | Validate user input. Return `true` to pass, or a string error message to fail. Supports async validators.                            |
+| `result`   | `Function`    | Transform the return value before it is returned                                                                                     |
+| `format`   | `Function`    | Visual-only: transforms the displayed value during input (no effect on the return value). Not supported by all underlying renderers. |
+| `signal`   | `AbortSignal` | Cancel the prompt programmatically via an AbortController                                                                            |
+
+### Prompt-specific options
+
+| Option             | Prompt               | Type      | Description                                |
+| ------------------ | -------------------- | --------- | ------------------------------------------ |
+| `mask`             | `secure`             | `string`  | Custom mask character (default: bullet)    |
+| `maxItems`         | `choice`, `multiple` | `number`  | Limit visible options with scrolling       |
+| `limit`            | `autocomplete`       | `number`  | Max visible autocomplete options           |
+| `multiple`         | `autocomplete`       | `boolean` | Enable multiple selection                  |
+| `selectableGroups` | `groupMultiselect`   | `boolean` | Allow selecting entire groups              |
+| `onlyDirectories`  | `path`               | `boolean` | Restrict to directories only               |
+| `root`             | `path`               | `string`  | Base directory for filesystem autocomplete |
+| `seperator`        | `list`               | `string`  | Custom separator (default: `,`)            |
+
+### Choice object
+
+Choices for `choice`, `multiple`, `selectKey`, and `groupMultiselect` can be objects:
+
+```ts
+{
+  name: 'value',      // The value returned when selected
+  message: 'Display', // Text displayed in the terminal
+  hint: 'extra info', // Optional hint text
+  disabled: true,     // Optional: disable this option
+}
+```
 
 ## Testing traps
-The biggest reason for using this package is for the testing traps API. Testing traps allow you to handle prompts programmatically.
 
-In the following example, we trap the prompt by its display message and answer it using the `replyWith` method.
+The biggest reason for using this package is the testing traps API. Testing traps allow you to handle prompts programmatically.
 
 ```ts
 import { Prompt } from '@poppinss/prompts'
@@ -314,40 +367,11 @@ await prompt.ask('Specify the model name', {
   name: 'modelName'
 })
 
-// Trap with prompt name
-prompt.trap('modelName')
+// Trap by name
+prompt.trap('modelName').replyWith('User')
 ```
 
-### Assertions
-You can define assertions on the prompt to test the `validate` method behavior. For example: Assert that the validate method disallows empty strings.
-
-```ts
-prompt
-  .trap('modelName')
-  .assertFails('')
-
-// Assert the validation method to print a specific error message
-prompt
-  .trap('modelName')
-  .assertFails('', 'Enter model name')
-```
-
-The `assertFails` method accepts the input to be tested against the `validate` method. The second argument is an optional message you expect the `validate` method to print.
-
-Similarly, you can use the `assertPasses` method to test whether the `validate` method allows for acceptable values.
-
-```ts
-prompt
-  .trap('modelName')
-  .assertPasses('User')
-  .assertPasses('app_user')
-  .assertPasses('models/User')
-  .replyWith('User')
-```
-
-### Traps API
-
-Following is the list of available methods on a trapped prompt.
+### Trap methods
 
 #### replyWith
 
@@ -359,7 +383,7 @@ prompt.trap('modelName').replyWith('User')
 
 #### accept
 
-Accept the `toggle` and the `confirm` prompts with a `true` value.
+Accept `toggle` and `confirm` prompts with `true`.
 
 ```ts
 prompt.trap('Want to delete all files?').accept()
@@ -367,7 +391,7 @@ prompt.trap('Want to delete all files?').accept()
 
 #### reject
 
-Reject the `toggle` and the `confirm` prompts with a `false` value.
+Reject `toggle` and `confirm` prompts with `false`.
 
 ```ts
 prompt.trap('Want to delete all files?').reject()
@@ -375,28 +399,90 @@ prompt.trap('Want to delete all files?').reject()
 
 #### chooseOption
 
-Choose an option by its index for a `select` prompt.
+Choose an option by index for `select` and `selectKey` prompts.
 
 ```ts
-prompt
-  .trap('Select package manager')
-  .chooseOption(0)
+prompt.trap('Select package manager').chooseOption(0)
 ```
-
-If you do not choose any option explicitly, then the first option will be selected by default.
 
 #### chooseOptions
 
-Choose multiple options by their indexes for a `multiselect` prompt.
+Choose multiple options by indexes for `multiselect` and `groupMultiselect` prompts. For `groupMultiselect`, indexes are flattened across all groups.
+
+```ts
+prompt.trap('Select database drivers').chooseOptions([1, 2])
+```
+
+#### cancel
+
+Simulate a prompt cancellation (Ctrl+C / Escape). The prompt will throw `E_PROMPT_CANCELLED`.
+
+```ts
+prompt.trap('Enter name').cancel()
+```
+
+### Assertions
+
+You can define assertions to test the `validate` method behavior.
+
+```ts
+// Assert that empty string fails validation
+prompt.trap('modelName').assertFails('')
+
+// Assert with expected error message
+prompt.trap('modelName').assertFails('', 'Enter model name')
+
+// Assert with regex match on error message
+prompt.trap('modelName').assertFails('', /required/)
+
+// Assert that a value passes validation
+prompt.trap('modelName').assertPasses('User')
+```
+
+Assertions can be chained:
 
 ```ts
 prompt
-  .trap('Select database manager')
-  .chooseOptions([1, 2])
+  .trap('modelName')
+  .assertFails('', 'Model name is required')
+  .assertPasses('User')
+  .assertPasses('app_user')
+  .replyWith('User')
 ```
 
-## Handling prompts cancellation error
-Enquirer throws an error when a prompt is cancelled using `Ctrl + C`. You can capture the exception by wrapping the prompt display code inside a `try/catch` block and check for `E_PROMPT_CANCELLED` error.
+### Testing group prompts
+
+Trap each individual prompt within the group:
+
+```ts
+prompt.trap('Project name').replyWith('my-app')
+prompt.trap('Use TypeScript?').accept()
+
+const config = await prompt.group({
+  name: () => prompt.ask('Project name'),
+  useTs: () => prompt.confirm('Use TypeScript?'),
+})
+```
+
+### Testing cancellation
+
+```ts
+import { Prompt, errors } from '@poppinss/prompts'
+
+const prompt = new Prompt()
+prompt.trap('Enter name').cancel()
+
+try {
+  await prompt.ask('Enter name')
+} catch (error) {
+  assert.instanceOf(error, errors.E_PROMPT_CANCELLED)
+  assert.equal(error.code, 'E_PROMPT_CANCELLED')
+}
+```
+
+## Handling cancellation
+
+When a prompt is cancelled using `Ctrl+C`, it throws an `E_PROMPT_CANCELLED` error.
 
 ```ts
 import { Prompt, errors } from '@poppinss/prompts'

@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { Prompt } from '../../src/enquirer.js'
+import { Prompt } from '../../src/clack.js'
 
 test.group('Prompts | secure', () => {
   test('trap secure prompt', async ({ assert, expectTypeOf }) => {
