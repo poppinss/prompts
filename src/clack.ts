@@ -16,6 +16,10 @@ type ValidationContext = {
   pending?: Promise<boolean | string>
 }
 
+type ClackAutocompleteValidation = (
+  value: string | string[] | undefined
+) => string | Error | undefined
+
 /**
  * Uses the `@clack/prompts` package to prompt user for input. The `prompt`
  * method is invoked by the extended `BasePrompt` class.
@@ -279,7 +283,7 @@ export class Prompt extends BasePrompt {
   ) {
     const clackOptions = this.#mapChoices(options.choices)
     const validate = this.#wrapValidateForClack(options, context) as
-      | ((value: string | string[] | undefined) => string | Error | undefined)
+      | ClackAutocompleteValidation
       | undefined
 
     if (options.multiple) {
